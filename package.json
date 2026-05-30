@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "bun run --hot src/server.tsx",
-    "start": "bun run src/server.tsx"
+    "start": "bun run src/server.tsx",
+    "build": "bun build ./server.tsx --outdir ./build"
   },
   "dependencies": {
     "react": "^19.2.6",
