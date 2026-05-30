@@ -1,0 +1,16 @@
+{
+  "name": "coin-catalog-bun",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run --hot src/server.tsx",
+    "start": "bun run src/server.tsx"
+  },
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3"
+  }
+}
