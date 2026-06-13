@@ -1,9 +1,9 @@
-import { openDb, getDbPath, listDbFiles, blobToBase64 } from '../db';
+import { openDb, getDbPath, listDbFiles, blobToBase64 } from "../db";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   });
 }
 
@@ -16,13 +16,13 @@ export function handleFilelist(): Response {
 }
 
 export function handleCoins(url: URL): Response {
-  const file = url.searchParams.get('f');
-  const search = url.searchParams.get('search');
-  const statusFilter = url.searchParams.get('status_filter');
-  const countryFilter = url.searchParams.get('country_filter');
-  const yearFilter = url.searchParams.get('year_filter');
+  const file = url.searchParams.get("f");
+  const search = url.searchParams.get("search");
+  const statusFilter = url.searchParams.get("status_filter");
+  const countryFilter = url.searchParams.get("country_filter");
+  const yearFilter = url.searchParams.get("year_filter");
 
-  if (!file) return json({ error: 'No file specified' }, 400);
+  if (!file) return json({ error: "No file specified" }, 400);
 
   try {
     const db = openDb(getDbPath(file));
@@ -30,12 +30,24 @@ export function handleCoins(url: URL): Response {
     const filters: string[] = [];
     const args: unknown[] = [];
 
-    if (search)        { filters.push('title LIKE ?');  args.push(`%${search}%`); }
-    if (statusFilter)  { filters.push('status = ?');    args.push(statusFilter); }
-    if (countryFilter) { filters.push('country = ?');   args.push(countryFilter); }
-    if (yearFilter)    { filters.push('year = ?');      args.push(yearFilter); }
+    if (search) {
+      filters.push("title LIKE ?");
+      args.push(`%${search}%`);
+    }
+    if (statusFilter) {
+      filters.push("status = ?");
+      args.push(statusFilter);
+    }
+    if (countryFilter) {
+      filters.push("country = ?");
+      args.push(countryFilter);
+    }
+    if (yearFilter) {
+      filters.push("year = ?");
+      args.push(yearFilter);
+    }
 
-    const where = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
+    const where = filters.length ? `WHERE ${filters.join(" AND ")}` : "";
 
     const sql = `
       SELECT coins.id, title, status, subjectshort, value, unit, year, mintmark, series, country,
@@ -48,7 +60,7 @@ export function handleCoins(url: URL): Response {
 
     const rows = db.query(sql).all(...args) as Record<string, unknown>[];
 
-    const coins = rows.map(row => ({
+    const coins = rows.map((row) => ({
       ...row,
       image: blobToBase64(row.image),
     }));
@@ -61,10 +73,10 @@ export function handleCoins(url: URL): Response {
 }
 
 export function handleCoin(url: URL): Response {
-  const file = url.searchParams.get('f');
-  const id = url.searchParams.get('id');
+  const file = url.searchParams.get("f");
+  const id = url.searchParams.get("id");
 
-  if (!file || !id) return json({ error: 'Missing parameters' }, 400);
+  if (!file || !id) return json({ error: "Missing parameters" }, 400);
 
   try {
     const db = openDb(getDbPath(file));
@@ -82,10 +94,13 @@ export function handleCoin(url: URL): Response {
       WHERE coins.id = ?
     `;
 
-    const row = db.query(sql).get(parseInt(id)) as Record<string, unknown> | null;
+    const row = db.query(sql).get(parseInt(id)) as Record<
+      string,
+      unknown
+    > | null;
     db.close();
 
-    if (!row) return json({ error: 'Coin not found' }, 404);
+    if (!row) return json({ error: "Coin not found" }, 404);
 
     return json({
       ...row,
@@ -98,18 +113,28 @@ export function handleCoin(url: URL): Response {
 }
 
 export function handleFilters(url: URL): Response {
-  const file = url.searchParams.get('f');
-  if (!file) return json({ error: 'No file specified' }, 400);
+  const file = url.searchParams.get("f");
+  if (!file) return json({ error: "No file specified" }, 400);
 
   try {
     const db = openDb(getDbPath(file));
     const result: Record<string, string[]> = {};
 
-    for (const field of ['status', 'country', 'year', 'series', 'type', 'period', 'mint']) {
-      const rows = db.query(
-        `SELECT DISTINCT IFNULL(${field},'') as val FROM coins ORDER BY ${field}`
-      ).all() as { val: string }[];
-      result[field] = rows.map(r => String(r.val));
+    for (const field of [
+      "status",
+      "country",
+      "year",
+      "series",
+      "type",
+      "period",
+      "mint",
+    ]) {
+      const rows = db
+        .query(
+          `SELECT DISTINCT IFNULL(${field},'') as val FROM coins ORDER BY ${field}`,
+        )
+        .all() as { val: string }[];
+      result[field] = rows.map((r) => String(r.val));
     }
 
     db.close();
