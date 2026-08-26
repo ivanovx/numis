@@ -30,6 +30,8 @@
         @yield('content')
     </main>
 
+    @include('partials.footer')
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/catalog.js') }}?v={{ filemtime(public_path('js/catalog.js')) }}-2"></script>
 </body>

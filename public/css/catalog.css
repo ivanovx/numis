@@ -127,12 +127,6 @@ main {
     border-radius: 0.65rem;
     background: rgba(255, 253, 248, 0.94);
     box-shadow: 0 0.4rem 1rem rgba(23, 35, 43, 0.08) !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-#coin-list .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.8rem 1.5rem rgba(23, 35, 43, 0.15) !important;
 }
 
 #coin-list .card-header {
@@ -160,7 +154,7 @@ main {
 
 #coin-list .coin-flip-container {
     height: 180px;
-    background: radial-gradient(circle at center, #fffdf8 0 42%, var(--catalog-paper-deep) 43% 100%);
+    background: transparent;
 }
 
 #coin-list .coin-flip-inner {
@@ -241,6 +235,15 @@ main {
 .catalog-pagination .pagination {
     gap: 0.35rem;
     margin-bottom: 0;
+}
+
+.catalog-pagination nav > .d-sm-flex {
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.catalog-pagination nav > .d-sm-flex > .small {
+    order: -1;
 }
 
 .catalog-pagination .page-link {
