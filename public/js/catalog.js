@@ -1,6 +1,24 @@
 (function () {
     'use strict';
 
+    var siteNavbar = document.getElementById('site-navbar');
+    var filterNavbar = document.getElementById('catalog-filter-navbar');
+
+    function updateNavbarHeights() {
+        if (!siteNavbar || !filterNavbar) return;
+
+        document.documentElement.style.setProperty('--site-navbar-height', siteNavbar.getBoundingClientRect().height + 'px');
+        document.documentElement.style.setProperty('--catalog-filter-height', filterNavbar.getBoundingClientRect().height + 'px');
+    }
+
+    window.addEventListener('DOMContentLoaded', updateNavbarHeights);
+    window.addEventListener('load', updateNavbarHeights);
+    window.addEventListener('resize', updateNavbarHeights);
+
+    if (window.ResizeObserver && filterNavbar) {
+        new ResizeObserver(updateNavbarHeights).observe(filterNavbar);
+    }
+
     var form = document.getElementById('coin-filter-form');
     var list = document.getElementById('coin-list');
 

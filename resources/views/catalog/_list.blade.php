@@ -31,6 +31,7 @@
                             @if ($coin->year)<li><strong>{{ __('catalog.year_label') }}:</strong> {{ $coin->year }}</li>@endif
                             @if ($coin->denomination)<li><strong>{{ __('catalog.denomination_label') }}:</strong> {{ $coin->denomination }}</li>@endif
                             @if ($coin->metal)<li><strong>{{ __('catalog.metal_label') }}:</strong> {{ $coin->metal }}</li>@endif
+                            @if ($coin->category)<li><strong>{{ __('catalog.category') }}:</strong> {{ __('catalog.categories.' . $coin->category) }}</li>@endif
                         </ul>
                     </div>
                     <div class="card-footer">
@@ -74,6 +75,7 @@
                                 @if ($coin->issue_date)<li><strong>{{ __('catalog.issue_date_label') }}:</strong> {{ $coin->issue_date->format('d.m.Y') }}</li>@endif
                                 @if ($coin->denomination)<li><strong>{{ __('catalog.denomination_label') }}:</strong> {{ $coin->denomination }}</li>@endif
                                 @if ($coin->metal)<li><strong>{{ __('catalog.metal_label') }}:</strong> {{ $coin->metal }}</li>@endif
+                                @if ($coin->category)<li><strong>{{ __('catalog.category') }}:</strong> {{ __('catalog.categories.' . $coin->category) }}</li>@endif
                                 @if ($coin->quality)<li><strong>{{ __('catalog.quality_label') }}:</strong> {{ $coin->quality }}</li>@endif
                                 @if ($coin->weight)<li><strong>{{ __('catalog.weight_label') }}:</strong> {{ $coin->weight }}</li>@endif
                                 @if ($coin->diameter)<li><strong>{{ __('catalog.diameter_label') }}:</strong> {{ $coin->diameter }} mm</li>@endif
@@ -96,8 +98,10 @@
     </div>
 </div>
 
-<div class="container">
-    {{ $coins->links() }}
+<div class="container catalog-pagination py-4">
+    <div class="d-flex justify-content-center">
+        {{ $coins->onEachSide(1)->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 
 @else

@@ -85,6 +85,7 @@ class CoinController extends Controller
             'title.de'               => ['nullable', 'string', 'max:255'],
 
             'series_id'              => ['nullable', 'exists:series,id'],
+            'category'               => ['required', 'in:' . implode(',', Coin::CATEGORIES)],
 
             'artist_ids'             => ['nullable', 'array'],
             'artist_ids.*'           => ['exists:artists,id'],

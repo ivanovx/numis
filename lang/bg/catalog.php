@@ -1,8 +1,18 @@
 <?php
 
 return [
-    'site_title'        => 'Каталог на монети',
+    'site_title'        => 'Numis',
     'filter'            => 'Филтър',
+    'clear_filters'     => 'Изчисти филтрите',
+    'find_pcgs'         => 'Търси в PCGS',
+    'find_ngc'          => 'Търси в NGC',
+    'category'          => 'Категория',
+    'all_categories'    => 'Всички категории',
+    'categories'        => [
+        'exchange'      => 'Разменни монети',
+        'commemorative' => 'Възпоменателни монети',
+        'collectible'   => 'Колекционерски монети',
+    ],
     'year_from'         => 'Година от',
     'year_to'           => 'Година до',
     'metal'             => 'Метал',

@@ -16,9 +16,16 @@ class Coin extends Model
     /** Suggested values for the "metal" field — kept as free text, these are just autocomplete hints. */
     public const METALS = ['Мед', 'Мед-никел', 'Сребро', 'Злато'];
 
+    public const CATEGORIES = [
+        'exchange',
+        'commemorative',
+        'collectible',
+    ];
+
     protected $fillable = [
         'title',
         'series_id',
+        'category',
         'year',
         'issue_date',
         'denomination',

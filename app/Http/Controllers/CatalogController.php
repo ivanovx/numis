@@ -43,7 +43,7 @@ class CatalogController extends Controller
             ]);
         }
 
-        foreach (['metal', 'diameter', 'denomination'] as $field) {
+        foreach (['category', 'metal', 'diameter', 'denomination'] as $field) {
             if ($request->filled($field)) {
                 $query->where($field, $request->input($field));
             }
@@ -67,6 +67,7 @@ class CatalogController extends Controller
         return [
             'year_from'    => $request->input('year_from', ''),
             'year_to'      => $request->input('year_to', ''),
+            'category'     => $request->input('category', ''),
             'metal'        => $request->input('metal', ''),
             'diameter'     => $request->input('diameter', ''),
             'denomination' => $request->input('denomination', ''),

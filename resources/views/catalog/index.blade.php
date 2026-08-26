@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
+@section('filters')
     @include('catalog._filter')
+@endsection
 
+@section('content')
     <div id="coin-list">
         @include('catalog._list')
     </div>

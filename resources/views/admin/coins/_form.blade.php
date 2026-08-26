@@ -26,6 +26,18 @@
         </select>
     </div>
 
+    <div class="col-md-4">
+        <label class="form-label">Category (Категория)</label>
+        <select name="category" class="form-select" required>
+            <option value="">— Select category —</option>
+            @foreach (\App\Models\Coin::CATEGORIES as $category)
+                <option value="{{ $category }}" @selected(old('category', $coin->category) === $category)>
+                    {{ __('catalog.categories.' . $category) }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
     <div class="col-md-8">
         <label class="form-label">Artist(s) (Художник)</label>
         <select name="artist_ids[]" class="form-select" multiple size="4">

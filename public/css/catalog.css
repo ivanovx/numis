@@ -1,10 +1,169 @@
-.coin-flip-container {
-    width: 100%;
-    height: 180px;
-    perspective: 1000px;
+:root {
+    --site-navbar-height: 60px;
+    --catalog-filter-height: 58px;
+    --catalog-ink: #17232b;
+    --catalog-ink-soft: #263944;
+    --catalog-copper: #bd6b3d;
+    --catalog-copper-dark: #914a2b;
+    --catalog-teal: #167d78;
+    --catalog-paper: #f5f1e8;
+    --catalog-paper-deep: #e9e2d5;
+    --catalog-line: rgba(23, 35, 43, 0.14);
 }
 
-.coin-flip-inner {
+html {
+    background: var(--catalog-paper);
+}
+
+body {
+    background-color: var(--catalog-paper);
+    background-image: linear-gradient(rgba(23, 35, 43, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 35, 43, 0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--catalog-ink);
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+#site-navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    min-height: var(--site-navbar-height);
+    background: var(--catalog-ink) !important;
+    border-bottom: 3px solid var(--catalog-copper);
+}
+
+#site-navbar .navbar-brand {
+    color: #fff8ed;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+}
+
+#site-navbar .btn-outline-light {
+    border-color: rgba(255, 248, 237, 0.6);
+    color: #fff8ed;
+}
+
+#site-navbar .btn-outline-light:hover,
+#site-navbar .btn-light {
+    background: var(--catalog-copper);
+    border-color: var(--catalog-copper);
+    color: #fff8ed;
+}
+
+#catalog-filter-navbar {
+    position: fixed !important;
+    top: var(--site-navbar-height) !important;
+    right: 0;
+    left: 0;
+    z-index: 1020;
+    margin: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--catalog-line) !important;
+    border-radius: 0 !important;
+    background: rgba(255, 250, 241, 0.97) !important;
+    box-shadow: 0 8px 20px rgba(23, 35, 43, 0.08) !important;
+}
+
+#catalog-filter-navbar .navbar-text {
+    color: var(--catalog-ink) !important;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+#catalog-filter-navbar .filter-heading {
+    color: var(--catalog-teal) !important;
+    font-size: 1.2rem;
+}
+
+#catalog-filter-navbar .filter-submit {
+    min-width: 2.75rem;
+}
+
+#catalog-filter-navbar .form-label {
+    color: var(--catalog-ink-soft);
+}
+
+#catalog-filter-navbar .form-control,
+#catalog-filter-navbar .form-select {
+    border-color: var(--catalog-line);
+    background-color: #fffdf8;
+    color: var(--catalog-ink);
+}
+
+#catalog-filter-navbar .form-control:focus,
+#catalog-filter-navbar .form-select:focus {
+    border-color: var(--catalog-teal);
+    box-shadow: 0 0 0 0.2rem rgba(22, 125, 120, 0.16);
+}
+
+#catalog-filter-navbar .btn-primary {
+    border-color: var(--catalog-teal);
+    background: var(--catalog-teal);
+}
+
+#catalog-filter-navbar .btn-primary:hover {
+    border-color: #105c59;
+    background: #105c59;
+}
+
+#catalog-filter-navbar .btn-outline-secondary {
+    border-color: var(--catalog-line);
+    color: var(--catalog-ink-soft);
+}
+
+main {
+    padding-top: calc(var(--site-navbar-height) + var(--catalog-filter-height));
+}
+
+#coin-list > .container {
+    padding-top: 1.25rem;
+}
+
+#coin-list .card {
+    overflow: hidden;
+    border: 1px solid var(--catalog-line);
+    border-radius: 0.65rem;
+    background: rgba(255, 253, 248, 0.94);
+    box-shadow: 0 0.4rem 1rem rgba(23, 35, 43, 0.08) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#coin-list .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.8rem 1.5rem rgba(23, 35, 43, 0.15) !important;
+}
+
+#coin-list .card-header {
+    border-bottom: 1px solid var(--catalog-line);
+    background: var(--catalog-ink);
+}
+
+#coin-list .card-header .btn-link {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    padding: 0.25rem 0;
+    color: #fff8ed;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+    text-align: left;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#coin-list .card-header .btn-link:hover {
+    color: #efb18d;
+}
+
+#coin-list .coin-flip-container {
+    height: 180px;
+    background: radial-gradient(circle at center, #fffdf8 0 42%, var(--catalog-paper-deep) 43% 100%);
+}
+
+#coin-list .coin-flip-inner {
     position: relative;
     width: 100%;
     height: 100%;
@@ -12,12 +171,12 @@
     transform-style: preserve-3d;
 }
 
-.coin-flip-container:hover .coin-flip-inner {
+#coin-list .coin-flip-container:hover .coin-flip-inner {
     transform: rotateY(180deg);
 }
 
-.coin-flip-front,
-.coin-flip-back {
+#coin-list .coin-flip-front,
+#coin-list .coin-flip-back {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -27,12 +186,97 @@
     justify-content: center;
 }
 
-.coin-flip-front img,
-.coin-flip-back img {
+#coin-list .coin-flip-front img,
+#coin-list .coin-flip-back img {
     max-height: 160px;
     object-fit: contain;
+    filter: drop-shadow(0 0.5rem 0.45rem rgba(23, 35, 43, 0.18));
 }
 
-.coin-flip-back {
+#coin-list .coin-flip-back {
     transform: rotateY(180deg);
+}
+
+#coin-list .card-body {
+    background: #fffdf8;
+}
+
+#coin-list .card-body li {
+    padding: 0.2rem 0;
+    border-bottom: 1px dotted var(--catalog-line);
+}
+
+#coin-list .card-body li:last-child {
+    border-bottom: 0;
+}
+
+#coin-list .card-body strong {
+    color: var(--catalog-teal);
+}
+
+#coin-list .card-footer {
+    border-top: 1px solid var(--catalog-line);
+    background: var(--catalog-paper-deep);
+    color: var(--catalog-copper-dark) !important;
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.modal-content {
+    border: 1px solid var(--catalog-line);
+    border-top: 4px solid var(--catalog-copper);
+    border-radius: 0.65rem;
+    background: #fffdf8;
+}
+
+.modal-header {
+    background: var(--catalog-ink);
+    color: #fff8ed;
+}
+
+.modal-header .btn-close {
+    filter: invert(1) grayscale(1) brightness(3);
+}
+
+.catalog-pagination .pagination {
+    gap: 0.35rem;
+    margin-bottom: 0;
+}
+
+.catalog-pagination .page-link {
+    min-width: 2.5rem;
+    border: 1px solid var(--catalog-line);
+    border-radius: 0.5rem;
+    background: #fffdf8;
+    color: var(--catalog-ink-soft);
+    text-align: center;
+}
+
+.catalog-pagination .page-link:hover {
+    background: var(--catalog-paper-deep);
+    color: var(--catalog-ink);
+}
+
+.catalog-pagination .active .page-link {
+    border-color: var(--catalog-copper);
+    background: var(--catalog-copper);
+    color: #fff8ed;
+    box-shadow: 0 0.25rem 0.75rem rgba(189, 107, 61, 0.25);
+}
+
+.catalog-pagination .disabled .page-link {
+    background: transparent;
+    color: rgba(23, 35, 43, 0.4);
+}
+
+@media (max-width: 575.98px) {
+    .catalog-pagination .pagination {
+        gap: 0.15rem;
+    }
+
+    .catalog-pagination .page-link {
+        min-width: 2.15rem;
+        padding-right: 0.55rem;
+        padding-left: 0.55rem;
+    }
 }

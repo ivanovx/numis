@@ -1,8 +1,18 @@
 <?php
 
 return [
-    'site_title'        => 'Coin Catalog',
+    'site_title'        => 'Numis',
     'filter'            => 'Filter',
+    'clear_filters'     => 'Clear filters',
+    'find_pcgs'         => 'Find on PCGS',
+    'find_ngc'          => 'Find on NGC',
+    'category'          => 'Category',
+    'all_categories'    => 'All categories',
+    'categories'        => [
+        'exchange'      => 'Circulation coins',
+        'commemorative' => 'Commemorative coins',
+        'collectible'   => 'Collectible coins',
+    ],
     'year_from'         => 'Year from',
     'year_to'           => 'Year to',
     'metal'             => 'Metal',

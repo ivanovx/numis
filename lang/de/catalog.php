@@ -1,8 +1,18 @@
 <?php
 
 return [
-    'site_title'        => 'Münzkatalog',
+    'site_title'        => 'Numis',
     'filter'            => 'Filtern',
+    'clear_filters'     => 'Filter löschen',
+    'find_pcgs'         => 'Auf PCGS suchen',
+    'find_ngc'          => 'Auf NGC suchen',
+    'category'          => 'Kategorie',
+    'all_categories'    => 'Alle Kategorien',
+    'categories'        => [
+        'exchange'      => 'Umlaufmünzen',
+        'commemorative' => 'Gedenkmünzen',
+        'collectible'   => 'Sammlermünzen',
+    ],
     'year_from'         => 'Jahr von',
     'year_to'           => 'Jahr bis',
     'metal'             => 'Metall',
