@@ -12,6 +12,7 @@ return [
         'exchange'      => 'Circulation coins',
         'commemorative' => 'Commemorative coins',
         'collectible'   => 'Collectible coins',
+        'specimen'      => 'Specimen',
     ],
     'year_from'         => 'Year from',
     'year_to'           => 'Year to',

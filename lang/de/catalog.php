@@ -12,6 +12,7 @@ return [
         'exchange'      => 'Umlaufmünzen',
         'commemorative' => 'Gedenkmünzen',
         'collectible'   => 'Sammlermünzen',
+        'specimen'      => 'Specimen'
     ],
     'year_from'         => 'Jahr von',
     'year_to'           => 'Jahr bis',

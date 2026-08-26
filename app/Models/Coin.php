@@ -20,6 +20,7 @@ class Coin extends Model
         'exchange',
         'commemorative',
         'collectible',
+        'specimen'
     ];
 
     protected $fillable = [
