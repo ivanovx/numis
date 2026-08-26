@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Series;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class SeriesController extends Controller
 {
     public function index()
     {
-        $series = Series::with('parent')->orderBy('name')->paginate(20)->withQueryString();
+        // name is a JSON column, so sort by slug instead (name isn't reliably sortable in SQL).
+        $series = Series::withCount('coins')->orderBy('slug')->paginate(20)->withQueryString();
 
         return view('admin.series.index', compact('series'));
     }
@@ -19,8 +21,7 @@ class SeriesController extends Controller
     public function create()
     {
         return view('admin.series.create', [
-            'series'    => new Series(),
-            'allSeries' => Series::flatTree(),
+            'series' => new Series(),
         ]);
     }
 
@@ -35,19 +36,12 @@ class SeriesController extends Controller
 
     public function edit(Series $series)
     {
-        return view('admin.series.edit', [
-            'series'    => $series,
-            'allSeries' => Series::flatTree()->reject(fn ($s) => $s->id === $series->id),
-        ]);
+        return view('admin.series.edit', compact('series'));
     }
 
     public function update(Request $request, Series $series)
     {
         $data = $this->validated($request, $series);
-
-        if ((int) ($data['parent_id'] ?? 0) === $series->id) {
-            return back()->withErrors(['parent_id' => 'A series cannot be its own parent.'])->withInput();
-        }
 
         $series->update($data);
 
@@ -56,7 +50,7 @@ class SeriesController extends Controller
 
     public function destroy(Series $series)
     {
-        $series->delete();
+        $series->delete(); // coins.series_id is set to null via the FK (nullOnDelete)
 
         return redirect()->route('admin.series.index')->with('status', 'Series deleted.');
     }
@@ -66,13 +60,22 @@ class SeriesController extends Controller
         $id = $series?->id;
 
         $data = $request->validate([
-            'name'      => ['required', 'string', 'max:255'],
-            'slug'      => ['nullable', 'string', 'max:255', 'unique:series,slug,' . $id],
-            'parent_id' => ['nullable', 'exists:series,id'],
+            'name'    => ['required', 'array'],
+            'name.bg' => ['nullable', 'string', 'max:255'],
+            'name.en' => ['nullable', 'string', 'max:255'],
+            'name.de' => ['nullable', 'string', 'max:255'],
+            'slug'    => ['nullable', 'string', 'max:255', 'unique:series,slug,' . $id],
         ]);
 
-        $data['slug'] = $data['slug'] ? Str::slug($data['slug']) : Str::slug($data['name']);
-        $data['parent_id'] = $data['parent_id'] ?: null;
+        $firstName = collect($data['name'])->first(fn ($v) => filled($v));
+
+        if (! $firstName) {
+            throw ValidationException::withMessages([
+                'name.en' => 'Please provide a name in at least one language.',
+            ]);
+        }
+
+        $data['slug'] = $data['slug'] ? Str::slug($data['slug']) : Str::slug($firstName);
 
         return $data;
     }

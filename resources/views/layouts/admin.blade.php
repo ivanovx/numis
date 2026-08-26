@@ -14,7 +14,8 @@
             <div class="navbar-nav flex-row gap-3">
                 <a class="nav-link text-white" href="{{ route('admin.coins.index') }}">Coins</a>
                 <a class="nav-link text-white" href="{{ route('admin.series.index') }}">Series</a>
-                <a class="nav-link text-white" href="{{ route('catalog.index') }}" target="_blank">View site</a>
+                <a class="nav-link text-white" href="{{ route('admin.artists.index') }}">Artists</a>
+                <?php /* <a class="nav-link text-white" href="{{ route('catalog.index') }}" target="_blank">View site</a> */ ?>
                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>

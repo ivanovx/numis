@@ -6,6 +6,6 @@
     <form method="POST" action="{{ route('admin.coins.update', $coin) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        @include('admin.coins._form', ['selected' => old('series', $selected)])
+        @include('admin.coins._form')
     </form>
 @endsection

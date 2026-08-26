@@ -11,8 +11,10 @@
             <tr>
                 <th>Title</th>
                 <th>Year</th>
+                <th>Denomination</th>
                 <th>Metal</th>
                 <th>Series</th>
+                <th>Artists</th>
                 <th></th>
             </tr>
         </thead>
@@ -21,8 +23,10 @@
                 <tr>
                     <td>{{ $coin->title }}</td>
                     <td>{{ $coin->year }}</td>
+                    <td>{{ $coin->denomination }}</td>
                     <td>{{ $coin->metal }}</td>
-                    <td>{{ $coin->seriesNames() }}</td>
+                    <td>{{ $coin->series?->name ?? '—' }}</td>
+                    <td>{{ $coin->artistNames() ?: '—' }}</td>
                     <td class="text-end">
                         <a href="{{ route('admin.coins.edit', $coin) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
                         <form action="{{ route('admin.coins.destroy', $coin) }}" method="POST" class="d-inline"
@@ -34,7 +38,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5">No coins found.</td></tr>
+                <tr><td colspan="7">No coins found.</td></tr>
             @endforelse
         </tbody>
     </table>

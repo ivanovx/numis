@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'site_title'        => 'Каталог на монети',
+    'filter'            => 'Филтър',
+    'year_from'         => 'Година от',
+    'year_to'           => 'Година до',
+    'metal'             => 'Метал',
+    'diameter'          => 'Диаметър',
+    'series'            => 'Серия',
+    'all_metals'        => 'Всички метали',
+    'all_diameters'     => 'Всички диаметри',
+    'all_series'        => 'Всички серии',
+    'no_series_option'  => 'Без серия',
+    'no_series'         => 'Няма',
+    'no_coins_found'    => 'Няма намерени монети.',
+    'close'             => 'Затвори',
+
+    'year_label'             => 'Година',
+    'issue_date_label'       => 'Дата на въвеждане',
+    'denomination_label'     => 'Номинална стойност',
+    'metal_label'            => 'Метал, проба',
+    'quality_label'          => 'Качество',
+    'weight_label'           => 'Тегло',
+    'diameter_label'         => 'Диаметър',
+    'edge_label'             => 'Гурт',
+    'mintage_label'          => 'Тираж',
+    'mint_label'             => 'Отсечена в',
+    'series_label'           => 'Серия',
+    'front_label'            => 'Лице',
+    'back_label'             => 'Реверс',
+
+    'denomination' => 'Номинал',
+    'all_denominations' => 'Всички номинали',
+    'artist' => 'Художник',
+    'all_artists' => 'Всички художници',
+    'artist_label' => 'Художник(ци)',
+];

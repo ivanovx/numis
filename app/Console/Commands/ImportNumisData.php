@@ -44,21 +44,14 @@ class ImportNumisData extends Command
     {
         $map = [];
 
-        // First pass: create all series without parent, so ids exist for the second pass.
+        // The WordPress export only had English names — stored under the "en" key.
+        // Fill in "bg" and "de" from the admin panel afterwards.
         foreach ($seriesRows as $row) {
             $series = Series::updateOrCreate(
                 ['slug' => $row['slug']],
-                ['name' => $row['name']]
+                ['name' => ['en' => $row['name']]]
             );
             $map[$row['term_id']] = $series->id;
-        }
-
-        // Second pass: wire up parent relationships (none in the current export, but supported).
-        foreach ($seriesRows as $row) {
-            if (! empty($row['parent_term_id']) && isset($map[$row['parent_term_id']])) {
-                Series::where('id', $map[$row['term_id']])
-                    ->update(['parent_id' => $map[$row['parent_term_id']]]);
-            }
         }
 
         $this->info('Series imported: ' . count($map));
@@ -72,13 +65,25 @@ class ImportNumisData extends Command
         $bar->start();
 
         foreach ($coinRows as $row) {
+            // A coin now belongs to at most one series. The old export never
+            // actually had more than one term per coin, so this is a 1:1 mapping.
+            $wpTermId = $row['series_term_ids'][0] ?? null;
+            $seriesId = $wpTermId !== null ? ($seriesMap[$wpTermId] ?? null) : null;
+
+            // The WordPress export only had English text — stored under the "en" key.
+            // Fill in "bg" and "de" from the admin panel afterwards.
             $coin = Coin::create([
-                'title'        => $row['title'],
+                'title'        => ['en' => $row['title']],
+                'series_id'    => $seriesId,
                 'year'         => $row['year'] !== null ? (int) $row['year'] : null,
                 'denomination' => $row['denomination'],
                 'metal'        => $row['metal'],
                 'diameter'     => $row['diameter'],
-                'description'  => $row['description'],
+                'description'  => $row['description'] !== null ? ['en' => $row['description']] : null,
+                // issue_date, quality, weight, mintage, edge, mint,
+                // front_description, back_description did not exist in the old
+                // WordPress plugin — they start blank and are filled in from
+                // /admin/coins per coin.
             ]);
 
             $updates = [];
@@ -90,16 +95,6 @@ class ImportNumisData extends Command
             }
             if ($updates) {
                 $coin->update($updates);
-            }
-
-            $seriesIds = collect($row['series_term_ids'] ?? [])
-                ->map(fn ($wpTermId) => $seriesMap[$wpTermId] ?? null)
-                ->filter()
-                ->values()
-                ->all();
-
-            if ($seriesIds) {
-                $coin->series()->sync($seriesIds);
             }
 
             $bar->advance();

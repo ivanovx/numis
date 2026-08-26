@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'site_title'        => 'Coin Catalog',
+    'filter'            => 'Filter',
+    'year_from'         => 'Year from',
+    'year_to'           => 'Year to',
+    'metal'             => 'Metal',
+    'diameter'          => 'Diameter',
+    'series'            => 'Series',
+    'all_metals'        => 'All Metals',
+    'all_diameters'     => 'All Diameters',
+    'all_series'        => 'All Series',
+    'no_series_option'  => 'No Series',
+    'no_series'         => 'None',
+    'no_coins_found'    => 'No coins found.',
+    'close'             => 'Close',
+
+    'year_label'             => 'Year',
+    'issue_date_label'       => 'Date of issue',
+    'denomination_label'     => 'Denomination',
+    'metal_label'            => 'Metal, fineness',
+    'quality_label'          => 'Quality',
+    'weight_label'           => 'Weight',
+    'diameter_label'         => 'Diameter',
+    'edge_label'             => 'Edge',
+    'mintage_label'          => 'Mintage',
+    'mint_label'             => 'Minted at',
+    'series_label'           => 'Series',
+    'front_label'            => 'Obverse',
+    'back_label'             => 'Reverse',
+
+    'denomination' => 'Denomination',
+    'all_denominations' => 'All Denominations',
+    'artist' => 'Artist',
+    'all_artists' => 'All Artists',
+    'artist_label' => 'Artist(s)',
+];

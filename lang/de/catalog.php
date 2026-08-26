@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'site_title'        => 'Münzkatalog',
+    'filter'            => 'Filtern',
+    'year_from'         => 'Jahr von',
+    'year_to'           => 'Jahr bis',
+    'metal'             => 'Metall',
+    'diameter'          => 'Durchmesser',
+    'series'            => 'Serie',
+    'all_metals'        => 'Alle Metalle',
+    'all_diameters'     => 'Alle Durchmesser',
+    'all_series'        => 'Alle Serien',
+    'no_series_option'  => 'Ohne Serie',
+    'no_series'         => 'Keine',
+    'no_coins_found'    => 'Keine Münzen gefunden.',
+    'close'             => 'Schließen',
+
+    'year_label'             => 'Jahr',
+    'issue_date_label'       => 'Ausgabedatum',
+    'denomination_label'     => 'Nennwert',
+    'metal_label'            => 'Metall, Feingehalt',
+    'quality_label'          => 'Qualität',
+    'weight_label'           => 'Gewicht',
+    'diameter_label'         => 'Durchmesser',
+    'edge_label'             => 'Rand',
+    'mintage_label'          => 'Auflage',
+    'mint_label'             => 'Geprägt in',
+    'series_label'           => 'Serie',
+    'front_label'            => 'Vorderseite',
+    'back_label'             => 'Rückseite',
+
+    'denomination' => 'Nennwert',
+    'all_denominations' => 'Alle Nennwerte',
+    'artist' => 'Künstler',
+    'all_artists' => 'Alle Künstler',
+    'artist_label' => 'Künstler',
+];

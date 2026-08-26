@@ -1,18 +1,30 @@
 <?php
 
+use App\Http\Controllers\Admin\ArtistController;
 use App\Http\Controllers\Admin\CoinController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SeriesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Public catalog (replaces the [coin_catalog] shortcode)
 |--------------------------------------------------------------------------
+| Bulgarian is the default language: "/" redirects to "/bg". "/en" and
+| "/de" serve the same catalog translated. The admin panel below is not
+| locale-prefixed — it stays in one language for whoever manages the site.
 */
-Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
+Route::redirect('/', '/' . config('app.locale', 'bg'));
+
+Route::prefix('{locale}')
+    ->whereIn('locale', SetLocale::SUPPORTED)
+    ->middleware(SetLocale::class)
+    ->group(function () {
+        Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +44,5 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('coins', CoinController::class);
     Route::resource('series', SeriesController::class);
+    Route::resource('artists', ArtistController::class);
 });

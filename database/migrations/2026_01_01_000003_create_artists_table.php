@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('series', function (Blueprint $table) {
+        Schema::create('artists', function (Blueprint $table) {
             $table->id();
-            $table->json('name'); // {"bg":"...","en":"...","de":"..."}
+            $table->string('name'); // proper name, not translated
             $table->string('slug')->unique();
             $table->timestamps();
         });
@@ -18,6 +18,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('series');
+        Schema::dropIfExists('artists');
     }
 };

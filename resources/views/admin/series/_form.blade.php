@@ -1,24 +1,21 @@
 <div class="row g-3">
-    <div class="col-md-6">
-        <label class="form-label">Name</label>
-        <input type="text" name="name" class="form-control" value="{{ old('name', $series->name) }}" required>
+    <div class="col-12">
+        <label class="form-label fw-bold mb-1">Name</label>
+        <div class="row g-2">
+            @foreach (['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] as $code => $label)
+                <div class="col-md-4">
+                    <label class="form-label small text-muted">{{ $label }}</label>
+                    <input type="text" name="name[{{ $code }}]" class="form-control"
+                           value="{{ old('name.' . $code, $series->translation('name', $code)) }}">
+                </div>
+            @endforeach
+        </div>
+        <div class="form-text">At least one language is required.</div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-6">
         <label class="form-label">Slug</label>
         <input type="text" name="slug" class="form-control" value="{{ old('slug', $series->slug) }}" placeholder="auto from name">
-    </div>
-
-    <div class="col-md-3">
-        <label class="form-label">Parent series</label>
-        <select name="parent_id" class="form-select">
-            <option value="">None</option>
-            @foreach ($allSeries as $term)
-                <option value="{{ $term->id }}" @selected((string) old('parent_id', $series->parent_id) === (string) $term->id)>
-                    {{ str_repeat('— ', $term->depth) }}{{ $term->name }}
-                </option>
-            @endforeach
-        </select>
     </div>
 </div>
 

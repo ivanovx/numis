@@ -2,61 +2,47 @@
 
 namespace App\Models;
 
+use App\Concerns\HasTranslatedFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Series extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslatedFields;
 
     protected $table = 'series';
 
     protected $fillable = [
         'name',
         'slug',
-        'parent_id',
     ];
 
-    public function parent(): BelongsTo
+    public function coins(): HasMany
     {
-        return $this->belongsTo(Series::class, 'parent_id');
+        return $this->hasMany(Coin::class);
     }
 
-    public function children(): HasMany
+    // name is stored as {"bg":"...","en":"...","de":"..."}
+    public function getNameAttribute($value): ?string
     {
-        return $this->hasMany(Series::class, 'parent_id');
+        return $this->translatedValue($value);
     }
 
-    public function coins(): BelongsToMany
+    public function setNameAttribute($value): void
     {
-        return $this->belongsToMany(Coin::class, 'coin_series');
+        $this->attributes['name'] = $this->encodeTranslations($value);
     }
 
     /**
-     * Flat list of all series ordered for a hierarchical <select>,
-     * with a `depth` attribute so views can indent child series.
+     * All series ordered for a <select>. Sorted by slug at the DB level
+     * (name is JSON, not sortable in SQL), then by the current locale's
+     * translated name.
      *
      * @return \Illuminate\Support\Collection<int, Series>
      */
-    public static function flatTree(): \Illuminate\Support\Collection
+    public static function forSelect(): \Illuminate\Support\Collection
     {
-        $all = static::orderBy('name')->get();
-
-        $build = function ($parentId, $depth) use (&$build, $all) {
-            $result = collect();
-
-            foreach ($all->where('parent_id', $parentId) as $node) {
-                $node->depth = $depth;
-                $result->push($node);
-                $result = $result->merge($build($node->id, $depth + 1));
-            }
-
-            return $result;
-        };
-
-        return $build(null, 0);
+        return static::orderBy('slug')->get()->sortBy('name')->values();
     }
 }

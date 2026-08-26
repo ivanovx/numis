@@ -5,6 +5,6 @@
 
     <form method="POST" action="{{ route('admin.coins.store') }}" enctype="multipart/form-data">
         @csrf
-        @include('admin.coins._form', ['selected' => old('series', [])])
+        @include('admin.coins._form')
     </form>
 @endsection

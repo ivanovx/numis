@@ -15,12 +15,12 @@
                         <div class="coin-flip-inner">
                             <div class="coin-flip-front">
                                 @if ($coin->front_image_url)
-                                    <img src="{{ $coin->front_image_url }}" class="img-fluid" alt="{{ $coin->title }} front">
+                                    <img src="{{ $coin->front_image_url }}" class="img-fluid" alt="{{ $coin->title }} — {{ __('catalog.front_label') }}">
                                 @endif
                             </div>
                             <div class="coin-flip-back">
                                 @if ($coin->back_image_url)
-                                    <img src="{{ $coin->back_image_url }}" class="img-fluid" alt="{{ $coin->title }} back">
+                                    <img src="{{ $coin->back_image_url }}" class="img-fluid" alt="{{ $coin->title }} — {{ __('catalog.back_label') }}">
                                 @endif
                             </div>
                         </div>
@@ -28,13 +28,13 @@
 
                     <div class="card-body">
                         <ul class="list-unstyled small">
-                            @if ($coin->year)<li><strong>Year:</strong> {{ $coin->year }}</li>@endif
-                            @if ($coin->metal)<li><strong>Metal:</strong> {{ $coin->metal }}</li>@endif
-                            @if ($coin->diameter)<li><strong>Diameter:</strong> {{ $coin->diameter }} mm</li>@endif
+                            @if ($coin->year)<li><strong>{{ __('catalog.year_label') }}:</strong> {{ $coin->year }}</li>@endif
+                            @if ($coin->denomination)<li><strong>{{ __('catalog.denomination_label') }}:</strong> {{ $coin->denomination }}</li>@endif
+                            @if ($coin->metal)<li><strong>{{ __('catalog.metal_label') }}:</strong> {{ $coin->metal }}</li>@endif
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <span class="text-muted">{{ $coin->seriesNames() }}</span>
+                        <span class="text-muted">{{ $coin->series?->name ?? __('catalog.no_series') }}</span>
                     </div>
                 </div>
             </div>
@@ -44,23 +44,46 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">{{ $coin->title }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('catalog.close') }}"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="text-center mb-3">
-                                @if ($coin->front_image_url)
-                                    <img src="{{ $coin->front_image_url }}" class="img-fluid mb-2" style="max-height:200px" alt="front">
-                                @endif
-                                @if ($coin->back_image_url)
-                                    <img src="{{ $coin->back_image_url }}" class="img-fluid" style="max-height:200px" alt="back">
-                                @endif
+
+                            <div class="row text-center mb-3">
+                                <div class="col-6">
+                                    @if ($coin->front_image_url)
+                                        <img src="{{ $coin->front_image_url }}" class="img-fluid mb-1" style="max-height:200px" alt="{{ __('catalog.front_label') }}">
+                                    @endif
+                                    <div class="small text-muted">{{ __('catalog.front_label') }}</div>
+                                    @if ($coin->front_description)
+                                        <p class="small mt-1">{{ $coin->front_description }}</p>
+                                    @endif
+                                </div>
+                                <div class="col-6">
+                                    @if ($coin->back_image_url)
+                                        <img src="{{ $coin->back_image_url }}" class="img-fluid mb-1" style="max-height:200px" alt="{{ __('catalog.back_label') }}">
+                                    @endif
+                                    <div class="small text-muted">{{ __('catalog.back_label') }}</div>
+                                    @if ($coin->back_description)
+                                        <p class="small mt-1">{{ $coin->back_description }}</p>
+                                    @endif
+                                </div>
                             </div>
-                            <ul class="list-unstyled">
-                                @if ($coin->year)<li><strong>Year:</strong> {{ $coin->year }}</li>@endif
-                                @if ($coin->metal)<li><strong>Metal:</strong> {{ $coin->metal }}</li>@endif
-                                @if ($coin->diameter)<li><strong>Diameter:</strong> {{ $coin->diameter }} mm</li>@endif
-                                <li><strong>Series:</strong> {{ $coin->seriesNames() }}</li>
+
+                            <ul class="list-unstyled mb-3">
+                                @if ($coin->year)<li><strong>{{ __('catalog.year_label') }}:</strong> {{ $coin->year }}</li>@endif
+                                @if ($coin->issue_date)<li><strong>{{ __('catalog.issue_date_label') }}:</strong> {{ $coin->issue_date->format('d.m.Y') }}</li>@endif
+                                @if ($coin->denomination)<li><strong>{{ __('catalog.denomination_label') }}:</strong> {{ $coin->denomination }}</li>@endif
+                                @if ($coin->metal)<li><strong>{{ __('catalog.metal_label') }}:</strong> {{ $coin->metal }}</li>@endif
+                                @if ($coin->quality)<li><strong>{{ __('catalog.quality_label') }}:</strong> {{ $coin->quality }}</li>@endif
+                                @if ($coin->weight)<li><strong>{{ __('catalog.weight_label') }}:</strong> {{ $coin->weight }}</li>@endif
+                                @if ($coin->diameter)<li><strong>{{ __('catalog.diameter_label') }}:</strong> {{ $coin->diameter }} mm</li>@endif
+                                @if ($coin->edge)<li><strong>{{ __('catalog.edge_label') }}:</strong> {{ $coin->edge }}</li>@endif
+                                @if ($coin->mintage)<li><strong>{{ __('catalog.mintage_label') }}:</strong> {{ $coin->mintage }}</li>@endif
+                                @if ($coin->mint)<li><strong>{{ __('catalog.mint_label') }}:</strong> {{ $coin->mint }}</li>@endif
+                                @if ($coin->artists->isNotEmpty())<li><strong>{{ __('catalog.artist_label') }}:</strong> {{ $coin->artistNames() }}</li>@endif
+                                <li><strong>{{ __('catalog.series_label') }}:</strong> {{ $coin->series?->name ?? __('catalog.no_series') }}</li>
                             </ul>
+
                             @if ($coin->description)
                                 <div class="mt-3">{!! nl2br(e($coin->description)) !!}</div>
                             @endif
@@ -78,5 +101,5 @@
 </div>
 
 @else
-    <p class="text-center mt-4">No coins found.</p>
+    <p class="text-center mt-4">{{ __('catalog.no_coins_found') }}</p>
 @endif
