@@ -1,0 +1,23 @@
+type Query {
+    coins: [Coin!]! @all
+    coin(id: ID! @eq): Coin @find
+    series: [Series!]! @all
+}
+
+type Coin {
+    id: ID!
+    title: String!
+    year: Int
+    metal: String
+    description: String
+    series_id: ID
+    series: Series @belongsTo
+    seriesName: String @method(name: "seriesName")
+}
+
+type Series {
+    id: ID!
+    name: String!
+    slug: String!
+    coins: [Coin!]! @hasMany
+}

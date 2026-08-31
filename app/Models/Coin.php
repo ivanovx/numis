@@ -65,6 +65,11 @@ class Coin extends Model
             : '';
     }
 
+    public function seriesName(): ?string
+    {
+        return $this->series?->name;
+    }
+
     // --- Translatable fields: stored as {"bg":"...","en":"...","de":"..."} ---
 
     public function getTitleAttribute($value): ?string
