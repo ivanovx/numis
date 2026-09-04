@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ArtistController;
 use App\Http\Controllers\Admin\CoinController;
+use App\Http\Controllers\Admin\CsvController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SeriesController;
 use App\Http\Controllers\Auth\LoginController;
@@ -65,6 +66,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 */
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('{resource}/export', [CsvController::class, 'export'])->name('csv.export');
+    Route::post('{resource}/import', [CsvController::class, 'import'])->name('csv.import');
     Route::resource('coins', CoinController::class);
     Route::resource('series', SeriesController::class);
     Route::resource('artists', ArtistController::class);

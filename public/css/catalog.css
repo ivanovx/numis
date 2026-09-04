@@ -117,7 +117,7 @@ main {
     padding-top: calc(var(--site-navbar-height) + var(--catalog-filter-height));
 }
 
-#coin-list > .container {
+#coin-list > .container-fluid {
     padding-top: 1.25rem;
 }
 
@@ -135,17 +135,19 @@ main {
 }
 
 #coin-list .card-header .btn-link {
-    display: block;
     width: 100%;
+    min-height: 3.1rem;
     overflow: hidden;
-    padding: 0.25rem 0;
+    padding: 0.4rem 0;
     color: #fff8ed;
     font-family: Georgia, 'Times New Roman', serif;
     font-weight: 600;
+    line-height: 1.25;
     text-align: left;
     text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 #coin-list .card-header .btn-link:hover {

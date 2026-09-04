@@ -113,6 +113,30 @@ php artisan migrate
 php artisan db:seed --class=Database\\Seeders\\AdminUserSeeder
 ```
 
+For automatic coin translations when creating a coin, add a DeepL Free API
+key to the application's `.env` file:
+
+```env
+DEEPL_API_KEY=your-deepl-api-key
+```
+
+The create form accepts Bulgarian text only and translates the translatable
+coin fields into English and German through DeepL. The edit form shows all
+three language fields for manual corrections. Keep the API key out of source
+control.
+
+### Admin CSV import/export
+
+The admin list pages provide CSV export and import for coins, series, and
+artists. Export a resource first to get the exact header format for imports.
+Imports update existing records by `id` for coins and by `slug` for series and
+artists. Coin relationships use `series_slug` and pipe-separated
+`artist_slugs` (for example `artist-one|artist-two`). Coin image columns store
+the existing storage paths; CSV import does not upload image binaries.
+
+Imports run inside a database transaction. Invalid rows are skipped and
+reported after the import; keep a backup before replacing a large dataset.
+
 `php artisan storage:link` is required — uploaded coin images are stored in
 `storage/app/public/coins` and served through the `public/storage` symlink.
 

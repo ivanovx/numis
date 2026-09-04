@@ -4,30 +4,37 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Series;
+use App\Services\CoinTranslationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class SeriesController extends Controller
 {
     public function index()
     {
-        // name is a JSON column, so sort by slug instead (name isn't reliably sortable in SQL).
-        $series = Series::withCount('coins')->orderBy('slug')->paginate(20)->withQueryString();
-
-        return view('admin.series.index', compact('series'));
+        return view('admin.series.index');
     }
 
     public function create()
     {
         return view('admin.series.create', [
-            'series' => new Series(),
+            'series' => new Series,
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CoinTranslationService $translator)
     {
         $data = $this->validated($request);
+
+        try {
+            $data = $translator->translateFields($data, ['name']);
+        } catch (Throwable $exception) {
+            throw ValidationException::withMessages([
+                'name.bg' => 'Automatic translation failed: '.$exception->getMessage(),
+            ]);
+        }
 
         Series::create($data);
 
@@ -60,11 +67,11 @@ class SeriesController extends Controller
         $id = $series?->id;
 
         $data = $request->validate([
-            'name'    => ['required', 'array'],
+            'name' => ['required', 'array'],
             'name.bg' => ['nullable', 'string', 'max:255'],
             'name.en' => ['nullable', 'string', 'max:255'],
             'name.de' => ['nullable', 'string', 'max:255'],
-            'slug'    => ['nullable', 'string', 'max:255', 'unique:series,slug,' . $id],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:series,slug,'.$id],
         ]);
 
         $firstName = collect($data['name'])->first(fn ($v) => filled($v));

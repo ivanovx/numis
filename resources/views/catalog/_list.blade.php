@@ -1,10 +1,10 @@
 @if ($coins->count())
 
-<div class="container mt-4">
-    <div class="row g-4">
+<div class="container-fluid px-3 px-lg-4 mt-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
 
         @foreach ($coins as $coin)
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="col">
                 <div class="card shadow-sm h-100">
                     <div class="card-header">
                         <a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#coinModal-{{ $coin->id }}">
@@ -56,7 +56,7 @@
                                     @endif
                                     <div class="small text-muted">{{ __('catalog.front_label') }}</div>
                                     @if ($coin->front_description)
-                                        <p class="small mt-1">{{ $coin->front_description }}</p>
+                                        <div class="small mt-1">{!! $coin->front_description !!}</div>
                                     @endif
                                 </div>
                                 <div class="col-6">
@@ -65,7 +65,7 @@
                                     @endif
                                     <div class="small text-muted">{{ __('catalog.back_label') }}</div>
                                     @if ($coin->back_description)
-                                        <p class="small mt-1">{{ $coin->back_description }}</p>
+                                        <div class="small mt-1">{!! $coin->back_description !!}</div>
                                     @endif
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                             </ul>
 
                             @if ($coin->description)
-                                <div class="mt-3">{!! nl2br(e($coin->description)) !!}</div>
+                                <div class="mt-3">{!! $coin->description !!}</div>
                             @endif
                         </div>
                     </div>
@@ -98,7 +98,7 @@
     </div>
 </div>
 
-<div class="container catalog-pagination py-4">
+<div class="container-fluid px-3 px-lg-4 catalog-pagination py-4">
     <div class="d-flex justify-content-center">
         {{ $coins->onEachSide(1)->links('pagination::bootstrap-5') }}
     </div>

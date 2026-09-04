@@ -1,9 +1,11 @@
+@php($languages = $coin->exists ? ['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] : ['bg' => 'Bulgarian'])
+
 <div class="row g-3">
 
     <div class="col-12">
         <label class="form-label fw-bold mb-1">Title (Заглавие)</label>
         <div class="row g-2">
-            @foreach (['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] as $code => $label)
+            @foreach ($languages as $code => $label)
                 <div class="col-md-4">
                     <label class="form-label small text-muted">{{ $label }}</label>
                     <input type="text" name="title[{{ $code }}]" class="form-control"
@@ -11,7 +13,13 @@
                 </div>
             @endforeach
         </div>
-        <div class="form-text">At least one language is required. Blank languages fall back to another filled one on the public site.</div>
+        <div class="form-text">
+            @if ($coin->exists)
+                Edit the translations directly. Blank languages fall back to another filled one on the public site.
+            @else
+                Enter the Bulgarian text. English and German will be translated automatically with DeepL after saving.
+            @endif
+        </div>
     </div>
 
     <div class="col-md-4">
@@ -106,7 +114,7 @@
         <div class="col-12">
             <label class="form-label fw-bold mb-1">{{ $label }}</label>
             <div class="row g-2">
-                @foreach (['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] as $code => $langLabel)
+                @foreach ($languages as $code => $langLabel)
                     <div class="col-md-4">
                         <label class="form-label small text-muted">{{ $langLabel }}</label>
                         <input type="text" name="{{ $field }}[{{ $code }}]" class="form-control"
@@ -124,10 +132,12 @@
             <img src="{{ $coin->front_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
         @endif
         <div class="row g-2 mt-2">
-            @foreach (['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] as $code => $label)
+            @foreach ($languages as $code => $label)
                 <div class="col-md-4">
                     <label class="form-label small text-muted">Description ({{ $label }})</label>
-                    <textarea name="front_description[{{ $code }}]" rows="3" class="form-control">{{ old('front_description.' . $code, $coin->translation('front_description', $code)) }}</textarea>
+                    @php($frontDescriptionId = 'front-description-' . $code)
+                    <textarea id="{{ $frontDescriptionId }}" name="front_description[{{ $code }}]" class="d-none">{{ old('front_description.' . $code, $coin->translation('front_description', $code)) }}</textarea>
+                    <div class="rich-text-editor" data-rich-text-editor="{{ $frontDescriptionId }}"></div>
                 </div>
             @endforeach
         </div>
@@ -140,10 +150,12 @@
             <img src="{{ $coin->back_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
         @endif
         <div class="row g-2 mt-2">
-            @foreach (['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] as $code => $label)
+            @foreach ($languages as $code => $label)
                 <div class="col-md-4">
                     <label class="form-label small text-muted">Description ({{ $label }})</label>
-                    <textarea name="back_description[{{ $code }}]" rows="3" class="form-control">{{ old('back_description.' . $code, $coin->translation('back_description', $code)) }}</textarea>
+                    @php($backDescriptionId = 'back-description-' . $code)
+                    <textarea id="{{ $backDescriptionId }}" name="back_description[{{ $code }}]" class="d-none">{{ old('back_description.' . $code, $coin->translation('back_description', $code)) }}</textarea>
+                    <div class="rich-text-editor" data-rich-text-editor="{{ $backDescriptionId }}"></div>
                 </div>
             @endforeach
         </div>
@@ -152,10 +164,12 @@
     <div class="col-12">
         <label class="form-label fw-bold mb-1">Description (Описание)</label>
         <div class="row g-2">
-            @foreach (['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] as $code => $label)
+            @foreach ($languages as $code => $label)
                 <div class="col-md-4">
                     <label class="form-label small text-muted">{{ $label }}</label>
-                    <textarea name="description[{{ $code }}]" rows="6" class="form-control">{{ old('description.' . $code, $coin->translation('description', $code)) }}</textarea>
+                    @php($descriptionId = 'description-' . $code)
+                    <textarea id="{{ $descriptionId }}" name="description[{{ $code }}]" class="d-none">{{ old('description.' . $code, $coin->translation('description', $code)) }}</textarea>
+                    <div class="rich-text-editor" data-rich-text-editor="{{ $descriptionId }}"></div>
                 </div>
             @endforeach
         </div>

@@ -11,14 +11,12 @@ class ArtistController extends Controller
 {
     public function index()
     {
-        $artists = Artist::withCount('coins')->orderBy('name')->paginate(20)->withQueryString();
-
-        return view('admin.artists.index', compact('artists'));
+        return view('admin.artists.index');
     }
 
     public function create()
     {
-        return view('admin.artists.create', ['artist' => new Artist()]);
+        return view('admin.artists.create', ['artist' => new Artist]);
     }
 
     public function store(Request $request)
@@ -53,7 +51,7 @@ class ArtistController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:artists,slug,' . $id],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:artists,slug,'.$id],
         ]);
 
         $data['slug'] = $data['slug'] ? Str::slug($data['slug']) : Str::slug($data['name']);

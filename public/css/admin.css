@@ -1,0 +1,73 @@
+:root {
+    --admin-ink: #17202a;
+    --admin-muted: #6c757d;
+    --admin-accent: #c96b3b;
+}
+
+body.admin-shell {
+    color: var(--admin-ink);
+    background: #f5f3ef !important;
+}
+
+.admin-navbar {
+    background: #17202a;
+    box-shadow: 0 0.35rem 1rem rgba(23, 32, 42, 0.16);
+}
+
+.admin-navbar .navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.admin-navbar .nav-link {
+    border-bottom: 2px solid transparent;
+    color: rgba(255, 255, 255, 0.7) !important;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+}
+
+.admin-navbar .nav-link:hover,
+.admin-navbar .nav-link.active {
+    border-bottom-color: var(--admin-accent);
+    color: #fff !important;
+}
+
+.admin-navbar .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.admin-main {
+    min-height: calc(100vh - 180px);
+}
+
+.admin-page-title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.admin-shell .btn-primary {
+    background-color: var(--admin-accent);
+    border-color: var(--admin-accent);
+}
+
+.admin-shell .btn-primary:hover {
+    background-color: #ad572e;
+    border-color: #ad572e;
+}
+
+@media (max-width: 991.98px) {
+    .admin-navbar .navbar-nav {
+        align-items: stretch !important;
+        padding-top: 0.75rem;
+    }
+
+    .admin-navbar .nav-link {
+        border-bottom: 0;
+        border-left: 2px solid transparent;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .admin-navbar .nav-link.active {
+        border-left-color: var(--admin-accent);
+    }
+}

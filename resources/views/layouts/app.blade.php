@@ -37,7 +37,7 @@
 <body>
 
     <nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container justify-content-between">
+        <div class="container-fluid px-3 px-lg-4 justify-content-between">
             <a class="navbar-brand" href="{{ route('catalog.index') }}">{{ __('catalog.site_title') }}</a>
             <div class="d-flex gap-2">
                 @foreach (['bg' => 'БГ', 'en' => 'EN', 'de' => 'DE'] as $code => $label)

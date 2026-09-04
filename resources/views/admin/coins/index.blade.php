@@ -6,42 +6,7 @@
         <a href="{{ route('admin.coins.create') }}" class="btn btn-primary">➕ Add Coin</a>
     </div>
 
-    <table class="table table-striped bg-white">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Denomination</th>
-                <th>Metal</th>
-                <th>Series</th>
-                <th>Artists</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($coins as $coin)
-                <tr>
-                    <td>{{ $coin->title }}</td>
-                    <td>{{ $coin->year }}</td>
-                    <td>{{ $coin->denomination }}</td>
-                    <td>{{ $coin->metal }}</td>
-                    <td>{{ $coin->series?->name ?? '—' }}</td>
-                    <td>{{ $coin->artistNames() ?: '—' }}</td>
-                    <td class="text-end">
-                        <a href="{{ route('admin.coins.edit', $coin) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                        <form action="{{ route('admin.coins.destroy', $coin) }}" method="POST" class="d-inline"
-                              onsubmit="return confirm('Delete this coin?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr><td colspan="7">No coins found.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+    @include('admin._csv-tools', ['resource' => 'coins'])
 
-    {{ $coins->links() }}
+    <livewire:admin.coins-grid />
 @endsection
