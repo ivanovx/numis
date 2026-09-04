@@ -8,6 +8,7 @@ return [
         'name' => 'graphql',
         'middleware' => [
             Nuwave\Lighthouse\Http\Middleware\AcceptJson::class,
+            App\Http\Middleware\SetGraphqlLocale::class,
             Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
         ],
     ],

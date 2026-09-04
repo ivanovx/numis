@@ -18,6 +18,7 @@ it('exposes a graphql endpoint for coin data', function () {
     ]);
 
     $response = $this->postJson('/graphql', [
+        'locale' => 'bg',
         'query' => '{
             coins {
                 id

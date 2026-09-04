@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\SeriesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Middleware\SetLocale;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +20,16 @@ use Illuminate\Support\Facades\Route;
 | locale-prefixed — it stays in one language for whoever manages the site.
 */
 Route::redirect('/', '/' . config('app.locale', 'bg'));
+
+Route::get('/graphql-ui', function (Request $request) {
+    $locale = $request->query('locale', config('app.locale', 'en'));
+
+    if (in_array($locale, SetLocale::SUPPORTED, true)) {
+        App::setLocale($locale);
+    }
+
+    return view('graphql-ui');
+})->name('graphql.ui');
 
 Route::prefix('{locale}')
     ->whereIn('locale', SetLocale::SUPPORTED)
