@@ -126,7 +126,7 @@ main {
     border: 1px solid var(--catalog-line);
     border-radius: 0.65rem;
     background: rgba(255, 253, 248, 0.94);
-    box-shadow: 0 0.4rem 1rem rgba(23, 35, 43, 0.08) !important;
+    box-shadow: none !important;
 }
 
 #coin-list .card-header {
@@ -184,7 +184,6 @@ main {
 #coin-list .coin-flip-back img {
     max-height: 160px;
     object-fit: contain;
-    filter: drop-shadow(0 0.5rem 0.45rem rgba(23, 35, 43, 0.18));
 }
 
 #coin-list .coin-flip-back {
