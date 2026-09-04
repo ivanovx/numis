@@ -28,6 +28,7 @@ return [
     'no_series'         => 'None',
     'no_coins_found'    => 'No coins found.',
     'close'             => 'Close',
+    'back_to_catalog'   => 'Back to catalog',
 
     'year_label'             => 'Year',
     'issue_date_label'       => 'Date of issue',
@@ -42,6 +43,8 @@ return [
     'series_label'           => 'Series',
     'front_label'            => 'Obverse',
     'back_label'             => 'Reverse',
+        'unknown_year'           => 'Year not specified',
+        'exchange_group'         => 'Circulation coins',
 
     'denomination' => 'Denomination',
     'all_denominations' => 'All Denominations',

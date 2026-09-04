@@ -125,7 +125,7 @@
         </div>
     @endforeach
 
-    <div class="col-md-6">
+    <div class="col-12">
         <label class="form-label">Front image (Лице)</label>
         <input type="file" name="front_image" class="form-control" accept="image/*">
         @if ($coin->front_image_url)
@@ -133,7 +133,7 @@
         @endif
         <div class="row g-2 mt-2">
             @foreach ($languages as $code => $label)
-                <div class="col-md-4">
+                <div class="col-12">
                     <label class="form-label small text-muted">Description ({{ $label }})</label>
                     @php($frontDescriptionId = 'front-description-' . $code)
                     <textarea id="{{ $frontDescriptionId }}" name="front_description[{{ $code }}]" class="d-none">{{ old('front_description.' . $code, $coin->translation('front_description', $code)) }}</textarea>
@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-12">
         <label class="form-label">Back image (Реверс)</label>
         <input type="file" name="back_image" class="form-control" accept="image/*">
         @if ($coin->back_image_url)
@@ -151,7 +151,7 @@
         @endif
         <div class="row g-2 mt-2">
             @foreach ($languages as $code => $label)
-                <div class="col-md-4">
+                <div class="col-12">
                     <label class="form-label small text-muted">Description ({{ $label }})</label>
                     @php($backDescriptionId = 'back-description-' . $code)
                     <textarea id="{{ $backDescriptionId }}" name="back_description[{{ $code }}]" class="d-none">{{ old('back_description.' . $code, $coin->translation('back_description', $code)) }}</textarea>
@@ -165,7 +165,7 @@
         <label class="form-label fw-bold mb-1">Description (Описание)</label>
         <div class="row g-2">
             @foreach ($languages as $code => $label)
-                <div class="col-md-4">
+                <div class="col-12">
                     <label class="form-label small text-muted">{{ $label }}</label>
                     @php($descriptionId = 'description-' . $code)
                     <textarea id="{{ $descriptionId }}" name="description[{{ $code }}]" class="d-none">{{ old('description.' . $code, $coin->translation('description', $code)) }}</textarea>

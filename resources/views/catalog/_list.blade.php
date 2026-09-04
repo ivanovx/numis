@@ -2,12 +2,21 @@
 
 <div class="container-fluid px-3 px-lg-4 mt-4">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+        @php($previousYear = '__initial__')
 
         @foreach ($coins as $coin)
+            @php($coinYear = $coin->year ?: 'unknown')
+            @if (($filters['category'] ?? '') === 'exchange' && $previousYear !== $coinYear)
+                <div class="col-12 catalog-year-heading">
+                    <h2>{{ $coinYear === 'unknown' ? __('catalog.unknown_year') : $coinYear }}</h2>
+                    <span>{{ __('catalog.exchange_group') }}</span>
+                </div>
+                @php($previousYear = $coinYear)
+            @endif
             <div class="col">
                 <div class="card shadow-sm h-100">
                     <div class="card-header">
-                        <a class="btn btn-link" data-bs-toggle="modal" data-bs-target="#coinModal-{{ $coin->id }}">
+                                <a class="btn btn-link" href="{{ route('catalog.coin', ['locale' => app()->getLocale(), 'coin' => $coin]) }}">
                             {{ $coin->title }}
                         </a>
                     </div>

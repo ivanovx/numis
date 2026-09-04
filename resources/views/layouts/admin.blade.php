@@ -86,6 +86,16 @@
             });
         });
     </script>
+    <style>
+        .rich-text-editor {
+            background: #fff;
+        }
+
+        .rich-text-editor .ql-container,
+        .rich-text-editor .ql-editor {
+            min-height: 300px;
+        }
+    </style>
     @livewireScripts
 </body>
 </html>

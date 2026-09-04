@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? __('catalog.seo_title') }}</title>
-    <meta name="description" content="{{ __('catalog.seo_description') }}">
+    <title>{{ $seoTitle ?? __('catalog.seo_title') }}</title>
+    <meta name="description" content="{{ $seoDescription ?? __('catalog.seo_description') }}">
     <meta name="robots" content="{{ request()->except('page') ? 'noindex,follow' : 'index,follow' }}">
-    <link rel="canonical" href="{{ route('catalog.index', request()->integer('page') > 1 ? ['page' => request()->integer('page')] : []) }}">
+    <link rel="canonical" href="{{ $canonicalUrl ?? route('catalog.index', request()->integer('page') > 1 ? ['page' => request()->integer('page')] : []) }}">
     @foreach (['bg', 'en', 'de'] as $locale)
-        <link rel="alternate" hreflang="{{ $locale }}" href="{{ route('catalog.index', ['locale' => $locale]) }}">
+        <link rel="alternate" hreflang="{{ $locale }}" href="{{ $alternateUrls[$locale] ?? route('catalog.index', ['locale' => $locale]) }}">
     @endforeach
     <link rel="alternate" hreflang="x-default" href="{{ route('catalog.index', ['locale' => 'bg']) }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ __('catalog.site_title') }}">
-    <meta property="og:title" content="{{ __('catalog.seo_title') }}">
-    <meta property="og:description" content="{{ __('catalog.seo_description') }}">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $seoTitle ?? __('catalog.seo_title') }}">
+    <meta property="og:description" content="{{ $seoDescription ?? __('catalog.seo_description') }}">
+    <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
+    @if (! empty($ogImage))
+        <meta property="og:image" content="{{ $ogImage }}">
+    @endif
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="{{ __('catalog.seo_title') }}">
-    <meta name="twitter:description" content="{{ __('catalog.seo_description') }}">
-    @php($structuredData = [
+    <meta name="twitter:title" content="{{ $seoTitle ?? __('catalog.seo_title') }}">
+    <meta name="twitter:description" content="{{ $seoDescription ?? __('catalog.seo_description') }}">
+    @php($structuredData = $structuredData ?? [
         '@context' => 'https://schema.org',
         '@type' => 'CollectionPage',
         'name' => __('catalog.seo_title'),
         'description' => __('catalog.seo_description'),
-        'url' => url()->current(),
+        'url' => $canonicalUrl ?? url()->current(),
         'inLanguage' => app()->getLocale(),
     ])
     <script type="application/ld+json">

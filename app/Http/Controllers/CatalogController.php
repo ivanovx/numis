@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\SetLocale;
 use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CatalogController extends Controller
 {
@@ -14,13 +16,13 @@ class CatalogController extends Controller
         $coins = $this->filteredQuery($request)->paginate(16)->withQueryString();
 
         $data = [
-            'coins'         => $coins,
-            'filters'       => $this->currentFilters($request),
-            'metals'        => Coin::whereNotNull('metal')->distinct()->orderBy('metal')->pluck('metal'),
-            'diameters'     => Coin::whereNotNull('diameter')->distinct()->orderBy('diameter')->pluck('diameter'),
+            'coins' => $coins,
+            'filters' => $this->currentFilters($request),
+            'metals' => Coin::whereNotNull('metal')->distinct()->orderBy('metal')->pluck('metal'),
+            'diameters' => Coin::whereNotNull('diameter')->distinct()->orderBy('diameter')->pluck('diameter'),
             'denominations' => Coin::whereNotNull('denomination')->distinct()->orderBy('denomination')->pluck('denomination'),
-            'allSeries'     => Series::forSelect(),
-            'allArtists'    => Artist::orderBy('name')->get(),
+            'allSeries' => Series::forSelect(),
+            'allArtists' => Artist::orderBy('name')->get(),
         ];
 
         // Fetch-based filtering: return just the list fragment for XHR requests.
@@ -29,6 +31,41 @@ class CatalogController extends Controller
         }
 
         return view('catalog.index', $data);
+    }
+
+    public function show(string $locale, Coin $coin)
+    {
+        $coin->load(['series', 'artists']);
+
+        $description = collect([
+            $coin->description,
+            $coin->front_description,
+            $coin->back_description,
+        ])->filter()->implode(' ');
+
+        return view('catalog.show', [
+            'coin' => $coin,
+            'seoTitle' => $coin->title.' | '.__('catalog.site_title'),
+            'seoDescription' => Str::limit(trim(strip_tags($description)), 160),
+            'canonicalUrl' => route('catalog.coin', ['locale' => $locale, 'coin' => $coin]),
+            'alternateUrls' => collect(SetLocale::SUPPORTED)->mapWithKeys(
+                fn (string $supportedLocale) => [$supportedLocale => route('catalog.coin', ['locale' => $supportedLocale, 'coin' => $coin])]
+            )->all(),
+            'ogImage' => $coin->front_image_url,
+            'structuredData' => [
+                '@context' => 'https://schema.org',
+                '@type' => 'Product',
+                'name' => $coin->title,
+                'description' => Str::limit(trim(strip_tags($description)), 300),
+                'url' => route('catalog.coin', ['locale' => $locale, 'coin' => $coin]),
+                'image' => array_values(array_filter([$coin->front_image_url, $coin->back_image_url])),
+                'category' => $coin->category,
+                'brand' => [
+                    '@type' => 'Brand',
+                    'name' => __('catalog.site_title'),
+                ],
+            ],
+        ]);
     }
 
     protected function filteredQuery(Request $request)
@@ -65,14 +102,14 @@ class CatalogController extends Controller
     protected function currentFilters(Request $request): array
     {
         return [
-            'year_from'    => $request->input('year_from', ''),
-            'year_to'      => $request->input('year_to', ''),
-            'category'     => $request->input('category', ''),
-            'metal'        => $request->input('metal', ''),
-            'diameter'     => $request->input('diameter', ''),
+            'year_from' => $request->input('year_from', ''),
+            'year_to' => $request->input('year_to', ''),
+            'category' => $request->input('category', ''),
+            'metal' => $request->input('metal', ''),
+            'diameter' => $request->input('diameter', ''),
             'denomination' => $request->input('denomination', ''),
-            'series'       => $request->input('series', ''),
-            'artist'       => $request->input('artist', ''),
+            'series' => $request->input('series', ''),
+            'artist' => $request->input('artist', ''),
         ];
     }
 }

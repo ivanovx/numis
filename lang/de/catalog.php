@@ -28,6 +28,7 @@ return [
     'no_series'         => 'Keine',
     'no_coins_found'    => 'Keine Münzen gefunden.',
     'close'             => 'Schließen',
+    'back_to_catalog'   => 'Zurück zum Katalog',
 
     'year_label'             => 'Jahr',
     'issue_date_label'       => 'Ausgabedatum',
@@ -42,6 +43,8 @@ return [
     'series_label'           => 'Serie',
     'front_label'            => 'Vorderseite',
     'back_label'             => 'Rückseite',
+        'unknown_year'           => 'Jahr nicht angegeben',
+        'exchange_group'         => 'Umlaufmünzen',
 
     'denomination' => 'Nennwert',
     'all_denominations' => 'Alle Nennwerte',

@@ -79,6 +79,7 @@
                     <th>Metal</th>
                     <th>Series</th>
                     <th>Artists</th>
+                    <th>Status</th>
                     <th class="text-end">Actions</th>
                 </tr>
             </thead>
@@ -95,6 +96,13 @@
                         <td>{{ $coin->metal ?: '—' }}</td>
                         <td>{{ $coin->series?->name ?: '—' }}</td>
                         <td>{{ $coin->artistNames() ?: '—' }}</td>
+                        <td class="text-nowrap">
+                            @foreach ($this->statusFlags($coin) as $status)
+                                <span class="badge {{ $status === 'Complete' ? 'text-bg-success' : 'text-bg-warning' }} mb-1">
+                                    {{ $status }}
+                                </span>
+                            @endforeach
+                        </td>
                         <td class="text-end text-nowrap">
                             <a href="{{ route('admin.coins.edit', $coin) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
                             <form action="{{ route('admin.coins.destroy', $coin) }}" method="POST" class="d-inline"
@@ -106,7 +114,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="8" class="text-center py-4">No coins found.</td></tr>
+                    <tr><td colspan="9" class="text-center py-4">No coins found.</td></tr>
                 @endforelse
             </tbody>
         </table>

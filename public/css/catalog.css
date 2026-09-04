@@ -121,6 +121,28 @@ main {
     padding-top: 1.25rem;
 }
 
+.catalog-year-heading {
+    display: flex !important;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 2px solid var(--catalog-copper);
+    background: rgba(233, 226, 213, 0.55);
+}
+
+.catalog-year-heading h2 {
+    margin: 0;
+    color: var(--catalog-ink);
+    font-size: 1.35rem;
+}
+
+.catalog-year-heading span {
+    color: var(--catalog-teal);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
 #coin-list .card {
     overflow: hidden;
     border: 1px solid var(--catalog-line);
@@ -271,6 +293,94 @@ main {
 .catalog-pagination .disabled .page-link {
     background: transparent;
     color: rgba(23, 35, 43, 0.4);
+}
+
+.catalog-detail {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+}
+
+.catalog-detail-kicker,
+.catalog-detail-eyebrow {
+    color: var(--catalog-teal);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.catalog-detail-card {
+    overflow: hidden;
+    border: 1px solid var(--catalog-line);
+    border-top: 4px solid var(--catalog-copper);
+    border-radius: 0.75rem;
+    background: #fffdf8;
+    box-shadow: 0 0.75rem 2rem rgba(23, 35, 43, 0.08);
+}
+
+.catalog-detail-header {
+    padding: 2rem clamp(1.25rem, 4vw, 3rem);
+    background: var(--catalog-ink);
+    color: #fff8ed;
+}
+
+.catalog-detail-header h1 {
+    max-width: 48rem;
+    margin-bottom: 0.65rem;
+    font-size: clamp(1.7rem, 3vw, 2.8rem);
+    line-height: 1.15;
+}
+
+.catalog-detail-header .catalog-detail-eyebrow {
+    color: #efb18d;
+}
+
+.catalog-detail-images,
+.catalog-detail-content {
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.catalog-detail-images {
+    background: var(--catalog-paper-deep);
+}
+
+.catalog-detail-image-frame {
+    display: flex;
+    min-height: 15rem;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border: 1px solid var(--catalog-line);
+    background: #fffdf8;
+}
+
+.catalog-detail-image-frame img {
+    max-height: 15rem;
+    object-fit: contain;
+}
+
+.catalog-spec-list dt,
+.catalog-spec-list dd {
+    padding: 0.7rem 0;
+    border-bottom: 1px dotted var(--catalog-line);
+}
+
+.catalog-spec-list dt {
+    color: var(--catalog-teal);
+    font-weight: 700;
+}
+
+.catalog-rich-text > :first-child {
+    margin-top: 0;
+}
+
+.catalog-rich-text > :last-child {
+    margin-bottom: 0;
+}
+
+.catalog-detail-description {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--catalog-line);
 }
 
 @media (max-width: 575.98px) {

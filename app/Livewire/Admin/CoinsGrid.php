@@ -104,6 +104,33 @@ class CoinsGrid extends Component
         session()->flash('status', 'Selected coins assigned to the series.');
     }
 
+    public function statusFlags(Coin $coin): array
+    {
+        $flags = [];
+
+        if (! $coin->front_image || ! $coin->back_image) {
+            $flags[] = 'Missing images';
+        }
+
+        if (collect(['bg', 'en', 'de'])->contains(fn ($locale) => ! filled($coin->translation('title', $locale)))) {
+            $flags[] = 'Missing translations';
+        }
+
+        if (! $coin->series_id) {
+            $flags[] = 'Missing series';
+        }
+
+        if (! $coin->year) {
+            $flags[] = 'Missing year';
+        }
+
+        if (! collect(['bg', 'en', 'de'])->contains(fn ($locale) => filled($coin->translation('description', $locale)))) {
+            $flags[] = 'Missing description';
+        }
+
+        return $flags ?: ['Complete'];
+    }
+
     public function render(): View
     {
         $coins = Coin::query()

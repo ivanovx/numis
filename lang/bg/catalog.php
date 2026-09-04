@@ -28,6 +28,7 @@ return [
     'no_series'         => 'Няма',
     'no_coins_found'    => 'Няма намерени монети.',
     'close'             => 'Затвори',
+    'back_to_catalog'   => 'Обратно към каталога',
 
     'year_label'             => 'Година',
     'issue_date_label'       => 'Дата на въвеждане',
@@ -42,6 +43,8 @@ return [
     'series_label'           => 'Серия',
     'front_label'            => 'Лице',
     'back_label'             => 'Реверс',
+        'unknown_year'           => 'Без посочена година',
+        'exchange_group'         => 'Разменни монети',
 
     'denomination' => 'Номинал',
     'all_denominations' => 'Всички номинали',

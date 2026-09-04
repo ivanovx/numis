@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SeriesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Middleware\SetLocale;
+use App\Models\Coin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -20,15 +21,21 @@ use Illuminate\Support\Facades\Route;
 | "/de" serve the same catalog translated. The admin panel below is not
 | locale-prefixed — it stays in one language for whoever manages the site.
 */
-Route::redirect('/', '/' . config('app.locale', 'bg'));
+Route::redirect('/', '/'.config('app.locale', 'bg'));
 
 Route::get('/sitemap.xml', function () {
     $urls = collect(SetLocale::SUPPORTED)
         ->map(fn (string $locale) => route('catalog.index', ['locale' => $locale]))
-        ->map(fn (string $url) => '<url><loc>' . e($url) . '</loc></url>')
+        ->merge(Coin::query()->pluck('id')->flatMap(
+            fn (int $id) => collect(SetLocale::SUPPORTED)->map(
+                fn (string $locale) => route('catalog.coin', ['locale' => $locale, 'coin' => $id])
+            )
+        ))
+        ->unique()
+        ->map(fn (string $url) => '<url><loc>'.e($url).'</loc></url>')
         ->implode('');
 
-    return response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . $urls . '</urlset>', 200, [
+    return response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.$urls.'</urlset>', 200, [
         'Content-Type' => 'application/xml',
     ]);
 });
@@ -48,6 +55,7 @@ Route::prefix('{locale}')
     ->middleware(SetLocale::class)
     ->group(function () {
         Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
+        Route::get('/coin/{coin}', [CatalogController::class, 'show'])->name('catalog.coin');
     });
 
 /*
