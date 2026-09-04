@@ -383,6 +383,76 @@ main {
     border-top: 1px solid var(--catalog-line);
 }
 
+.catalog-statistics {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+}
+
+.catalog-statistics-header {
+    padding: 2rem clamp(1.25rem, 4vw, 3rem);
+    border-left: 4px solid var(--catalog-copper);
+    background: var(--catalog-ink);
+    color: #fff8ed;
+}
+
+.catalog-statistics-header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.catalog-stat-card,
+.catalog-stat-section {
+    padding: 1.25rem;
+    border: 1px solid var(--catalog-line);
+    border-radius: 0.65rem;
+    background: rgba(255, 253, 248, 0.94);
+}
+
+.catalog-stat-card {
+    border-top: 3px solid var(--catalog-teal);
+}
+
+.catalog-stat-card > i {
+    color: var(--catalog-copper);
+    font-size: 1.25rem;
+}
+
+.catalog-stat-value {
+    margin-top: 0.5rem;
+    color: var(--catalog-ink);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.catalog-stat-label {
+    color: var(--catalog-ink-soft);
+    font-size: 0.9rem;
+}
+
+.catalog-stat-section h2 {
+    margin-bottom: 1rem;
+    color: var(--catalog-ink);
+    font-size: 1.2rem;
+}
+
+.catalog-stat-section .list-group-item {
+    border-color: var(--catalog-line);
+    background: transparent;
+}
+
+.catalog-quality-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-left: 3px solid var(--catalog-copper);
+    background: var(--catalog-paper-deep);
+}
+
+.catalog-quality-card strong {
+    color: var(--catalog-copper-dark);
+    font-size: 1.35rem;
+}
+
 @media (max-width: 575.98px) {
     .catalog-pagination .pagination {
         gap: 0.15rem;

@@ -56,6 +56,7 @@ Route::prefix('{locale}')
     ->group(function () {
         Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
         Route::get('/coin/{coin}', [CatalogController::class, 'show'])->name('catalog.coin');
+        Route::get('/statistics', [CatalogController::class, 'statistics'])->name('catalog.statistics');
     });
 
 /*

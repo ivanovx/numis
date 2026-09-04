@@ -42,7 +42,15 @@
     <nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid px-3 px-lg-4 justify-content-between">
             <a class="navbar-brand" href="{{ route('catalog.index') }}">{{ __('catalog.site_title') }}</a>
-            <div class="d-flex gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ route('catalog.index', ['locale' => app()->getLocale()]) }}"
+                   class="btn btn-sm {{ request()->routeIs('catalog.index') ? 'btn-light' : 'btn-outline-light' }}">
+                    {{ __('catalog.home_nav') }}
+                </a>
+                <a href="{{ route('catalog.statistics', ['locale' => app()->getLocale()]) }}"
+                   class="btn btn-sm {{ request()->routeIs('catalog.statistics') ? 'btn-light' : 'btn-outline-light' }}">
+                    {{ __('catalog.statistics_nav') }}
+                </a>
                 @foreach (['bg' => 'БГ', 'en' => 'EN', 'de' => 'DE'] as $code => $label)
                     <a href="{{ url()->to(preg_replace('#^/(bg|en|de)#', '/' . $code, request()->getRequestUri())) }}"
                        class="btn btn-sm {{ app()->getLocale() === $code ? 'btn-light' : 'btn-outline-light' }}">
