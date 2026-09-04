@@ -2,6 +2,8 @@
 
 return [
     'site_title'        => 'Numis',
+    'seo_title'         => 'Katalog bulgarischer Münzen | Numis',
+    'seo_description'   => 'Entdecken Sie einen Katalog bulgarischer Münzen mit Angaben zu Jahr, Nennwert, Metall, Auflage, Serie und Künstlern.',
     'filter'            => 'Filtern',
     'clear_filters'     => 'Filter löschen',
     'find_pcgs'         => 'Auf PCGS suchen',

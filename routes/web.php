@@ -21,6 +21,17 @@ use Illuminate\Support\Facades\Route;
 */
 Route::redirect('/', '/' . config('app.locale', 'bg'));
 
+Route::get('/sitemap.xml', function () {
+    $urls = collect(SetLocale::SUPPORTED)
+        ->map(fn (string $locale) => route('catalog.index', ['locale' => $locale]))
+        ->map(fn (string $url) => '<url><loc>' . e($url) . '</loc></url>')
+        ->implode('');
+
+    return response('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . $urls . '</urlset>', 200, [
+        'Content-Type' => 'application/xml',
+    ]);
+});
+
 Route::get('/graphql-ui', function (Request $request) {
     $locale = $request->query('locale', config('app.locale', 'en'));
 
