@@ -40,6 +40,15 @@ test('coin description fields use rich text editors', function () {
     $response->assertSee('data-rich-text-editor="back-description-bg"', false);
 });
 
+test('coin image upload fields are rendered on create form', function () {
+    $this->actingAs(User::factory()->create());
+
+    $response = $this->get(route('admin.coins.create'));
+
+    $response->assertSee('name="front_image"', false);
+    $response->assertSee('name="back_image"', false);
+});
+
 test('unsafe markup is removed from coin descriptions on update', function () {
     $this->actingAs(User::factory()->create());
 

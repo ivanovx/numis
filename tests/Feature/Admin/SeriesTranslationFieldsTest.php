@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Artist;
 use App\Models\Series;
 use App\Models\User;
 
@@ -23,6 +24,33 @@ test('series editing shows all translation fields', function () {
     ]);
 
     $response = $this->get(route('admin.series.edit', $series));
+
+    $response->assertOk();
+    $response->assertSee('name="name[bg]"', false);
+    $response->assertSee('name="name[en]"', false);
+    $response->assertSee('name="name[de]"', false);
+});
+
+test('artist creation shows only Bulgarian translation fields', function () {
+    $this->actingAs(User::factory()->create());
+
+    $response = $this->get(route('admin.artists.create'));
+
+    $response->assertOk();
+    $response->assertSee('name="name[bg]"', false);
+    $response->assertDontSee('name="name[en]"', false);
+    $response->assertDontSee('name="name[de]"', false);
+});
+
+test('artist editing shows all translation fields', function () {
+    $this->actingAs(User::factory()->create());
+
+    $artist = Artist::create([
+        'name' => ['bg' => 'Николай Георгиев'],
+        'slug' => 'nikolay-georgiev',
+    ]);
+
+    $response = $this->get(route('admin.artists.edit', $artist));
 
     $response->assertOk();
     $response->assertSee('name="name[bg]"', false);

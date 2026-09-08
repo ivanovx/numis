@@ -2,11 +2,14 @@
     --admin-ink: #17202a;
     --admin-muted: #6c757d;
     --admin-accent: #c96b3b;
+    --admin-panel: #ffffff;
+    --admin-soft: #f6f1ec;
+    --admin-line: #e5ddd7;
 }
 
 body.admin-shell {
     color: var(--admin-ink);
-    background: #f5f3ef !important;
+    background: linear-gradient(180deg, #f7f4f1 0%, #f3efe9 100%) !important;
 }
 
 .admin-navbar {
@@ -45,6 +48,54 @@ body.admin-shell {
     letter-spacing: -0.02em;
 }
 
+.admin-shell h1,
+.admin-shell h2,
+.admin-shell h3 {
+    color: var(--admin-ink);
+    letter-spacing: -0.02em;
+}
+
+.admin-shell .card {
+    border: 1px solid var(--admin-line);
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 0.9rem rgba(23, 32, 42, 0.04);
+    background: var(--admin-panel);
+}
+
+.admin-shell .form-label {
+    font-weight: 600;
+    color: var(--admin-ink);
+    margin-bottom: 0.5rem;
+}
+
+.admin-shell .form-text {
+    color: var(--admin-muted);
+}
+
+.admin-shell .form-control,
+.admin-shell .form-select,
+.admin-shell textarea {
+    border: 1px solid #d7d0ca;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: var(--admin-ink);
+    box-shadow: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-shell .form-control:focus,
+.admin-shell .form-select:focus,
+.admin-shell textarea:focus {
+    border-color: rgba(201, 107, 59, 0.7);
+    box-shadow: 0 0 0 0.2rem rgba(201, 107, 59, 0.12);
+}
+
+.admin-shell .btn {
+    border-radius: 0.75rem;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+}
+
 .admin-shell .btn-primary {
     background-color: var(--admin-accent);
     border-color: var(--admin-accent);
@@ -53,6 +104,50 @@ body.admin-shell {
 .admin-shell .btn-primary:hover {
     background-color: #ad572e;
     border-color: #ad572e;
+}
+
+.admin-shell .btn-secondary {
+    background-color: #f3ece8;
+    border-color: #e8ddd6;
+    color: var(--admin-ink);
+}
+
+.admin-shell .btn-outline-secondary {
+    border-color: #d5ccc4;
+    color: var(--admin-ink);
+}
+
+.admin-shell .form-control[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background-color: #fff;
+    border: 1px solid #d7d0ca;
+    border-radius: 0.75rem;
+    color: var(--admin-ink);
+    line-height: 1.5;
+}
+
+.admin-shell .form-control[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid #d0d5dd;
+    border-radius: 0.5rem;
+    background: #f8f9fa;
+    color: var(--admin-ink);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-shell .alert {
+    border-radius: 0.9rem;
+    border: 1px solid transparent;
+}
+
+.admin-shell .table {
+    background: #fff;
+    border-radius: 0.75rem;
+    overflow: hidden;
 }
 
 @media (max-width: 991.98px) {
