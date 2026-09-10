@@ -161,7 +161,7 @@
         </div>
     </div>
 
-    <div class="col-12">
+   <!-- <div class="col-12">
         <label class="form-label fw-bold mb-1">Description (Описание)</label>
         <div class="row g-2">
             @foreach ($languages as $code => $label)
@@ -173,11 +173,10 @@
                 </div>
             @endforeach
         </div>
-    </div>
-
+    </div>-->
 </div>
 
-<div class="mt-4">
+<div class="mt-10" style="margin-top: 10rem;">
     <button type="submit" class="btn btn-primary">Save</button>
     <a href="{{ route('admin.coins.index') }}" class="btn btn-outline-secondary">Cancel</a>
 </div>

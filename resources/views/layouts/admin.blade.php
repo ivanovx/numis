@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Numis Admin' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/admin.css') }}?v=1" rel="stylesheet">
+    <link href="{{ asset('css/admin.css') }}?v=2" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
     @livewireStyles
 </head>
@@ -89,11 +89,27 @@
     <style>
         .rich-text-editor {
             background: #fff;
+            border: 1px solid #e5ddd7;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .rich-text-editor .ql-toolbar {
+            border: 0;
+            border-bottom: 1px solid #e5ddd7;
+            background: #f9f6f3;
         }
 
         .rich-text-editor .ql-container,
         .rich-text-editor .ql-editor {
-            min-height: 300px;
+            min-height: 140px;
+            max-height: 220px;
+            overflow: auto;
+        }
+
+        .admin-shell .form-control[type="file"] {
+            margin-top: 0.5rem;
         }
     </style>
     @livewireScripts
