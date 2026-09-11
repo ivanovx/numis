@@ -6,11 +6,8 @@
         <label class="form-label fw-bold mb-1">Title (Заглавие)</label>
         <div class="row g-2">
             @foreach ($languages as $code => $label)
-                <div class="col-md-4">
-                    <label class="form-label small text-muted">{{ $label }}</label>
-                    <input type="text" name="title[{{ $code }}]" class="form-control"
-                           value="{{ old('title.' . $code, $coin->translation('title', $code)) }}">
-                </div>
+                <label class="form-label small text-muted">{{ $label }}</label>
+                <input type="text" name="title[{{ $code }}]" class="form-control" value="{{ old('title.' . $code, $coin->translation('title', $code)) }}">
             @endforeach
         </div>
         <div class="form-text">
@@ -125,39 +122,43 @@
         </div>
     @endforeach
 
-    <div class="col-12">
-        <label class="form-label">Front image (Лице)</label>
-        <input type="file" name="front_image" class="form-control" accept="image/*">
-        @if ($coin->front_image_url)
-            <img src="{{ $coin->front_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
-        @endif
-        <div class="row g-2 mt-2">
-            @foreach ($languages as $code => $label)
-                <div class="col-12">
-                    <label class="form-label small text-muted">Description ({{ $label }})</label>
-                    @php($frontDescriptionId = 'front-description-' . $code)
-                    <textarea id="{{ $frontDescriptionId }}" name="front_description[{{ $code }}]" class="d-none">{{ old('front_description.' . $code, $coin->translation('front_description', $code)) }}</textarea>
-                    <div class="rich-text-editor" data-rich-text-editor="{{ $frontDescriptionId }}"></div>
-                </div>
-            @endforeach
+    <div class="col-12 col-lg-6">
+        <div class="image-side-block">
+            <label class="form-label">Front image (Лице)</label>
+            <input type="file" name="front_image" class="form-control" accept="image/*">
+            @if ($coin->front_image_url)
+                <img src="{{ $coin->front_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
+            @endif
+            <div class="row g-2 mt-2">
+                @foreach ($languages as $code => $label)
+                    <div class="col-12">
+                        <label class="form-label small text-muted">Description ({{ $label }})</label>
+                        @php($frontDescriptionId = 'front-description-' . $code)
+                        <textarea id="{{ $frontDescriptionId }}" name="front_description[{{ $code }}]" class="d-none">{{ old('front_description.' . $code, $coin->translation('front_description', $code)) }}</textarea>
+                        <div class="rich-text-editor" data-rich-text-editor="{{ $frontDescriptionId }}"></div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 
-    <div class="col-12">
-        <label class="form-label">Back image (Реверс)</label>
-        <input type="file" name="back_image" class="form-control" accept="image/*">
-        @if ($coin->back_image_url)
-            <img src="{{ $coin->back_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
-        @endif
-        <div class="row g-2 mt-2">
-            @foreach ($languages as $code => $label)
-                <div class="col-12">
-                    <label class="form-label small text-muted">Description ({{ $label }})</label>
-                    @php($backDescriptionId = 'back-description-' . $code)
-                    <textarea id="{{ $backDescriptionId }}" name="back_description[{{ $code }}]" class="d-none">{{ old('back_description.' . $code, $coin->translation('back_description', $code)) }}</textarea>
-                    <div class="rich-text-editor" data-rich-text-editor="{{ $backDescriptionId }}"></div>
-                </div>
-            @endforeach
+    <div class="col-12 col-lg-6">
+        <div class="image-side-block">
+            <label class="form-label">Back image (Реверс)</label>
+            <input type="file" name="back_image" class="form-control" accept="image/*">
+            @if ($coin->back_image_url)
+                <img src="{{ $coin->back_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
+            @endif
+            <div class="row g-2 mt-2">
+                @foreach ($languages as $code => $label)
+                    <div class="col-12">
+                        <label class="form-label small text-muted">Description ({{ $label }})</label>
+                        @php($backDescriptionId = 'back-description-' . $code)
+                        <textarea id="{{ $backDescriptionId }}" name="back_description[{{ $code }}]" class="d-none">{{ old('back_description.' . $code, $coin->translation('back_description', $code)) }}</textarea>
+                        <div class="rich-text-editor" data-rich-text-editor="{{ $backDescriptionId }}"></div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 
