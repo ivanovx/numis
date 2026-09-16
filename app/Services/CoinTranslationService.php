@@ -44,7 +44,7 @@ class CoinTranslationService
 
         $client = new DeepLClient($apiKey);
 
-        foreach (['en' => 'EN', 'de' => 'DE'] as $locale => $targetLanguage) {
+        foreach (['en' => 'en-US', 'de' => 'DE'] as $locale => $targetLanguage) {
             $translations = $client->translateText(array_values($texts), 'BG', $targetLanguage);
 
             foreach (array_keys($texts) as $index => $field) {
