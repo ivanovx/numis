@@ -15,6 +15,7 @@ return [
         'commemorative' => 'Commemorative coins',
         'collectible'   => 'Collectible coins',
         'specimen'      => 'Specimen',
+        'curiosities'   => 'Curio',
     ],
     'year_from'         => 'Year from',
     'year_to'           => 'Year to',

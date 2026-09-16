@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('filters')
-    @include('catalog._filter')
+    @if (! request()->routeIs('catalog.category'))
+        @include('catalog._filter')
+    @endif
 @endsection
 
 @section('content')

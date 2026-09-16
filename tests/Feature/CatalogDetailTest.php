@@ -79,3 +79,94 @@ test('exchange coins are displayed under their year heading', function () {
         ->assertSee('Разменни монети')
         ->assertSee('Една стотинка');
 });
+
+test('exchange pages group coins by year and sort by denomination inside each year', function () {
+    Coin::create([
+        'title' => ['bg' => 'Десет стотинки'],
+        'category' => 'exchange',
+        'year' => 2026,
+        'denomination' => '10 ст.',
+    ]);
+
+    Coin::create([
+        'title' => ['bg' => 'Една стотинка'],
+        'category' => 'exchange',
+        'year' => 2026,
+        'denomination' => '1 ст.',
+    ]);
+
+    Coin::create([
+        'title' => ['bg' => 'Пет стотинки'],
+        'category' => 'exchange',
+        'year' => 2025,
+        'denomination' => '5 ст.',
+    ]);
+
+    $response = $this->get(route('catalog.index', ['locale' => 'bg', 'category' => 'exchange']));
+
+    $response->assertOk()
+        ->assertSee('2026')
+        ->assertSee('2025')
+        ->assertSeeInOrder(['2026', '1 ст.', '10 ст.', '2025', '5 ст.']);
+});
+
+test('category pages show only coins from that category', function () {
+    Coin::create([
+        'title' => ['bg' => 'Куриозна монета'],
+        'category' => 'curiosities',
+        'year' => 2027,
+    ]);
+
+    Coin::create([
+        'title' => ['bg' => 'Разменна монета'],
+        'category' => 'exchange',
+        'year' => 2027,
+    ]);
+
+    $this->get(route('catalog.category', ['locale' => 'bg', 'category' => 'curiosities']))
+        ->assertOk()
+        ->assertSee('Куриозна монета')
+        ->assertDontSee('Разменна монета')
+        ->assertDontSee('Филтър');
+});
+
+test('main catalog page keeps the filter bar visible', function () {
+    $this->get(route('catalog.index', ['locale' => 'bg']))
+        ->assertOk()
+        ->assertSee('Филтър');
+});
+
+test('collectible and commemorative pages group tickets by series and sort by denomination then year', function () {
+    $laterSeries = Series::create([
+        'name' => ['bg' => 'Серия Б'],
+        'slug' => 'series-b',
+    ]);
+
+    $earlierSeries = Series::create([
+        'name' => ['bg' => 'Серия А'],
+        'slug' => 'series-a',
+    ]);
+
+    Coin::create([
+        'title' => ['bg' => 'Възпоменателна монета 10 лв'],
+        'category' => 'commemorative',
+        'series_id' => $laterSeries->id,
+        'year' => 2025,
+        'denomination' => '10 лв',
+    ]);
+
+    Coin::create([
+        'title' => ['bg' => 'Възпоменателна монета 2 лв'],
+        'category' => 'commemorative',
+        'series_id' => $earlierSeries->id,
+        'year' => 2020,
+        'denomination' => '2 лв',
+    ]);
+
+    $response = $this->get(route('catalog.category', ['locale' => 'bg', 'category' => 'commemorative']));
+
+    $response->assertOk()
+        ->assertSee('Серия А')
+        ->assertSee('Серия Б')
+        ->assertSeeInOrder(['Серия А', 'Възпоменателна монета 2 лв', 'Серия Б', 'Възпоменателна монета 10 лв']);
+});

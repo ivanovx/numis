@@ -40,26 +40,64 @@
 <body>
 
     <nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container-fluid px-3 px-lg-4 justify-content-between">
-            <a class="navbar-brand" href="{{ route('catalog.index') }}">{{ __('catalog.site_title') }}</a>
-            <div class="d-flex align-items-center gap-2">
-                <a href="{{ route('catalog.index', ['locale' => app()->getLocale()]) }}"
-                   class="btn btn-sm {{ request()->routeIs('catalog.index') ? 'btn-light' : 'btn-outline-light' }}">
-                    {{ __('catalog.home_nav') }}
-                </a>
-                <a href="{{ route('catalog.statistics', ['locale' => app()->getLocale()]) }}"
-                   class="btn btn-sm {{ request()->routeIs('catalog.statistics') ? 'btn-light' : 'btn-outline-light' }}">
-                    {{ __('catalog.statistics_nav') }}
-                </a>
-                @foreach (['bg' => 'БГ', 'en' => 'EN', 'de' => 'DE'] as $code => $label)
-                    <a href="{{ url()->to(preg_replace('#^/(bg|en|de)#', '/' . $code, request()->getRequestUri())) }}"
-                       class="btn btn-sm {{ app()->getLocale() === $code ? 'btn-light' : 'btn-outline-light' }}">
-                        {{ $label }}
+        <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
+            <a class="navbar-brand me-3" href="{{ route('catalog.index', ['locale' => app()->getLocale()]) }}">{{ __('catalog.site_title') }}</a>
+
+            <div class="flex-grow-1 d-flex justify-content-center">
+                <div class="nav d-flex align-items-center gap-3">
+                    <a href="{{ route('catalog.index', ['locale' => app()->getLocale()]) }}"
+                       class="nav-link {{ request()->routeIs('catalog.index') ? 'active text-white fw-semibold' : 'text-white-50' }}">
+                        {{ __('catalog.home_nav') }}
                     </a>
-                @endforeach
+
+                    <div class="dropdown">
+                        <button class="btn btn-link nav-link dropdown-toggle text-white-50 p-0 border-0 {{ request()->routeIs('catalog.category') ? 'active text-white fw-semibold' : '' }}"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Монети
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            @foreach (\App\Models\Coin::CATEGORIES as $category)
+                                <li>
+                                    <a class="dropdown-item {{ request()->route('category') === $category ? 'active' : '' }}" href="{{ route('catalog.category', ['locale' => app()->getLocale(), 'category' => $category]) }}">
+                                        {{ __('catalog.categories.' . $category) }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <a href="{{ route('catalog.statistics', ['locale' => app()->getLocale()]) }}"
+                       class="nav-link {{ request()->routeIs('catalog.statistics') ? 'active text-white fw-semibold' : 'text-white-50' }}">
+                        {{ __('catalog.statistics_nav') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="ms-auto d-flex align-items-center">
+                <label for="locale-switcher" class="visually-hidden">Език</label>
+                <select id="locale-switcher" class="form-select form-select-sm w-auto bg-dark text-white border-secondary" aria-label="Language selector" onchange="window.location.href = switchLocale(this.value)">
+                    @foreach (['bg' => 'Български', 'en' => 'English', 'de' => 'Deutsch'] as $code => $label)
+                        <option value="{{ $code }}" {{ app()->getLocale() === $code ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
     </nav>
+
+    <script>
+        function switchLocale(locale) {
+            const currentPath = window.location.pathname;
+            const currentQuery = window.location.search;
+
+            if (currentPath === '/') {
+                return '/' + locale + currentQuery;
+            }
+
+            const nextPath = currentPath.replace(/^\/(bg|en|de)(?=\/|$)/, '/' + locale);
+
+            return nextPath + currentQuery;
+        }
+    </script>
 
     @yield('filters')
 

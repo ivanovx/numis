@@ -14,7 +14,8 @@ return [
         'exchange'      => 'Разменни монети',
         'commemorative' => 'Възпоменателни монети',
         'collectible'   => 'Колекционерски монети',
-        'specimen'      => 'Пробни монети'
+        'specimen'      => 'Пробни монети',
+        'curiosities'   => 'Куриоз',
     ],
     'year_from'         => 'Година от',
     'year_to'           => 'Година до',

@@ -15,6 +15,18 @@ class CatalogController extends Controller
     {
         $coins = $this->filteredQuery($request)->paginate(16)->withQueryString();
 
+        if ($request->input('category') === 'exchange') {
+            $coins->setCollection($coins->getCollection()->sort(function (Coin $left, Coin $right): int {
+                return $this->exchangeSortValue($right) <=> $this->exchangeSortValue($left);
+            }));
+        }
+
+        if (in_array($request->input('category'), ['collectible', 'commemorative'], true)) {
+            $coins->setCollection($coins->getCollection()->sort(function (Coin $left, Coin $right): int {
+                return $this->categorySortValue($left) <=> $this->categorySortValue($right);
+            }));
+        }
+
         $data = [
             'coins' => $coins,
             'filters' => $this->currentFilters($request),
@@ -31,6 +43,15 @@ class CatalogController extends Controller
         }
 
         return view('catalog.index', $data);
+    }
+
+    public function category(Request $request, string $locale, string $category)
+    {
+        abort_unless(in_array($category, Coin::CATEGORIES, true), 404);
+
+        $request->merge(['category' => $category]);
+
+        return $this->index($request);
     }
 
     public function show(string $locale, Coin $coin)
@@ -66,6 +87,29 @@ class CatalogController extends Controller
                 ],
             ],
         ]);
+    }
+
+    protected function categorySortValue(Coin $coin): array
+    {
+        preg_match('/-?\d+(?:[.,]\d+)?/', (string) ($coin->denomination ?? ''), $matches);
+
+        return [
+            (float) str_replace(',', '.', $matches[0] ?? '0'),
+            (int) ($coin->year ?? 0),
+            $coin->series?->name ?? '',
+            $coin->id,
+        ];
+    }
+
+    protected function exchangeSortValue(Coin $coin): array
+    {
+        preg_match('/-?\d+(?:[.,]\d+)?/', (string) ($coin->denomination ?? ''), $matches);
+
+        return [
+            (int) ($coin->year ?? 0),
+            (float) str_replace(',', '.', $matches[0] ?? '0'),
+            $coin->id,
+        ];
     }
 
     public function statistics(string $locale)

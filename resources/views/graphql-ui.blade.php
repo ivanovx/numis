@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="bg">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,8 +28,8 @@
     <div class="graphql-toolbar">
         <span>Language</span>
         <select id="graphql-locale" aria-label="GraphQL response language">
-            <option value="bg">Български</option>
-            <option value="en" selected>English</option>
+            <option value="bg" selected>Български</option>
+            <option value="en">English</option>
             <option value="de">Deutsch</option>
         </select>
     </div>
@@ -84,7 +84,7 @@
     <form id="graphql-form">
         <div class="toolbar">
             <label>Language
-                <select id="locale"><option value="bg">Български</option><option value="en" selected>English</option><option value="de">Deutsch</option></select>
+                <select id="locale"><option value="bg" selected>Български</option><option value="en">English</option><option value="de">Deutsch</option></select>
             </label>
             <button type="submit">Run query</button>
             <button type="button" id="clear">Clear</button>

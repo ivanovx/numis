@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::redirect('/', '/'.config('app.locale', 'bg'));
 
+Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.page');
+Route::get('/catalog/statistics', [CatalogController::class, 'statistics'])->name('catalog.stats');
+
 Route::get('/sitemap.xml', function () {
     $urls = collect(SetLocale::SUPPORTED)
         ->map(fn (string $locale) => route('catalog.index', ['locale' => $locale]))
@@ -41,7 +44,7 @@ Route::get('/sitemap.xml', function () {
 });
 
 Route::get('/graphql-ui', function (Request $request) {
-    $locale = $request->query('locale', config('app.locale', 'en'));
+    $locale = $request->query('locale', config('app.locale', 'bg'));
 
     if (in_array($locale, SetLocale::SUPPORTED, true)) {
         App::setLocale($locale);
@@ -55,6 +58,7 @@ Route::prefix('{locale}')
     ->middleware(SetLocale::class)
     ->group(function () {
         Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
+        Route::get('/category/{category}', [CatalogController::class, 'category'])->whereIn('category', Coin::CATEGORIES)->name('catalog.category');
         Route::get('/coin/{coin}', [CatalogController::class, 'show'])->name('catalog.coin');
         Route::get('/statistics', [CatalogController::class, 'statistics'])->name('catalog.statistics');
     });
