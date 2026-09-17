@@ -41,6 +41,19 @@ body {
     letter-spacing: 0.02em;
 }
 
+#site-navbar-menu {
+    position: relative;
+}
+
+@media (min-width: 992px) {
+    #site-navbar-menu .navbar-nav {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+}
+
 #site-navbar .btn-outline-light {
     border-color: rgba(255, 248, 237, 0.6);
     color: #fff8ed;
@@ -138,6 +151,30 @@ main {
 }
 
 .catalog-year-heading span {
+    color: var(--catalog-teal);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.coins-year-heading {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 2px solid var(--catalog-copper);
+    background: rgba(233, 226, 213, 0.55);
+}
+
+.coins-year-heading h2 {
+    margin: 0;
+    color: var(--catalog-ink);
+    font-size: 1.35rem;
+}
+
+.coins-year-heading span {
     color: var(--catalog-teal);
     font-size: 0.82rem;
     font-weight: 700;

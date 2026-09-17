@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\SetLocale;
 use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class CatalogController extends Controller
 {
@@ -45,50 +43,6 @@ class CatalogController extends Controller
         return view('catalog.index', $data);
     }
 
-    public function category(Request $request, string $locale, string $category)
-    {
-        abort_unless(in_array($category, Coin::CATEGORIES, true), 404);
-
-        $request->merge(['category' => $category]);
-
-        return $this->index($request);
-    }
-
-    public function show(string $locale, Coin $coin)
-    {
-        $coin->load(['series', 'artists']);
-
-        $description = collect([
-            $coin->description,
-            $coin->front_description,
-            $coin->back_description,
-        ])->filter()->implode(' ');
-
-        return view('catalog.show', [
-            'coin' => $coin,
-            'seoTitle' => $coin->title.' | '.__('catalog.site_title'),
-            'seoDescription' => Str::limit(trim(strip_tags($description)), 160),
-            'canonicalUrl' => route('catalog.coin', ['locale' => $locale, 'coin' => $coin]),
-            'alternateUrls' => collect(SetLocale::SUPPORTED)->mapWithKeys(
-                fn (string $supportedLocale) => [$supportedLocale => route('catalog.coin', ['locale' => $supportedLocale, 'coin' => $coin])]
-            )->all(),
-            'ogImage' => $coin->front_image_url,
-            'structuredData' => [
-                '@context' => 'https://schema.org',
-                '@type' => 'Product',
-                'name' => $coin->title,
-                'description' => Str::limit(trim(strip_tags($description)), 300),
-                'url' => route('catalog.coin', ['locale' => $locale, 'coin' => $coin]),
-                'image' => array_values(array_filter([$coin->front_image_url, $coin->back_image_url])),
-                'category' => $coin->category,
-                'brand' => [
-                    '@type' => 'Brand',
-                    'name' => __('catalog.site_title'),
-                ],
-            ],
-        ]);
-    }
-
     protected function categorySortValue(Coin $coin): array
     {
         preg_match('/-?\d+(?:[.,]\d+)?/', (string) ($coin->denomination ?? ''), $matches);
@@ -110,41 +64,6 @@ class CatalogController extends Controller
             (float) str_replace(',', '.', $matches[0] ?? '0'),
             $coin->id,
         ];
-    }
-
-    public function statistics(string $locale)
-    {
-        $coins = Coin::query()->get();
-        $missingTranslations = $coins->filter(function (Coin $coin): bool {
-            return collect(['bg', 'en', 'de'])->contains(
-                fn (string $language) => ! filled($coin->translation('title', $language))
-            );
-        })->count();
-
-        return view('catalog.statistics', [
-            'totalCoins' => $coins->count(),
-            'totalSeries' => Series::count(),
-            'totalArtists' => Artist::count(),
-            'artistsWithCoinCounts' => Artist::withCount('coins')->orderBy('name')->get(),
-            'coinsByYear' => $coins->groupBy(fn (Coin $coin) => $coin->year ?: 'unknown')->map->count()->sortKeysDesc(),
-            'coinsByCategory' => $coins->groupBy('category')->map->count(),
-            'missingImages' => $coins->filter(fn (Coin $coin) => ! $coin->front_image || ! $coin->back_image)->count(),
-            'missingTranslations' => $missingTranslations,
-            'seoTitle' => __('catalog.statistics_title').' | '.__('catalog.site_title'),
-            'seoDescription' => __('catalog.statistics_description'),
-            'canonicalUrl' => route('catalog.statistics', ['locale' => $locale]),
-            'alternateUrls' => collect(SetLocale::SUPPORTED)->mapWithKeys(
-                fn (string $supportedLocale) => [$supportedLocale => route('catalog.statistics', ['locale' => $supportedLocale])]
-            )->all(),
-            'structuredData' => [
-                '@context' => 'https://schema.org',
-                '@type' => 'Dataset',
-                'name' => __('catalog.statistics_title'),
-                'description' => __('catalog.statistics_description'),
-                'url' => route('catalog.statistics', ['locale' => $locale]),
-                'inLanguage' => $locale,
-            ],
-        ]);
     }
 
     protected function filteredQuery(Request $request)

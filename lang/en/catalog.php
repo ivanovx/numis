@@ -54,6 +54,8 @@ return [
     'artist_label' => 'Artist(s)',
     'statistics_nav' => 'Statistics',
     'home_nav' => 'Home',
+    'catalog_nav' => 'Catalog',
+    'artists_nav' => 'Artists',
     'statistics_title' => 'Catalog statistics',
     'statistics_description' => 'An overview of the coins, series, artists, and data quality in the catalog.',
     'total_coins' => 'Total coins',

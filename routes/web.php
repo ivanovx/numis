@@ -6,8 +6,13 @@ use App\Http\Controllers\Admin\CsvController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SeriesController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ArtistsController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CoinsController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Middleware\SetLocale;
+use App\Models\Artist;
 use App\Models\Coin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -17,14 +22,55 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Public catalog (replaces the [coin_catalog] shortcode)
 |--------------------------------------------------------------------------
-| Bulgarian is the default language: "/" redirects to "/bg". "/en" and
-| "/de" serve the same catalog translated. The admin panel below is not
-| locale-prefixed — it stays in one language for whoever manages the site.
+| The home page is served at "/" and at the supported locale paths. The
+| catalog is available at "/catalog" and under each locale. The admin panel
+| below is not locale-prefixed — it stays in one language for whoever
+| manages the site.
 */
-Route::redirect('/', '/'.config('app.locale', 'bg'));
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy-policy');
 
-Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.page');
-Route::get('/catalog/statistics', [CatalogController::class, 'statistics'])->name('catalog.stats');
+Route::get('/catalog', function () {
+    return redirect()->route('catalog.index', [
+        'locale' => app()->getLocale(),
+    ]);
+})->name('catalog.page');
+Route::get('/coins', function () {
+    return redirect()->route('coins.index', [
+        'locale' => app()->getLocale(),
+    ]);
+})->name('coins.page');
+Route::get('/coins/{category}', function (string $category) {
+    abort_unless(in_array($category, Coin::CATEGORIES, true), 404);
+
+    return redirect()->route('catalog.category', [
+        'locale' => app()->getLocale(),
+        'category' => $category,
+    ]);
+})->whereIn('category', Coin::CATEGORIES)->name('coins.category.page');
+Route::get('/coin/{coin}', function (Coin $coin) {
+    return redirect()->route('catalog.coin', [
+        'locale' => app()->getLocale(),
+        'coin' => $coin,
+    ]);
+})->name('coin.page');
+Route::get('/artists', function () {
+    return redirect()->route('artists.index', [
+        'locale' => app()->getLocale(),
+    ]);
+})->name('artists.page');
+Route::get('/artists/{artist}', function (Artist $artist) {
+    return redirect()->route('artists.show', [
+        'locale' => app()->getLocale(),
+        'artist' => $artist,
+    ]);
+})->name('artists.show.page');
+Route::get('/statistics', function () {
+    return redirect()->route('catalog.statistics', [
+        'locale' => app()->getLocale(),
+    ]);
+})->name('statistics');
 
 Route::get('/sitemap.xml', function () {
     $urls = collect(SetLocale::SUPPORTED)
@@ -57,10 +103,18 @@ Route::prefix('{locale}')
     ->whereIn('locale', SetLocale::SUPPORTED)
     ->middleware(SetLocale::class)
     ->group(function () {
-        Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
-        Route::get('/category/{category}', [CatalogController::class, 'category'])->whereIn('category', Coin::CATEGORIES)->name('catalog.category');
-        Route::get('/coin/{coin}', [CatalogController::class, 'show'])->name('catalog.coin');
-        Route::get('/statistics', [CatalogController::class, 'statistics'])->name('catalog.statistics');
+        Route::get('/', [HomeController::class, 'index'])->name('home.locale');
+        Route::get('/statistics', [StatisticsController::class, 'index'])->name('catalog.statistics');
+        Route::get('/coins', [CoinsController::class, 'index'])->name('coins.index');
+        Route::get('/coins/{category}', [CoinsController::class, 'category'])
+            ->whereIn('category', Coin::CATEGORIES)
+            ->name('catalog.category');
+        Route::get('/coin/{coin}', [CoinsController::class, 'show'])->name('catalog.coin');
+        Route::get('/artists', [ArtistsController::class, 'index'])->name('artists.index');
+        Route::get('/artists/{artist}', [ArtistsController::class, 'show'])->name('artists.show');
+        Route::prefix('catalog')->group(function () {
+            Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
+        });
     });
 
 /*

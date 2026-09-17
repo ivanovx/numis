@@ -3,7 +3,6 @@
 @section('content')
     <div class="container-fluid px-3 px-lg-4 catalog-statistics">
         <header class="catalog-statistics-header mb-4">
-            <p class="catalog-detail-eyebrow mb-2">Numis</p>
             <h1>{{ __('catalog.statistics_title') }}</h1>
             <p class="mb-0">{{ __('catalog.statistics_description') }}</p>
         </header>
@@ -32,7 +31,13 @@
                     <div class="list-group list-group-flush">
                         @forelse ($coinsByYear as $year => $count)
                             <div class="list-group-item d-flex justify-content-between px-0">
-                                <span>{{ $year === 'unknown' ? __('catalog.unknown_year') : $year }}</span>
+                                @if ($year === 'unknown')
+                                    <span>{{ __('catalog.unknown_year') }}</span>
+                                @else
+                                    <a href="{{ route('catalog.index', ['locale' => app()->getLocale(), 'year_from' => $year, 'year_to' => $year]) }}">
+                                        {{ $year }}
+                                    </a>
+                                @endif
                                 <strong>{{ $count }}</strong>
                             </div>
                         @empty
@@ -84,7 +89,9 @@
             <div class="list-group list-group-flush">
                 @forelse ($artistsWithCoinCounts as $artist)
                     <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>{{ $artist->name }}</span>
+                        <a href="{{ route('artists.show', ['locale' => app()->getLocale(), 'artist' => $artist]) }}">
+                            {{ $artist->name }}
+                        </a>
                         <strong>{{ $artist->coins_count }}</strong>
                     </div>
                 @empty
