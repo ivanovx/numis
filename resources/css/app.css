@@ -8,14 +8,14 @@
 * {
     box-sizing: border-box;
 }
-/*
+
 html {
     font-family: var(--font-sans);
 }
-*/
+
 
 body {
-/*    font-family: var(--font-sans);*/
+font-family: var(--font-sans);
     background: #f5f5f4;
     color: var(--brand-ink);
 }

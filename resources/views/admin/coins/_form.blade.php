@@ -1,7 +1,6 @@
 @php($languages = $coin->exists ? ['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] : ['bg' => 'Bulgarian'])
 
 <div class="row g-3">
-
     <div class="col-12">
         <label class="form-label fw-bold mb-1">Title (Заглавие)</label>
         <div class="row g-2">
@@ -31,7 +30,7 @@
         </select>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label class="form-label">Category (Категория)</label>
         <select name="category" class="form-select" required>
             <option value="">— Select category —</option>
@@ -43,7 +42,18 @@
         </select>
     </div>
 
-    <div class="col-md-8">
+     <div class="col-md-2">
+        <label class="form-label">Year (Година)</label>
+        <input type="number" name="year" class="form-control" value="{{ old('year', $coin->year) }}">
+    </div>
+
+     <div class="col-md-3">
+        <label class="form-label">Date of issue (Дата на въвеждане)</label>
+        <input type="date" name="issue_date" class="form-control"
+               value="{{ old('issue_date', $coin->issue_date?->format('Y-m-d')) }}">
+    </div>
+
+    <div class="col-md-12">
         <label class="form-label">Artist(s) (Художник)</label>
         <select name="artist_ids[]" class="form-select" multiple size="4">
             @foreach ($allArtists as $artist)
@@ -56,17 +66,6 @@
             Ctrl/Cmd-click to select multiple.
             Manage the artist list at <a href="{{ route('admin.artists.index') }}" target="_blank">/admin/artists</a>.
         </div>
-    </div>
-
-    <div class="col-md-2">
-        <label class="form-label">Year (Година)</label>
-        <input type="number" name="year" class="form-control" value="{{ old('year', $coin->year) }}">
-    </div>
-
-    <div class="col-md-3">
-        <label class="form-label">Date of issue (Дата на въвеждане)</label>
-        <input type="date" name="issue_date" class="form-control"
-               value="{{ old('issue_date', $coin->issue_date?->format('Y-m-d')) }}">
     </div>
 
     <div class="col-md-3">
@@ -177,7 +176,7 @@
     </div>-->
 </div>
 
-<div class="mt-10" style="margin-top: 10rem;">
+<div class="mt-10" style="margin-top: 5rem;">
     <button type="submit" class="btn btn-primary">Save</button>
     <a href="{{ route('admin.coins.index') }}" class="btn btn-outline-secondary">Cancel</a>
 </div>

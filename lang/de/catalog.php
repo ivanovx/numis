@@ -55,6 +55,7 @@ return [
     'statistics_nav' => 'Statistik',
     'home_nav' => 'Startseite',
     'catalog_nav' => 'Katalog',
+    'coins_nav' => 'Münzen',
     'artists_nav' => 'Künstler',
     'statistics_title' => 'Katalogstatistik',
     'statistics_description' => 'Eine Übersicht über Münzen, Serien, Künstler und Datenqualität im Katalog.',

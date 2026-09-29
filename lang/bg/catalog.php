@@ -53,6 +53,7 @@ return [
     'statistics_nav' => 'Статистика',
     'home_nav' => 'Начало',
     'catalog_nav' => 'Каталог',
+    'coins_nav' => 'Монети',
     'artists_nav' => 'Художници',
     'statistics_title' => 'Статистика на каталога',
     'statistics_description' => 'Обобщение на монетите, сериите, авторите и качеството на данните в каталога.',

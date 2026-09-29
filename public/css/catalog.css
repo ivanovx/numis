@@ -20,7 +20,7 @@ html {
 body {
     background: var(--catalog-bg);
     color: var(--catalog-text);
-    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /*  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;*/
 }
 
 #site-navbar {

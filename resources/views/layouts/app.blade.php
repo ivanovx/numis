@@ -41,6 +41,7 @@
 <body>
     @php($currentLocale = app()->getLocale())
 
+    <!--
     <nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container-fluid px-3 px-lg-4 d-flex align-items-center">
             <a class="navbar-brand me-3" href="{{ route('home.locale', ['locale' => $currentLocale]) }}">{{ __('catalog.site_title') }}</a>
@@ -107,6 +108,75 @@
             </div>
         </div>
     </nav>
+-->
+
+<nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid px-3 px-lg-4">
+        <a class="navbar-brand" href="{{ route('home.locale', ['locale' => $currentLocale]) }}">{{ __('catalog.site_title') }}</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#site-navbar-menu"
+                aria-controls="site-navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="site-navbar-menu" class="collapse navbar-collapse">
+            <div class="navbar-nav mx-lg-auto align-items-lg-center gap-lg-3">
+                <a href="{{ route('home.locale', ['locale' => $currentLocale]) }}"
+                   class="nav-link {{ request()->routeIs('home', 'home.locale') ? 'active text-white fw-semibold' : 'text-white-50' }}">
+                    {{ __('catalog.home_nav') }}
+                </a>
+
+                <a href="{{ route('catalog.index', ['locale' => $currentLocale]) }}"
+                   class="nav-link {{ request()->routeIs('catalog.index', 'catalog.page') ? 'active text-white fw-semibold' : 'text-white-50' }}">
+                    {{ __('catalog.catalog_nav') }}
+                </a>
+
+                <a href="{{ route('artists.index', ['locale' => $currentLocale]) }}"
+                   class="nav-link {{ request()->routeIs('artists.index', 'artists.show') ? 'active text-white fw-semibold' : 'text-white-50' }}">
+                    {{ __('catalog.artists_nav') }}
+                </a>
+
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white-50 {{ request()->routeIs('coins.index', 'catalog.category') ? 'active text-white fw-semibold' : '' }}"
+                       href="{{ route('coins.index', ['locale' => $currentLocale]) }}"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         {{ __('catalog.coins_nav') }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('coins.index', ['locale' => $currentLocale]) }}">
+                                {{ __('catalog.catalog_nav') }}
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        @foreach (\App\Models\Coin::CATEGORIES as $category)
+                            <li>
+                                <a class="dropdown-item {{ request()->route('category') === $category ? 'active' : '' }}" href="{{ route('catalog.category', ['locale' => $currentLocale, 'category' => $category]) }}">
+                                    {{ __('catalog.categories.' . $category) }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <a href="{{ route('catalog.statistics', ['locale' => $currentLocale]) }}"
+                   class="nav-link {{ request()->routeIs('catalog.statistics') ? 'active text-white fw-semibold' : 'text-white-50' }}">
+                    {{ __('catalog.statistics_nav') }}
+                </a>
+            </div>
+
+            <div class="ms-lg-3 mt-3 mt-lg-0">
+                <label for="locale-switcher" class="visually-hidden">Език</label>
+                <select id="locale-switcher" class="form-select form-select-sm w-auto bg-dark text-white border-secondary" aria-label="Language selector" onchange="window.location.href = switchLocale(this.value)">
+                    @foreach (['bg' => 'Български', 'en' => 'English', 'de' => 'Deutsch'] as $code => $label)
+                        <option value="{{ $code }}" {{ app()->getLocale() === $code ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+</nav>
+
 
     <script>
         function switchLocale(locale) {

@@ -1,7 +1,7 @@
 @if ($coins->count())
 
 <div class="container-fluid px-3 px-lg-4 mt-4">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
         @php($previousYear = '__initial__')
         @php($groupedCategory = in_array(($filters['category'] ?? ''), ['collectible', 'commemorative'], true))
         @php($exchangeGroups = (($filters['category'] ?? '') === 'exchange') ? collect($coins->items())->sort(function ($left, $right) {
