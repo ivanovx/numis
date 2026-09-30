@@ -1,3 +1,7 @@
+@include('partials._breadcrumbs', ['items' => [
+    ['label' => __('catalog.categories.' . $category)],
+]])
+
 <div class="container-fluid px-3 px-lg-4 mt-4">
     @if ($seriesGroups)
         @foreach ($seriesGroups as $seriesName => $seriesCoins)

@@ -1,12 +1,16 @@
-
 <nav id="catalog-filter-navbar" class="navbar navbar-expand-xl bg-body-tertiary border rounded-3 shadow-sm mb-4" aria-label="{{ __('catalog.filter') }}">
     <div class="container-fluid px-3 px-lg-4">
-        <span class="navbar-text filter-heading me-3" title="{{ __('catalog.filter') }}" aria-label="{{ __('catalog.filter') }}">
+        <span class="navbar-text filter-heading me-3 position-relative" title="{{ __('catalog.filter') }}" aria-label="{{ __('catalog.filter') }}">
             <i class="bi bi-funnel-fill" aria-hidden="true"></i>
+            @php($activeCount = collect($filters)->filter(fn ($v) => $v !== '' && $v !== null)->count())
+            <span id="active-filter-badge" class="catalog-filter-badge {{ $activeCount ? '' : 'd-none' }}">{{ $activeCount ?: '' }}</span>
         </span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#coin-filter-menu"
+        <button class="navbar-toggler position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#coin-filter-menu"
                 aria-controls="coin-filter-menu" aria-expanded="false" aria-label="{{ __('catalog.filter') }}">
             <span class="navbar-toggler-icon"></span>
+            @if ($activeCount)
+                <span class="catalog-filter-badge catalog-filter-badge-toggler">{{ $activeCount }}</span>
+            @endif
         </button>
 
         <div class="collapse navbar-collapse" id="coin-filter-menu">
@@ -34,7 +38,7 @@
                                 @else
                                     <optgroup label="{{ $baseMetal }}">
                                         <option value="{{ $baseMetal }}" @selected($filters['metal'] === $baseMetal)>
-                                            {{ $baseMetal }} ({{ __('catalog.all') }})
+                                            {{ $baseMetal }} ({{ __('catalog.all_variants') }})
                                         </option>
                                         @foreach ($variants as $variant)
                                             @continue($variant === $baseMetal)

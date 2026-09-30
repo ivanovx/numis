@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Concerns\FiltersCoinsQuery;
 use App\Http\Middleware\SetLocale;
 use App\Models\Coin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class CoinsController extends Controller
 {
+    use FiltersCoinsQuery;
+
     public function index()
     {
         return view('coins.index', [
@@ -43,7 +47,7 @@ class CoinsController extends Controller
         ]);
     }
 
-    public function show(string $locale, Coin $coin)
+    public function show(string $locale, Coin $coin, Request $request)
     {
         $coin->load(['series', 'artists']);
 
@@ -52,6 +56,8 @@ class CoinsController extends Controller
             $coin->front_description,
             $coin->back_description,
         ])->filter()->implode(' ');
+
+        $contextFilters = $this->coinFiltersFromRequest($request);
 
         return view('catalog.show', [
             'coin' => $coin,
@@ -62,6 +68,10 @@ class CoinsController extends Controller
                 fn (string $supportedLocale) => [$supportedLocale => route('catalog.coin', ['locale' => $supportedLocale, 'coin' => $coin])]
             )->all(),
             'ogImage' => $coin->front_image_url,
+            'similarCoins' => $this->similarCoins($coin),
+            'contextFilters' => $contextFilters,
+            'neighborCoins' => $this->neighborCoins($coin, $contextFilters),
+            'breadcrumbItems' => $this->coinBreadcrumbItems($coin),
             'structuredData' => [
                 '@context' => 'https://schema.org',
                 '@type' => 'Product',
@@ -76,6 +86,68 @@ class CoinsController extends Controller
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Find the previous/next coin within the same filtered, ordered result
+     * set the user was browsing before opening this coin. $filters comes
+     * from the query string that catalog._card appends to every coin link,
+     * so the "current list" context survives the click through.
+     */
+    protected function neighborCoins(Coin $coin, array $filters): array
+    {
+        $ids = $this->applyCoinFilters(Coin::query(), $filters)->pluck('id');
+        $position = $ids->search($coin->id);
+
+        if ($position === false) {
+            return ['prev' => null, 'next' => null];
+        }
+
+        return [
+            'prev' => $position > 0 ? Coin::find($ids[$position - 1]) : null,
+            'next' => $position < $ids->count() - 1 ? Coin::find($ids[$position + 1]) : null,
+        ];
+    }
+
+    protected function coinBreadcrumbItems(Coin $coin): array
+    {
+        $items = [];
+
+        if ($coin->category) {
+            $items[] = [
+                'label' => __('catalog.categories.'.$coin->category),
+                'url' => route('catalog.category', ['locale' => app()->getLocale(), 'category' => $coin->category]),
+            ];
+        }
+
+        $items[] = ['label' => $coin->title];
+
+        return $items;
+    }
+
+    protected function similarCoins(Coin $coin): Collection
+    {
+        $artistIds = $coin->artists->pluck('id');
+
+        return Coin::query()
+            ->with(['series', 'artists'])
+            ->where('id', '!=', $coin->id)
+            ->where(function ($query) use ($coin, $artistIds) {
+                if ($coin->series_id) {
+                    $query->orWhere('series_id', $coin->series_id);
+                }
+
+                if ($artistIds->isNotEmpty()) {
+                    $query->orWhereHas('artists', fn ($q) => $q->whereIn('artists.id', $artistIds));
+                }
+
+                if (! $coin->series_id && $artistIds->isEmpty()) {
+                    $query->orWhere('category', $coin->category);
+                }
+            })
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
     }
 
     protected function exchangeCoinsByYear(Collection $coins): Collection

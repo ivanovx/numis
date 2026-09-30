@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Concerns\FiltersCoinsQuery;
 use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 
 class CatalogController extends Controller
 {
+    use FiltersCoinsQuery;
+
     public function index(Request $request)
     {
         $coins = $this->filteredQuery($request)->paginate(16)->withQueryString();
@@ -33,6 +36,7 @@ class CatalogController extends Controller
             'denominations' => Coin::whereNotNull('denomination')->distinct()->orderBy('denomination')->pluck('denomination'),
             'allSeries' => Series::forSelect(),
             'allArtists' => Artist::orderBy('name')->get(),
+            ...$this->heroData(),
         ];
 
         // Fetch-based filtering: return just the list fragment for XHR requests.
@@ -51,6 +55,19 @@ class CatalogController extends Controller
             ->groupBy(fn (string $metal) => Coin::baseMetal($metal))
             ->map(fn ($group) => $group->sort()->values())
             ->sortKeys();
+    }
+
+    protected function heroData(): array
+    {
+        return [
+            'totalCoins' => Coin::count(),
+            'earliestYear' => Coin::whereNotNull('year')->min('year'),
+            'recentCoins' => Coin::query()
+                ->whereNotNull('front_image')
+                ->latest('created_at')
+                ->take(6)
+                ->get(),
+        ];
     }
 
     protected function categorySortValue(Coin $coin): array
@@ -80,50 +97,11 @@ class CatalogController extends Controller
     {
         $query = Coin::query()->with(['series', 'artists']);
 
-        // Year range — a single year works too (year_from == year_to).
-        if ($request->filled('year_from') || $request->filled('year_to')) {
-            $query->whereBetween('year', [
-                (int) $request->input('year_from', 0),
-                (int) $request->input('year_to', 9999),
-            ]);
-        }
-
-        foreach (['category', 'diameter', 'denomination'] as $field) {
-            if ($request->filled($field)) {
-                $query->where($field, $request->input($field));
-            }
-        }
-
-        if ($request->filled('metal')) {
-            $metalValue = $request->input('metal');
-            $escaped = str_replace(['%', '_'], ['\%', '\_'], $metalValue);
-            $query->where('metal', 'LIKE', $escaped . '%');
-        }
-
-        if ($request->input('series') === 'none') {
-            $query->whereNull('series_id');
-        } elseif ($request->filled('series')) {
-            $query->whereHas('series', fn ($q) => $q->where('slug', $request->input('series')));
-        }
-
-        if ($request->filled('artist')) {
-            $query->whereHas('artists', fn ($q) => $q->where('artists.slug', $request->input('artist')));
-        }
-
-        return $query->orderByDesc('year');
+        return $this->applyCoinFilters($query, $this->currentFilters($request));
     }
 
     protected function currentFilters(Request $request): array
     {
-        return [
-            'year_from' => $request->input('year_from', ''),
-            'year_to' => $request->input('year_to', ''),
-            'category' => $request->input('category', ''),
-            'metal' => $request->input('metal', ''),
-            'diameter' => $request->input('diameter', ''),
-            'denomination' => $request->input('denomination', ''),
-            'series' => $request->input('series', ''),
-            'artist' => $request->input('artist', ''),
-        ];
+        return $this->coinFiltersFromRequest($request);
     }
 }

@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+    @include('partials._breadcrumbs', ['items' => [
+        ['label' => __('catalog.categories.exchange')],
+    ]])
+
     <div class="container-fluid px-3 px-lg-4 mt-4">
         @foreach ($coinsByYear as $year => $coins)
             <section class="mb-5">

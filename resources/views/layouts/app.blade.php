@@ -201,7 +201,19 @@
 
     @include('partials.footer')
 
+    {{-- Global lightbox overlay — opened via any element with [data-lightbox-src] --}}
+    <div id="catalog-lightbox" class="catalog-lightbox" hidden>
+        <button type="button" class="catalog-lightbox-close" aria-label="{{ __('catalog.close') }}">&times;</button>
+        <img src="" alt="" id="catalog-lightbox-img">
+    </div>
+
+    {{-- Sticky back-to-top button --}}
+    <button type="button" id="catalog-back-to-top" class="catalog-back-to-top" aria-label="{{ __('catalog.back_to_top') }}" hidden>
+        <i class="bi bi-arrow-up" aria-hidden="true"></i>
+    </button>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/catalog.js') }}?v={{ filemtime(public_path('js/catalog.js')) }}-2"></script>
+    <script src="{{ asset('js/catalog.js') }}?v={{ filemtime(public_path('js/catalog.js')) }}-3"></script>
+    @stack('scripts')
 </body>
 </html>
