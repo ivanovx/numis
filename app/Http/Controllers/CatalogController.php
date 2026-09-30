@@ -28,7 +28,7 @@ class CatalogController extends Controller
         $data = [
             'coins' => $coins,
             'filters' => $this->currentFilters($request),
-            'metals' => Coin::whereNotNull('metal')->distinct()->orderBy('metal')->pluck('metal'),
+            'groupedMetals' => $this->groupedMetals(),
             'diameters' => Coin::whereNotNull('diameter')->distinct()->orderBy('diameter')->pluck('diameter'),
             'denominations' => Coin::whereNotNull('denomination')->distinct()->orderBy('denomination')->pluck('denomination'),
             'allSeries' => Series::forSelect(),
@@ -41,6 +41,16 @@ class CatalogController extends Controller
         }
 
         return view('catalog.index', $data);
+    }
+
+    protected function groupedMetals()
+    {
+        return Coin::whereNotNull('metal')
+            ->distinct()
+            ->pluck('metal')
+            ->groupBy(fn (string $metal) => Coin::baseMetal($metal))
+            ->map(fn ($group) => $group->sort()->values())
+            ->sortKeys();
     }
 
     protected function categorySortValue(Coin $coin): array
@@ -78,10 +88,16 @@ class CatalogController extends Controller
             ]);
         }
 
-        foreach (['category', 'metal', 'diameter', 'denomination'] as $field) {
+        foreach (['category', 'diameter', 'denomination'] as $field) {
             if ($request->filled($field)) {
                 $query->where($field, $request->input($field));
             }
+        }
+
+        if ($request->filled('metal')) {
+            $metalValue = $request->input('metal');
+            $escaped = str_replace(['%', '_'], ['\%', '\_'], $metalValue);
+            $query->where('metal', 'LIKE', $escaped . '%');
         }
 
         if ($request->input('series') === 'none') {

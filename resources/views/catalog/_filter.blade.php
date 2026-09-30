@@ -1,3 +1,4 @@
+
 <nav id="catalog-filter-navbar" class="navbar navbar-expand-xl bg-body-tertiary border rounded-3 shadow-sm mb-4" aria-label="{{ __('catalog.filter') }}">
     <div class="container-fluid px-3 px-lg-4">
         <span class="navbar-text filter-heading me-3" title="{{ __('catalog.filter') }}" aria-label="{{ __('catalog.filter') }}">
@@ -21,7 +22,33 @@
                         <input type="number" id="year_to" name="year_to" value="{{ $filters['year_to'] }}" class="form-control" placeholder="{{ __('catalog.year_to') }}">
                     </div>
 
-                    @foreach (['metal' => $metals, 'diameter' => $diameters, 'denomination' => $denominations] as $field => $values)
+                    <div class="col-12 col-md-4 col-xl">
+                        <label for="metal" class="form-label small mb-1">{{ __('catalog.metal') }}</label>
+                        <select id="metal" name="metal" class="form-select">
+                            <option value="">{{ __('catalog.all_metals') }}</option>
+                            @foreach ($groupedMetals as $baseMetal => $variants)
+                                @if ($variants->count() === 1 && $variants->first() === $baseMetal)
+                                    <option value="{{ $baseMetal }}" @selected($filters['metal'] === $baseMetal)>
+                                        {{ $baseMetal }}
+                                    </option>
+                                @else
+                                    <optgroup label="{{ $baseMetal }}">
+                                        <option value="{{ $baseMetal }}" @selected($filters['metal'] === $baseMetal)>
+                                            {{ $baseMetal }} ({{ __('catalog.all') }})
+                                        </option>
+                                        @foreach ($variants as $variant)
+                                            @continue($variant === $baseMetal)
+                                            <option value="{{ $variant }}" @selected($filters['metal'] === $variant)>
+                                                {{ $variant }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
+                    @foreach (['diameter' => $diameters, 'denomination' => $denominations] as $field => $values)
                         <div class="col-12 col-md-4 col-xl">
                             <label for="{{ $field }}" class="form-label small mb-1">{{ __('catalog.' . $field) }}</label>
                             <select id="{{ $field }}" name="{{ $field }}" class="form-select">

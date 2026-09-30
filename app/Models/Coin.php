@@ -49,6 +49,22 @@ class Coin extends Model
         'issue_date' => 'date',
     ];
 
+    /**
+ * Извлича базовия метал/проба от пълния низ, отрязвайки описанието на варианта.
+ * "Ag 925/1000 с нанесено частично позлатяване" -> "Ag 925/1000"
+ * "Ag 999/1000 with partial gold plating" -> "Ag 999/1000"
+ */
+public static function baseMetal(string $metal): string
+{
+    if (preg_match('/^([A-Za-zА-Яа-я\-]+ ?\d{3}\/1000)/u', $metal, $m)) {
+        return trim($m[1]);
+    }
+
+    $parts = preg_split('/\s+с\s+|\s+with\s+/u', $metal, 2);
+
+    return trim($parts[0]);
+}
+
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class);
@@ -61,9 +77,7 @@ class Coin extends Model
 
     public function artistNames(): string
     {
-        return $this->artists->isNotEmpty()
-            ? $this->artists->pluck('name')->implode(', ')
-            : '';
+        return $this->artists->isNotEmpty() ? $this->artists->pluck('name')->implode(', ') : '';
     }
 
     public function seriesName(): ?string
