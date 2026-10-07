@@ -16,6 +16,14 @@
         <div class="collapse navbar-collapse" id="coin-filter-menu">
             <form id="coin-filter-form" method="GET" action="{{ route('catalog.index') }}" class="w-100">
                 <div class="row g-2 align-items-end">
+                    <div class="col-12">
+                        <label for="q" class="form-label small mb-1">{{ __('catalog.search') }}</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+                            <input type="search" id="q" name="q" value="{{ $filters['q'] }}" class="form-control" placeholder="{{ __('catalog.search_placeholder') }}">
+                        </div>
+                    </div>
+
                     <div class="col-6 col-md-2 col-xl-auto">
                         <label for="year_from" class="form-label small mb-1">{{ __('catalog.year_from') }}</label>
                         <input type="number" id="year_from" name="year_from" value="{{ $filters['year_from'] }}" class="form-control" placeholder="{{ __('catalog.year_from') }}">
@@ -102,6 +110,10 @@
                             <i class="bi bi-funnel-fill" aria-hidden="true"></i>
                         </button>
                         <a href="{{ route('catalog.index') }}" class="btn btn-outline-secondary" title="{{ __('catalog.clear_filters') }}" aria-label="{{ __('catalog.clear_filters') }}">&times;</a>
+                        <a href="{{ route('catalog.export-pdf') }}" id="catalog-export-pdf-btn" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1" title="{{ __('catalog.export_pdf') }}" aria-label="{{ __('catalog.export_pdf') }}">
+                            <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
+                            <span class="d-none d-sm-inline">PDF</span>
+                        </a>
                     </div>
                 </div>
             </form>

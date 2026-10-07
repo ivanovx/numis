@@ -105,6 +105,25 @@
             </div>
         </article>
 
+        @if ($coin->series && $seriesTimeline->count() > 1)
+            <section class="catalog-series-timeline">
+                <h2 class="catalog-similar-title">{{ $coin->series->name }} — {{ __('catalog.series_timeline_title') }}</h2>
+                <div class="catalog-timeline-track">
+                    @foreach ($seriesTimeline as $timelineCoin)
+                        <a href="{{ route('catalog.coin', ['locale' => app()->getLocale(), 'coin' => $timelineCoin]) }}"
+                           class="catalog-timeline-item {{ $timelineCoin->id === $coin->id ? 'is-current' : '' }}">
+                            <div class="catalog-timeline-thumb">
+                                @if ($timelineCoin->front_image_url)
+                                    <img src="{{ $timelineCoin->front_image_url }}" alt="{{ $timelineCoin->title }}" loading="lazy">
+                                @endif
+                            </div>
+                            <span class="catalog-timeline-year">{{ $timelineCoin->year ?: '—' }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
         @if ($similarCoins->isNotEmpty())
             <section class="catalog-similar">
                 <h2 class="catalog-similar-title">{{ __('catalog.similar_coins_title') }}</h2>

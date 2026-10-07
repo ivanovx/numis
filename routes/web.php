@@ -114,6 +114,7 @@ Route::prefix('{locale}')
         Route::get('/artists/{artist}', [ArtistsController::class, 'show'])->name('artists.show');
         Route::prefix('catalog')->group(function () {
             Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
+            Route::get('/export-pdf', [CatalogController::class, 'exportPdf'])->name('catalog.export-pdf');
         });
     });
 

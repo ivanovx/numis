@@ -6,6 +6,7 @@ use App\Http\Middleware\SetLocale;
 use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
+use Illuminate\Support\Str;
 
 class StatisticsController extends Controller
 {
@@ -25,6 +26,11 @@ class StatisticsController extends Controller
             'artistsWithCoinCounts' => Artist::withCount('coins')->orderBy('name')->get(),
             'coinsByYear' => $coins->groupBy(fn (Coin $coin) => $coin->year ?: 'unknown')->map->count()->sortKeysDesc(),
             'coinsByCategory' => $coins->groupBy('category')->map->count(),
+            'coinsByBaseMetal' => $coins
+                ->filter(fn (Coin $coin) => filled($coin->metal))
+                ->groupBy(fn (Coin $coin) => Coin::baseMetal($coin->metal))
+                ->map->count()
+                ->sortDesc(),
             'missingImages' => $coins->filter(fn (Coin $coin) => ! $coin->front_image || ! $coin->back_image)->count(),
             'missingTranslations' => $missingTranslations,
             'seoTitle' => __('catalog.statistics_title').' | '.__('catalog.site_title'),

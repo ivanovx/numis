@@ -25,10 +25,29 @@
         </div>
 
         <div class="row g-4">
+            <div class="col-lg-7">
+                <section class="catalog-stat-section h-100">
+                    <h2>{{ __('catalog.coins_by_year_chart') }}</h2>
+                    <div class="catalog-chart-wrap">
+                        <canvas id="chart-coins-by-year" height="220"></canvas>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-5">
+                <section class="catalog-stat-section h-100">
+                    <h2>{{ __('catalog.metal_breakdown_title') }}</h2>
+                    <div class="catalog-chart-wrap">
+                        <canvas id="chart-metals" height="220"></canvas>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
             <div class="col-lg-6">
                 <section class="catalog-stat-section h-100">
                     <h2>{{ __('catalog.coins_by_year') }}</h2>
-                    <div class="list-group list-group-flush">
+                    <div class="list-group list-group-flush catalog-stat-scroll">
                         @forelse ($coinsByYear as $year => $count)
                             <div class="list-group-item d-flex justify-content-between px-0">
                                 @if ($year === 'unknown')
@@ -101,3 +120,67 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script>
+        (function () {
+            var yearLabels = @json($coinsByYear->reject(fn ($c, $y) => $y === 'unknown')->sortKeys()->keys());
+            var yearData = @json($coinsByYear->reject(fn ($c, $y) => $y === 'unknown')->sortKeys()->values());
+
+            var metalLabels = @json($coinsByBaseMetal->keys());
+            var metalData = @json($coinsByBaseMetal->values());
+
+            var palette = ['#023E73', '#024873', '#0A89A6', '#15AEBF', '#BF6B04', '#a35a03', '#4b6072', '#7fb8c4'];
+
+            var yearCtx = document.getElementById('chart-coins-by-year');
+            if (yearCtx && yearLabels.length) {
+                new Chart(yearCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: yearLabels,
+                        datasets: [{
+                            label: '{{ __('catalog.total_coins') }}',
+                            data: yearData,
+                            backgroundColor: '#0A89A6',
+                            borderRadius: 3,
+                            maxBarThickness: 22
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: { beginAtZero: true, ticks: { precision: 0 } }
+                        }
+                    }
+                });
+            }
+
+            var metalCtx = document.getElementById('chart-metals');
+            if (metalCtx && metalLabels.length) {
+                new Chart(metalCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: metalLabels,
+                        datasets: [{
+                            data: metalData,
+                            backgroundColor: palette,
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } }
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
+@endpush

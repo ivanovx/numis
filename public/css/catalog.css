@@ -52,6 +52,17 @@ body {
     letter-spacing: 0.01em;
 }
 
+#site-navbar .site-brand-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+#site-navbar .site-brand-subtitle {
+    font-size: 0.65em;
+    font-weight: 500;
+}
+
 #site-navbar-menu {
     position: relative;
 }
@@ -1001,4 +1012,93 @@ body.catalog-lightbox-open {
 .catalog-back-to-top:hover {
     background: var(--catalog-teal);
     transform: translateY(-2px);
+}
+
+/* ============ Statistics charts ============ */
+.catalog-chart-wrap {
+    position: relative;
+    height: 240px;
+}
+
+.catalog-stat-scroll {
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+/* ============ Series mini-timeline (detail page) ============ */
+.catalog-series-timeline {
+    margin-top: 2.5rem;
+}
+
+.catalog-timeline-track {
+    display: flex;
+    gap: 0.9rem;
+    overflow-x: auto;
+    padding: 0.25rem 0.25rem 0.75rem;
+}
+
+.catalog-timeline-item {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    width: 5.5rem;
+    text-decoration: none;
+}
+
+.catalog-timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 2.25rem;
+    right: -0.5rem;
+    left: calc(50% + 1.9rem);
+    height: 2px;
+    background: var(--catalog-line);
+}
+
+.catalog-timeline-item:last-child::before {
+    display: none;
+}
+
+.catalog-timeline-thumb {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 4.5rem;
+    height: 4.5rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+    border: 2px solid var(--catalog-line);
+    border-radius: 50%;
+    background: #ffffff;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.catalog-timeline-thumb img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.catalog-timeline-item:hover .catalog-timeline-thumb {
+    border-color: var(--catalog-teal);
+    transform: translateY(-2px);
+}
+
+.catalog-timeline-item.is-current .catalog-timeline-thumb {
+    border-color: var(--catalog-amber);
+    box-shadow: 0 0 0 3px rgba(191, 107, 4, 0.18);
+}
+
+.catalog-timeline-year {
+    margin-top: 0.4rem;
+    color: var(--catalog-text-soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.catalog-timeline-item.is-current .catalog-timeline-year {
+    color: var(--catalog-amber-dark);
 }

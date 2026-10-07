@@ -95,6 +95,23 @@
         });
     })();
 
+    // ------------------------------------------------------------------
+    // PDF export button — carries the current (possibly unsubmitted)
+    // filter values so the download always matches what's on screen.
+    // ------------------------------------------------------------------
+    (function () {
+        var exportBtn = document.getElementById('catalog-export-pdf-btn');
+        var filterForm = document.getElementById('coin-filter-form');
+        if (!exportBtn || !filterForm) return;
+
+        var baseHref = exportBtn.getAttribute('href');
+
+        exportBtn.addEventListener('click', function () {
+            var params = new URLSearchParams(new FormData(filterForm)).toString();
+            exportBtn.setAttribute('href', baseHref + (params ? '?' + params : ''));
+        });
+    })();
+
     var form = document.getElementById('coin-filter-form');
     var list = document.getElementById('coin-list');
 

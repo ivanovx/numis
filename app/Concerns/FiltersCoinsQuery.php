@@ -15,6 +15,20 @@ trait FiltersCoinsQuery
      */
     protected function applyCoinFilters(Builder $query, array $filters): Builder
     {
+        if (($filters['q'] ?? '') !== '') {
+            $term = trim($filters['q']);
+            $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $term).'%';
+
+            $query->where(function (Builder $q) use ($like) {
+                $q->where('title', 'LIKE', $like)
+                    ->orWhere('description', 'LIKE', $like)
+                    ->orWhere('front_description', 'LIKE', $like)
+                    ->orWhere('back_description', 'LIKE', $like)
+                    ->orWhereHas('artists', fn ($a) => $a->where('artists.name', 'LIKE', $like))
+                    ->orWhereHas('series', fn ($s) => $s->where('name', 'LIKE', $like));
+            });
+        }
+
         $yearFrom = $filters['year_from'] ?? '';
         $yearTo = $filters['year_to'] ?? '';
 
@@ -54,6 +68,7 @@ trait FiltersCoinsQuery
     protected function coinFiltersFromRequest(Request $request): array
     {
         return [
+            'q' => trim((string) $request->input('q', '')),
             'year_from' => $request->input('year_from', ''),
             'year_to' => $request->input('year_to', ''),
             'category' => $request->input('category', ''),

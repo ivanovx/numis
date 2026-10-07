@@ -69,6 +69,7 @@ class CoinsController extends Controller
             )->all(),
             'ogImage' => $coin->front_image_url,
             'similarCoins' => $this->similarCoins($coin),
+            'seriesTimeline' => $this->seriesTimeline($coin),
             'contextFilters' => $contextFilters,
             'neighborCoins' => $this->neighborCoins($coin, $contextFilters),
             'breadcrumbItems' => $this->coinBreadcrumbItems($coin),
@@ -123,6 +124,19 @@ class CoinsController extends Controller
         $items[] = ['label' => $coin->title];
 
         return $items;
+    }
+
+    protected function seriesTimeline(Coin $coin): Collection
+    {
+        if (! $coin->series_id) {
+            return collect();
+        }
+
+        return Coin::query()
+            ->where('series_id', $coin->series_id)
+            ->orderBy('year')
+            ->orderBy('id')
+            ->get(['id', 'title', 'year', 'front_image']);
     }
 
     protected function similarCoins(Coin $coin): Collection

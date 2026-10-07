@@ -112,10 +112,16 @@
 
 <nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid px-3 px-lg-4">
-        <a class="navbar-brand" href="{{ route('home.locale', ['locale' => $currentLocale]) }}">{{ __('catalog.site_title') }}</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('home.locale', ['locale' => $currentLocale]) }}">
+            <img src="{{ asset('logo.png') }}" alt="Logo" height="32" width="40">
+            <span class="site-brand-copy">
+                <span class="site-brand-title">{{ __('catalog.brand_title') }}</span>
+                <span class="site-brand-subtitle">{{ __('catalog.brand_subtitle') }}</span>
+            </span>
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#site-navbar-menu"
-                aria-controls="site-navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="site-navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 

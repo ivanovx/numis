@@ -2,6 +2,8 @@
 
 return [
     'site_title'        => 'Numis',
+    'brand_title'       => 'Catalog',
+    'brand_subtitle'    => 'of Bulgarian coins',
     'seo_title'         => 'Bulgarian Coin Catalog | Numis',
     'seo_description'   => 'Explore a Bulgarian coin catalog with details about year, denomination, metal, mintage, series, and artists.',
     'filter'            => 'Filter',
@@ -83,4 +85,19 @@ return [
     'next_coin' => 'Next coin',
     'close' => 'Close',
     'back_to_top' => 'Back to top',
+    'export_pdf' => 'Download as PDF',
+    'pdf_title' => 'Catalog of Bulgarian coins',
+    'pdf_generated_at' => 'Generated on',
+    'pdf_total' => 'Total coins',
+    'pdf_col_name' => 'Name',
+    'pdf_col_front' => 'Front',
+    'pdf_col_back' => 'Back',
+    'pdf_col_mintage' => 'Mintage',
+    'pdf_col_mint' => 'Mint',
+    'pdf_col_edge' => 'Edge',
+    'series_timeline_title' => 'From the same series',
+    'metal_breakdown_title' => 'Breakdown by metal',
+    'coins_by_year_chart' => 'Coins by year',
+    'search' => 'Search',
+    'search_placeholder' => 'Search by title, artist, or description…',
 ];

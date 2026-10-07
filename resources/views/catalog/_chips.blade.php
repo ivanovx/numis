@@ -4,6 +4,7 @@
     }
 
     $labels = [
+        'q' => __('catalog.search'),
         'year_from' => __('catalog.year_from'),
         'year_to' => __('catalog.year_to'),
         'category' => __('catalog.category'),

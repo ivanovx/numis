@@ -2,6 +2,8 @@
 
 return [
     'site_title'        => 'Numis',
+    'brand_title'       => 'Katalog',
+    'brand_subtitle'    => 'bulgarischer Münzen',
     'seo_title'         => 'Katalog bulgarischer Münzen | Numis',
     'seo_description'   => 'Entdecken Sie einen Katalog bulgarischer Münzen mit Angaben zu Jahr, Nennwert, Metall, Auflage, Serie und Künstlern.',
     'filter'            => 'Filtern',
@@ -84,4 +86,19 @@ return [
     'next_coin' => 'Nächste Münze',
     'close' => 'Schließen',
     'back_to_top' => 'Nach oben',
+    'export_pdf' => 'Als PDF herunterladen',
+    'pdf_title' => 'Katalog bulgarischer Münzen',
+    'pdf_generated_at' => 'Erstellt am',
+    'pdf_total' => 'Münzen insgesamt',
+    'pdf_col_name' => 'Name',
+    'pdf_col_front' => 'Vorderseite',
+    'pdf_col_back' => 'Rückseite',
+    'pdf_col_mintage' => 'Auflage',
+    'pdf_col_mint' => 'Münzstätte',
+    'pdf_col_edge' => 'Rand',
+    'series_timeline_title' => 'Aus derselben Serie',
+    'metal_breakdown_title' => 'Verteilung nach Metall',
+    'coins_by_year_chart' => 'Münzen nach Jahr',
+    'search' => 'Suche',
+    'search_placeholder' => 'Suche nach Titel, Künstler oder Beschreibung…',
 ];

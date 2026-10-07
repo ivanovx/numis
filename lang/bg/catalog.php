@@ -2,6 +2,8 @@
 
 return [
     'site_title'        => 'Numis',
+    'brand_title'       => 'Каталог',
+    'brand_subtitle'    => 'на българските монети',
     'seo_title'         => 'Каталог на български монети | Numis',
     'seo_description'   => 'Разгледайте каталог на български монети с данни за година, номинал, метал, тираж, серия и художник.',
     'filter'            => 'Филтър',
@@ -82,4 +84,19 @@ return [
     'next_coin' => 'Следваща монета',
     'close' => 'Затвори',
     'back_to_top' => 'Нагоре',
+    'export_pdf' => 'Свали като PDF',
+    'pdf_title' => 'Каталог на българските монети',
+    'pdf_generated_at' => 'Генерирано на',
+    'pdf_total' => 'Общо монети',
+    'pdf_col_name' => 'Наименование',
+    'pdf_col_front' => 'Лице',
+    'pdf_col_back' => 'Гръб',
+    'pdf_col_mintage' => 'Тираж',
+    'pdf_col_mint' => 'Монетен двор',
+    'pdf_col_edge' => 'Гурт',
+    'series_timeline_title' => 'От същата серия',
+    'metal_breakdown_title' => 'Разпределение по метал',
+    'coins_by_year_chart' => 'Монети по години',
+    'search' => 'Търсене',
+    'search_placeholder' => 'Търси по заглавие, художник или описание…',
 ];

@@ -6,6 +6,7 @@ use App\Concerns\FiltersCoinsQuery;
 use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class CatalogController extends Controller
@@ -45,6 +46,21 @@ class CatalogController extends Controller
         }
 
         return view('catalog.index', $data);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $coins = $this->filteredQuery($request)
+            ->with(['series', 'artists'])
+            ->get();
+
+        $pdf = Pdf::loadView('catalog.pdf', [
+            'coins' => $coins,
+            'filters' => $this->currentFilters($request),
+            'generatedAt' => now(),
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('numis-catalog-'.now()->format('Y-m-d').'.pdf');
     }
 
     protected function groupedMetals()
