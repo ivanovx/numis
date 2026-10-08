@@ -2,8 +2,6 @@
 
 return [
     'site_title'        => 'Numis',
-    'brand_title'       => 'Catalog',
-    'brand_subtitle'    => 'of Bulgarian coins',
     'seo_title'         => 'Bulgarian Coin Catalog | Numis',
     'seo_description'   => 'Explore a Bulgarian coin catalog with details about year, denomination, metal, mintage, series, and artists.',
     'filter'            => 'Filter',

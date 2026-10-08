@@ -52,17 +52,6 @@ body {
     letter-spacing: 0.01em;
 }
 
-#site-navbar .site-brand-copy {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-}
-
-#site-navbar .site-brand-subtitle {
-    font-size: 0.65em;
-    font-weight: 500;
-}
-
 #site-navbar-menu {
     position: relative;
 }

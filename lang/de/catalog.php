@@ -2,8 +2,6 @@
 
 return [
     'site_title'        => 'Numis',
-    'brand_title'       => 'Katalog',
-    'brand_subtitle'    => 'bulgarischer Münzen',
     'seo_title'         => 'Katalog bulgarischer Münzen | Numis',
     'seo_description'   => 'Entdecken Sie einen Katalog bulgarischer Münzen mit Angaben zu Jahr, Nennwert, Metall, Auflage, Serie und Künstlern.',
     'filter'            => 'Filtern',
