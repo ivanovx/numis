@@ -12,17 +12,21 @@ class ImportNumisDates extends Command
      * php artisan numis:import_dates [path-to-json] [--apply] [--force]
      * Defaults to database/data/numis_dates_import.json
      *
+     * Fills in two columns per matched coin: issue_date (the circulation date)
+     * and bnb_number (the BNB emission code, which also links to the official
+     * source page on bnb.bg).
+     *
      * By default this runs as a DRY RUN: it only prints what it would do.
-     * Pass --apply to actually write the issue_date column.
-     * Pass --force to overwrite coins that already have an issue_date set
-     * (without it, coins with an existing issue_date are left untouched).
+     * Pass --apply to actually write the changes.
+     * Pass --force to overwrite values that are already set (without it,
+     * existing issue_date / bnb_number values are left untouched).
      */
     protected $signature = 'numis:import_dates
         {path? : Path to the dates JSON file}
         {--apply : Actually write changes (default is a dry run)}
-        {--force : Overwrite coins that already have an issue_date}';
+        {--force : Overwrite issue_date / bnb_number values that are already set}';
 
-    protected $description = 'Match coins by title/year and fill in their issue_date from researched BNB circulation dates';
+    protected $description = 'Match coins by title/year and fill in issue_date and the BNB emission code from researched BNB data';
 
     /** Minimum normalized-title similarity (0-100) to accept a fuzzy match. */
     protected const MIN_SIMILARITY = 55;
@@ -106,7 +110,18 @@ class ImportNumisDates extends Command
             /** @var Coin $coin */
             $coin = $scored[0]['coin'];
 
-            if ($coin->issue_date && ! $force) {
+            $bnbCode = $row['bnb_code'] ?? null;
+            $changes = [];
+
+            if ($force || ! $coin->issue_date) {
+                $changes['issue_date'] = $date;
+            }
+
+            if ($bnbCode && ($force || ! filled($coin->bnb_number))) {
+                $changes['bnb_number'] = $bnbCode;
+            }
+
+            if ($changes === []) {
                 $skippedExisting++;
 
                 continue;
@@ -117,13 +132,12 @@ class ImportNumisDates extends Command
                 $apply ? 'SET' : 'WOULD SET',
                 $coin->id,
                 $coin->title,
-                $date,
+                collect($changes)->map(fn ($value, $field) => "{$field}={$value}")->implode(', '),
                 round($scored[0]['score'])
             ));
 
             if ($apply) {
-                $coin->issue_date = $date;
-                $coin->save();
+                $coin->fill($changes)->save();
             }
 
             $matched++;
@@ -131,7 +145,7 @@ class ImportNumisDates extends Command
 
         $this->newLine();
         $this->info("Matched: {$matched}".($apply ? ' (saved)' : ' (dry run — not saved)'));
-        $this->info("Skipped (already had issue_date, use --force to overwrite): {$skippedExisting}");
+        $this->info("Skipped (nothing to change — values already set, use --force to overwrite): {$skippedExisting}");
 
         if ($notFound) {
             $this->newLine();

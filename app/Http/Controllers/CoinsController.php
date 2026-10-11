@@ -85,8 +85,34 @@ class CoinsController extends Controller
                     '@type' => 'Brand',
                     'name' => __('catalog.site_title'),
                 ],
-            ],
+            ] + $this->referenceStructuredData($coin, $locale),
         ]);
+    }
+
+    /**
+     * schema.org identifiers for the catalog numbers (KM#, Numista, BNB code…)
+     * and sameAs links to the same coin on other sites, so search engines can
+     * connect the page with those catalogs.
+     */
+    protected function referenceStructuredData(Coin $coin, string $locale): array
+    {
+        $references = collect($coin->catalogReferences($locale));
+
+        $identifiers = $references->map(fn (array $reference) => [
+            '@type' => 'PropertyValue',
+            'propertyID' => match ($reference['key']) {
+                'km' => 'Krause-Mishler KM#',
+                'numista' => 'Numista',
+                'bnb' => 'BNB emission code',
+                default => 'Catalog reference',
+            },
+            'value' => $reference['value'],
+        ])->values()->all();
+
+        $sameAs = $references->pluck('url')->filter()->values()->all();
+
+        return ($identifiers ? ['identifier' => $identifiers] : [])
+            + ($sameAs ? ['sameAs' => $sameAs] : []);
     }
 
     /**

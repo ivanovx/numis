@@ -118,6 +118,11 @@ class CoinController extends Controller
             'diameter' => ['nullable', 'string', 'max:255'],
             'mintage' => ['nullable', 'string', 'max:255'],
 
+            'km_number' => ['nullable', 'string', 'max:64'],
+            'numista_number' => ['nullable', 'string', 'max:255'], // may be a pasted URL; normalised to the number on save
+            'bnb_number' => ['nullable', 'string', 'max:255'],     // may be a pasted URL; normalised to the code on save
+            'other_references' => ['nullable', 'string', 'max:255'],
+
             'edge' => ['nullable', 'array'],
             'edge.bg' => ['nullable', 'string', 'max:255'],
             'edge.en' => ['nullable', 'string', 'max:255'],

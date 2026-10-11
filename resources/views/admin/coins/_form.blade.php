@@ -1,6 +1,12 @@
 @php($languages = $coin->exists ? ['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] : ['bg' => 'Bulgarian'])
 
 <div class="row g-3">
+    @if ($coin->exists)
+        <div class="col-12">
+            @include('admin.coins._completeness', ['coin' => $coin, 'detailed' => true])
+        </div>
+    @endif
+
     <div class="col-12">
         <label class="form-label fw-bold mb-1">Title (Заглавие)</label>
         <div class="row g-2">
@@ -101,6 +107,40 @@
     <div class="col-md-3">
         <label class="form-label">Mintage (Тираж)</label>
         <input type="text" name="mintage" class="form-control" value="{{ old('mintage', $coin->mintage) }}">
+    </div>
+
+    <div class="col-12 mt-4">
+        <label class="form-label fw-bold mb-0">Catalog references (Каталожни номера)</label>
+        <div class="form-text mt-0">Numbers collectors search by. Prefixes such as "KM#" or "N#" are optional — they are stripped automatically.</div>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Krause (KM#)</label>
+        <input type="text" name="km_number" class="form-control" maxlength="64" placeholder="e.g. 202.1"
+               value="{{ old('km_number', $coin->km_number) }}">
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Numista (N#)</label>
+        <input type="text" name="numista_number" class="form-control" maxlength="64" placeholder="e.g. 12345 or numista.com URL"
+               value="{{ old('numista_number', $coin->numista_number) }}">
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">BNB code (БНБ код)</label>
+        <input type="text" name="bnb_number" class="form-control" maxlength="100" placeholder="e.g. NC_2025_9_100LV"
+               value="{{ old('bnb_number', $coin->bnb_number) }}">
+        @if ($coin->bnbUrl('bg'))
+            <div class="form-text"><a href="{{ $coin->bnbUrl('bg') }}" target="_blank" rel="noopener">Open on bnb.bg ↗</a></div>
+        @else
+            <div class="form-text">The code from the coin's address on bnb.bg (a pasted URL works too).</div>
+        @endif
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Other catalogs (Други каталози)</label>
+        <input type="text" name="other_references" class="form-control" maxlength="255" placeholder="e.g. Schön 123; Фриш 45"
+               value="{{ old('other_references', $coin->other_references) }}">
     </div>
 
     @foreach ([

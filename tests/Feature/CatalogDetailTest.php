@@ -45,7 +45,7 @@ test('coin detail pages expose localized seo metadata and structured data', func
     $response = $this->get(route('catalog.coin', ['locale' => 'en', 'coin' => $coin]));
 
     $response->assertOk()
-        ->assertSee('<title>Gold coin | Numis</title>', false)
+        ->assertSee('<title>Gold coin | Catalog of Bulgarian Coins</title>', false)
         ->assertSee('property="og:type" content="website"', false)
         ->assertSee('property="og:url"', false)
         ->assertSee('"@type":"Product"', false)
@@ -169,4 +169,27 @@ test('collectible and commemorative pages group tickets by series and sort by de
         ->assertSee('Серия А')
         ->assertSee('Серия Б')
         ->assertSeeInOrder(['Серия А', 'Възпоменателна монета 2 лв', 'Серия Б', 'Възпоменателна монета 10 лв']);
+});
+
+test('the navbar shows the site name on two lines in every language', function () {
+    $this->get(route('catalog.index', ['locale' => 'bg']))
+        ->assertSee('<span class="brand-line brand-line-main">Каталог</span>', false)
+        ->assertSee('<span class="brand-line brand-line-sub">на българските монети</span>', false);
+
+    $this->get(route('catalog.index', ['locale' => 'en']))
+        ->assertSee('<span class="brand-line brand-line-main">Catalog</span>', false)
+        ->assertSee('<span class="brand-line brand-line-sub">of Bulgarian Coins</span>', false);
+
+    $this->get(route('catalog.index', ['locale' => 'de']))
+        ->assertSee('<span class="brand-line brand-line-main">Katalog</span>', false)
+        ->assertSee('<span class="brand-line brand-line-sub">bulgarischer Münzen</span>', false);
+});
+
+test('the navbar shows the logo in front of the site name', function () {
+    expect(public_path('logo-navbar.png'))->toBeFile();
+
+    $this->get(route('catalog.index', ['locale' => 'bg']))
+        ->assertOk()
+        ->assertSee('<span class="brand-logo"><img src="', false)
+        ->assertSee('logo-navbar.png?v=', false);
 });

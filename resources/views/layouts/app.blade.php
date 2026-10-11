@@ -112,7 +112,16 @@
 
 <nav id="site-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid px-3 px-lg-4">
-        <a class="navbar-brand" href="{{ route('home.locale', ['locale' => $currentLocale]) }}">{{ __('catalog.site_title') }}</a>
+        @php($navbarLogo = public_path('logo-navbar.png'))
+        <a class="navbar-brand navbar-brand-stacked" href="{{ route('home.locale', ['locale' => $currentLocale]) }}" aria-label="{{ __('catalog.site_title') }}">
+            @if (file_exists($navbarLogo))
+                <span class="brand-logo"><img src="{{ asset('logo-navbar.png') }}?v={{ filemtime($navbarLogo) }}" alt="" width="128" height="89" decoding="async"></span>
+            @endif
+            <span class="brand-text">
+                <span class="brand-line brand-line-main">{{ __('catalog.brand_line_1') }}</span>
+                <span class="brand-line brand-line-sub">{{ __('catalog.brand_line_2') }}</span>
+            </span>
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#site-navbar-menu"
                 aria-controls="site-navbar-menu" aria-expanded="false" aria-label="Toggle navigation">

@@ -1,8 +1,10 @@
 <?php
 
 return [
-    'site_title'        => 'Numis',
-    'seo_title'         => 'Bulgarian Coin Catalog | Numis',
+    'site_title'        => 'Catalog of Bulgarian Coins',
+    'brand_line_1'      => 'Catalog',
+    'brand_line_2'      => 'of Bulgarian Coins',
+    'seo_title'         => 'Catalog of Bulgarian Coins',
     'seo_description'   => 'Explore a Bulgarian coin catalog with details about year, denomination, metal, mintage, series, and artists.',
     'filter'            => 'Filter',
     'clear_filters'     => 'Clear filters',
@@ -97,5 +99,12 @@ return [
     'metal_breakdown_title' => 'Breakdown by metal',
     'coins_by_year_chart' => 'Coins by year',
     'search' => 'Search',
-    'search_placeholder' => 'Search by title, artist, or description…',
+    'search_placeholder' => 'Search by title, artist, description or catalog number (KM#)…',
+    'references_title' => 'Catalog references',
+    'reference_km_label' => 'Krause (KM#)',
+    'reference_numista_label' => 'Numista',
+    'reference_bnb_label' => 'BNB code',
+    'reference_other_label' => 'Other catalogs',
+    'reference_bnb_source' => 'official BNB source',
+    'pdf_col_refs' => 'Catalog no.',
 ];

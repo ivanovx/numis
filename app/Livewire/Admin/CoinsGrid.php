@@ -6,6 +6,7 @@ use App\Models\Coin;
 use App\Models\Series;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,6 +22,14 @@ class CoinsGrid extends Component
 
     public string $metal = '';
 
+    /** '' | 'complete' | 'incomplete' — linkable, e.g. from the dashboard. */
+    #[Url]
+    public string $completeness = '';
+
+    /** '' | one of Coin::COMPLETENESS_FIELDS — show only coins missing that field. */
+    #[Url]
+    public string $missing = '';
+
     public string $sortBy = 'year';
 
     public string $sortDirection = 'desc';
@@ -35,14 +44,14 @@ class CoinsGrid extends Component
 
     public function updated(string $property): void
     {
-        if (in_array($property, ['search', 'seriesId', 'category', 'metal', 'perPage'], true)) {
+        if (in_array($property, ['search', 'seriesId', 'category', 'metal', 'completeness', 'missing', 'perPage'], true)) {
             $this->resetPage();
         }
     }
 
     public function sort(string $column): void
     {
-        if (! in_array($column, ['year', 'denomination', 'metal'], true)) {
+        if (! in_array($column, ['year', 'denomination', 'metal', 'completeness'], true)) {
             return;
         }
 
@@ -58,7 +67,7 @@ class CoinsGrid extends Component
 
     public function clearFilters(): void
     {
-        $this->reset(['search', 'seriesId', 'category', 'metal']);
+        $this->reset(['search', 'seriesId', 'category', 'metal', 'completeness', 'missing']);
         $this->selected = [];
         $this->resetPage();
     }
@@ -142,13 +151,23 @@ class CoinsGrid extends Component
                     $query->where('title', 'like', $search)
                         ->orWhere('denomination', 'like', $search)
                         ->orWhere('metal', 'like', $search)
+                        ->orWhere('km_number', 'like', $search)
+                        ->orWhere('numista_number', 'like', $search)
+                        ->orWhere('bnb_number', 'like', $search)
+                        ->orWhere('other_references', 'like', $search)
                         ->orWhereHas('series', fn ($query) => $query->where('slug', 'like', $search));
                 });
             })
             ->when($this->seriesId !== '', fn ($query) => $query->where('series_id', $this->seriesId))
             ->when($this->category !== '', fn ($query) => $query->where('category', $this->category))
             ->when($this->metal !== '', fn ($query) => $query->where('metal', $this->metal))
-            ->orderBy($this->sortBy, $this->sortDirection)
+            ->when($this->completeness !== '', fn ($query) => $query->completenessState($this->completeness))
+            ->when($this->missing !== '', fn ($query) => $query->missingField($this->missing))
+            ->when(
+                $this->sortBy === 'completeness',
+                fn ($query) => $query->orderByCompleteness($this->sortDirection)->orderByDesc('year'),
+                fn ($query) => $query->orderBy($this->sortBy, $this->sortDirection),
+            )
             ->paginate($this->perPage);
 
         return view('livewire.admin.coins-grid', [
@@ -156,6 +175,7 @@ class CoinsGrid extends Component
             'series' => Series::forSelect(),
             'categories' => Coin::CATEGORIES,
             'metals' => Coin::METALS,
+            'completenessFields' => Coin::COMPLETENESS_FIELDS,
         ]);
     }
 }

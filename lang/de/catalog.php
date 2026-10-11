@@ -1,8 +1,10 @@
 <?php
 
 return [
-    'site_title'        => 'Numis',
-    'seo_title'         => 'Katalog bulgarischer Münzen | Numis',
+    'site_title'        => 'Katalog bulgarischer Münzen',
+    'brand_line_1'      => 'Katalog',
+    'brand_line_2'      => 'bulgarischer Münzen',
+    'seo_title'         => 'Katalog bulgarischer Münzen',
     'seo_description'   => 'Entdecken Sie einen Katalog bulgarischer Münzen mit Angaben zu Jahr, Nennwert, Metall, Auflage, Serie und Künstlern.',
     'filter'            => 'Filtern',
     'clear_filters'     => 'Filter löschen',
@@ -98,5 +100,12 @@ return [
     'metal_breakdown_title' => 'Verteilung nach Metall',
     'coins_by_year_chart' => 'Münzen nach Jahr',
     'search' => 'Suche',
-    'search_placeholder' => 'Suche nach Titel, Künstler oder Beschreibung…',
+    'search_placeholder' => 'Suche nach Titel, Künstler, Beschreibung oder Katalognummer (KM#)…',
+    'references_title' => 'Katalognummern',
+    'reference_km_label' => 'Krause (KM#)',
+    'reference_numista_label' => 'Numista',
+    'reference_bnb_label' => 'BNB-Code',
+    'reference_other_label' => 'Weitere Kataloge',
+    'reference_bnb_source' => 'offizielle BNB-Quelle',
+    'pdf_col_refs' => 'Katalog-Nr.',
 ];

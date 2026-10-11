@@ -90,6 +90,7 @@
                 <th>{{ __('catalog.denomination_label') }}</th>
                 <th>{{ __('catalog.metal_label') }}</th>
                 <th>{{ __('catalog.artist_label') }}</th>
+                <th>{{ __('catalog.pdf_col_refs') }}</th>
                 <th>{{ __('catalog.pdf_col_front') }}</th>
                 <th>{{ __('catalog.pdf_col_back') }}</th>
                 <th>{{ __('catalog.pdf_col_mintage') }}</th>
@@ -109,6 +110,7 @@
                     <td>{{ $coin->denomination ?: '—' }}</td>
                     <td>{{ $coin->metal ?: '—' }}</td>
                     <td>{{ $coin->artists->pluck('name')->implode(', ') ?: '—' }}</td>
+                    <td>{{ collect($coin->catalogReferences())->whereIn('key', ['km', 'numista'])->pluck('value')->implode(' · ') ?: '—' }}</td>
                     <td class="pdf-thumb">
                         @if ($frontPath && file_exists($frontPath))
                             <img src="{{ $frontPath }}" alt="">

@@ -9,7 +9,7 @@ test('authenticated users can visit the coins grid', function () {
     $response = $this->get(route('admin.coins.index'));
 
     $response->assertOk();
-    $response->assertSee('Search title, series, metal...');
+    $response->assertSee('Search title, series, metal, catalog #...');
     $response->assertSee(route('admin.coins.create'));
 });
 

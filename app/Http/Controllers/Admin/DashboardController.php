@@ -15,6 +15,8 @@ class DashboardController extends Controller
             'coinCount'   => Coin::count(),
             'seriesCount' => Series::count(),
             'artistCount' => Artist::count(),
+            'completeness' => Coin::completenessReport(),
+            'completenessFields' => Coin::COMPLETENESS_FIELDS,
         ]);
     }
 }

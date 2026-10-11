@@ -8,7 +8,19 @@ type Coin {
     id: ID!
     title: String!
     year: Int
+    issue_date: String @method(name: "issueDateIso")
+    denomination: String
     metal: String
+    quality: String
+    weight: String
+    diameter: String
+    mintage: String
+    edge: String
+    mint: String
+    km_number: String
+    bnb_number: String
+    numista_number: String
+    other_references: String
     description: String
     series_id: ID
     series: Series @belongsTo

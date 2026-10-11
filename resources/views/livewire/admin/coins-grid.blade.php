@@ -2,7 +2,7 @@
     <div class="row g-2 mb-3">
         <div class="col-lg-4">
             <label for="coin-search" class="visually-hidden">Search coins</label>
-            <input id="coin-search" type="search" class="form-control" placeholder="Search title, series, metal..."
+            <input id="coin-search" type="search" class="form-control" placeholder="Search title, series, metal, catalog #..."
                    wire:model.live.debounce.300ms="search">
         </div>
         <div class="col-sm-6 col-lg-2">
@@ -33,6 +33,24 @@
             <button type="button" class="btn btn-outline-secondary w-100" wire:click="clearFilters">
                 Clear filters
             </button>
+        </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+        <div class="col-sm-6 col-lg-3">
+            <select class="form-select" wire:model.live="completeness" aria-label="Filter by data completeness">
+                <option value="">All records (any completeness)</option>
+                <option value="incomplete">Incomplete data only</option>
+                <option value="complete">Complete data only ({{ count($completenessFields) }}/{{ count($completenessFields) }})</option>
+            </select>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <select class="form-select" wire:model.live="missing" aria-label="Filter by missing field">
+                <option value="">Missing field: any</option>
+                @foreach ($completenessFields as $field => $label)
+                    <option value="{{ $field }}">Missing: {{ $label }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -79,6 +97,12 @@
                     <th>Metal</th>
                     <th>Series</th>
                     <th>Artists</th>
+                    <th>
+                        <button type="button" class="btn btn-link p-0 text-decoration-none text-dark fw-bold"
+                                wire:click="sort('completeness')" title="Sort by data completeness">
+                            Data @if ($sortBy === 'completeness') {{ $sortDirection === 'asc' ? '↑' : '↓' }} @endif
+                        </button>
+                    </th>
                     <th>Status</th>
                     <th class="text-end">Actions</th>
                 </tr>
@@ -96,6 +120,7 @@
                         <td>{{ $coin->metal ?: '—' }}</td>
                         <td>{{ $coin->series?->name ?: '—' }}</td>
                         <td>{{ $coin->artistNames() ?: '—' }}</td>
+                        <td>@include('admin.coins._completeness', ['coin' => $coin])</td>
                         <td class="text-nowrap">
                             @foreach ($this->statusFlags($coin) as $status)
                                 <span class="badge {{ $status === 'Complete' ? 'text-bg-success' : 'text-bg-warning' }} mb-1">
@@ -114,7 +139,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="9" class="text-center py-4">No coins found.</td></tr>
+                    <tr><td colspan="10" class="text-center py-4">No coins found.</td></tr>
                 @endforelse
             </tbody>
         </table>

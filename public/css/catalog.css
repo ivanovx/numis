@@ -1091,3 +1091,89 @@ body.catalog-lightbox-open {
 .catalog-timeline-item.is-current .catalog-timeline-year {
     color: var(--catalog-amber-dark);
 }
+
+
+/* ============ Catalog references (detail page) ============ */
+.catalog-references-title {
+    margin: 1.75rem 0 0.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--catalog-line);
+    color: var(--catalog-navy-deep);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.catalog-references dd a {
+    color: var(--catalog-teal);
+    text-decoration: none;
+}
+
+.catalog-references dd a:hover {
+    text-decoration: underline;
+}
+
+/* ============ Site brand in the navbar: logo + two-line name ============ */
+#site-navbar .navbar-brand-stacked {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+/* White plate: the logo's dark-teal strokes disappear on the navy bar without it. */
+#site-navbar .brand-logo {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0.28rem 0.4rem;
+    border-radius: 0.6rem;
+    background: #ffffff;
+    box-shadow: 0 0.1rem 0.35rem rgba(0, 0, 0, 0.25);
+}
+
+#site-navbar .brand-logo img {
+    display: block;
+    width: auto;
+    height: 2.2rem;
+}
+
+#site-navbar .brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.1;
+}
+
+#site-navbar .brand-line-main {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+#site-navbar .brand-line-sub {
+    color: #6dd3e0; /* light teal with >5.5:1 contrast on the navy bar (WCAG AA for small text) */
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+#site-navbar .navbar-brand-stacked:hover .brand-line-sub {
+    color: #ffffff;
+}
+
+@media (max-width: 575.98px) {
+    #site-navbar .navbar-brand-stacked {
+        gap: 0.5rem;
+    }
+
+    #site-navbar .brand-logo img {
+        height: 1.85rem;
+    }
+
+    #site-navbar .brand-line-main {
+        font-size: 1.15rem;
+    }
+}

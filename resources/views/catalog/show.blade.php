@@ -96,6 +96,26 @@
                         <dd class="col-sm-7">{{ $coin->series?->name ?? __('catalog.no_series') }}</dd>
                     </dl>
 
+                    @php($references = $coin->catalogReferences(app()->getLocale()))
+                    @if ($references)
+                        <h2 class="catalog-references-title">{{ __('catalog.references_title') }}</h2>
+                        <dl class="row catalog-spec-list catalog-references mb-0">
+                            @foreach ($references as $reference)
+                                <dt class="col-sm-5">{{ __('catalog.reference_'.$reference['key'].'_label') }}</dt>
+                                <dd class="col-sm-7">
+                                    @if ($reference['url'])
+                                        <a href="{{ $reference['url'] }}" target="_blank" rel="noopener noreferrer">{{ $reference['value'] }}<i class="bi bi-box-arrow-up-right ms-1 small" aria-hidden="true"></i></a>
+                                    @else
+                                        {{ $reference['value'] }}
+                                    @endif
+                                    @if ($reference['key'] === 'bnb')
+                                        <span class="text-muted small">· {{ __('catalog.reference_bnb_source') }}</span>
+                                    @endif
+                                </dd>
+                            @endforeach
+                        </dl>
+                    @endif
+
                     @if ($coin->description)
                         <section class="catalog-rich-text catalog-detail-description mt-4">
                             {!! $coin->description !!}

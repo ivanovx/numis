@@ -1,8 +1,10 @@
 <?php
 
 return [
-    'site_title'        => 'Numis',
-    'seo_title'         => 'Каталог на български монети | Numis',
+    'site_title'        => 'Каталог на българските монети',
+    'brand_line_1'      => 'Каталог',
+    'brand_line_2'      => 'на българските монети',
+    'seo_title'         => 'Каталог на българските монети',
     'seo_description'   => 'Разгледайте каталог на български монети с данни за година, номинал, метал, тираж, серия и художник.',
     'filter'            => 'Филтър',
     'clear_filters'     => 'Изчисти филтрите',
@@ -96,5 +98,12 @@ return [
     'metal_breakdown_title' => 'Разпределение по метал',
     'coins_by_year_chart' => 'Монети по години',
     'search' => 'Търсене',
-    'search_placeholder' => 'Търси по заглавие, художник или описание…',
+    'search_placeholder' => 'Търси по заглавие, художник, описание или каталожен номер (KM#)…',
+    'references_title' => 'Каталожни номера',
+    'reference_km_label' => 'Krause (KM#)',
+    'reference_numista_label' => 'Numista',
+    'reference_bnb_label' => 'БНБ код',
+    'reference_other_label' => 'Други каталози',
+    'reference_bnb_source' => 'официален източник на БНБ',
+    'pdf_col_refs' => 'Каталожен №',
 ];
