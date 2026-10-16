@@ -32,12 +32,14 @@ class CoinsGrid extends Component
 
     public string $sortBy = 'year';
 
+    /** @var 'asc'|'desc' */
     public string $sortDirection = 'desc';
 
     public int $perPage = 20;
 
     public string $paginationTheme = 'bootstrap';
 
+    /** @var array<int, int|string> */
     public array $selected = [];
 
     public string $bulkSeriesId = '';
@@ -72,6 +74,7 @@ class CoinsGrid extends Component
         $this->resetPage();
     }
 
+    /** @param  array<int, int|string>  $ids */
     public function togglePageSelection(array $ids): void
     {
         $ids = array_map('intval', $ids);
@@ -113,6 +116,7 @@ class CoinsGrid extends Component
         session()->flash('status', 'Selected coins assigned to the series.');
     }
 
+    /** @return list<string> */
     public function statusFlags(Coin $coin): array
     {
         $flags = [];

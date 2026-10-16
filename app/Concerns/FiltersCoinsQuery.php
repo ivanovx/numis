@@ -2,8 +2,10 @@
 
 namespace App\Concerns;
 
+use App\Models\Coin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Pdo\Sqlite;
 
 trait FiltersCoinsQuery
 {
@@ -12,6 +14,11 @@ trait FiltersCoinsQuery
      * Coin query builder. Used both for the listing itself and for building
      * the prev/next neighbor lookup on the coin detail page, so the two
      * always stay in sync.
+     */
+    /**
+     * @param  Builder<Coin>  $query
+     * @param  array<string, mixed>  $filters
+     * @return Builder<Coin>
      */
     protected function applyCoinFilters(Builder $query, array $filters): Builder
     {
@@ -38,6 +45,7 @@ trait FiltersCoinsQuery
         if (($filters['metal'] ?? '') !== '') {
             // Prefix match: picking the base metal ("Ag 925/1000") also finds its variants.
             $lower = $this->lowerFunction($query);
+            // @phpstan-ignore argument.type (SQL is assembled from fixed column/function names in this file only; user input is always bound as a parameter)
             $query->whereRaw("{$lower}(coins.metal) LIKE ? ESCAPE '!'", [$this->escapeLike(mb_strtolower($filters['metal'])).'%']);
         }
 
@@ -60,6 +68,7 @@ trait FiltersCoinsQuery
      * Free-text search: titles, descriptions, artist, series, and catalog
      * numbers (KM#, Numista, BNB code, other references).
      */
+    /** @param  Builder<Coin>  $query */
     protected function applyTextSearch(Builder $query, string $term): void
     {
         $lower = $this->lowerFunction($query);
@@ -72,16 +81,20 @@ trait FiltersCoinsQuery
 
         $query->where(function (Builder $q) use ($lower, $like, $referencePrefix) {
             foreach (['title', 'description', 'front_description', 'back_description', 'bnb_number', 'other_references'] as $column) {
+                // @phpstan-ignore argument.type (column names come from the fixed list above)
                 $q->orWhereRaw("{$lower}(coins.{$column}) LIKE ? ESCAPE '!'", [$like]);
             }
 
             if ($referencePrefix !== null) {
                 foreach (['km_number', 'numista_number'] as $column) {
+                    // @phpstan-ignore argument.type (column names come from the fixed list above)
                     $q->orWhereRaw("{$lower}(coins.{$column}) LIKE ? ESCAPE '!'", [$referencePrefix]);
                 }
             }
 
+            // @phpstan-ignore-next-line argument.type (fixed column names; the search term is bound, not interpolated)
             $q->orWhereHas('artists', fn ($a) => $a->whereRaw("{$lower}(artists.name) LIKE ? ESCAPE '!'", [$like]));
+            // @phpstan-ignore-next-line argument.type
             $q->orWhereHas('series', fn ($s) => $s->whereRaw("{$lower}(series.name) LIKE ? ESCAPE '!'", [$like]));
         });
     }
@@ -93,6 +106,7 @@ trait FiltersCoinsQuery
      * would never match "Ботев". On SQLite we register a Unicode-aware
      * function on the connection; MySQL/MariaDB/PostgreSQL already handle it.
      */
+    /** @param  Builder<Coin>  $query */
     protected function lowerFunction(Builder $query): string
     {
         $connection = $query->getModel()->getConnection();
@@ -104,10 +118,12 @@ trait FiltersCoinsQuery
         $pdo = $connection->getPdo();
         $callback = fn ($value) => $value === null ? null : mb_strtolower((string) $value);
 
-        if (method_exists($pdo, 'sqliteCreateFunction')) {
-            $pdo->sqliteCreateFunction('mb_lower', $callback, 1);
-        } else {
+        if ($pdo instanceof Sqlite) {
+            // Driver-specific class (PHP 8.4+, only when created through PDO::connect()).
             $pdo->createFunction('mb_lower', $callback, 1);
+        } else {
+            // Laravel opens connections with `new PDO(...)`, so this is the usual path (PHP 8.3 - 8.5).
+            $pdo->sqliteCreateFunction('mb_lower', $callback, 1);
         }
 
         return 'mb_lower';
@@ -119,6 +135,7 @@ trait FiltersCoinsQuery
         return str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $value);
     }
 
+    /** @return array<string, mixed> */
     protected function coinFiltersFromRequest(Request $request): array
     {
         return [

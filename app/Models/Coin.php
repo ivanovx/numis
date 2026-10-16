@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Concerns\HasTranslatedFields;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,6 +15,7 @@ use Illuminate\Support\Str;
 
 class Coin extends Model
 {
+    /** @use HasFactory<Factory<Coin>> */
     use HasFactory, HasTranslatedFields;
 
     /** Suggested values for the "metal" field — kept as free text, these are just autocomplete hints. */
@@ -76,11 +78,13 @@ class Coin extends Model
         'issue_date' => 'date',
     ];
 
+    /** @return BelongsTo<Series, $this> */
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class);
     }
 
+    /** @return BelongsToMany<Artist, $this> */
     public function artists(): BelongsToMany
     {
         return $this->belongsToMany(Artist::class, 'artist_coin');
@@ -100,62 +104,62 @@ class Coin extends Model
 
     // --- Translatable fields: stored as {"bg":"...","en":"...","de":"..."} ---
 
-    public function getTitleAttribute($value): ?string
+    public function getTitleAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setTitleAttribute($value): void
+    public function setTitleAttribute(mixed $value): void
     {
         $this->attributes['title'] = $this->encodeTranslations($value);
     }
 
-    public function getEdgeAttribute($value): ?string
+    public function getEdgeAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setEdgeAttribute($value): void
+    public function setEdgeAttribute(mixed $value): void
     {
         $this->attributes['edge'] = $this->encodeTranslations($value);
     }
 
-    public function getMintAttribute($value): ?string
+    public function getMintAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setMintAttribute($value): void
+    public function setMintAttribute(mixed $value): void
     {
         $this->attributes['mint'] = $this->encodeTranslations($value);
     }
 
-    public function getFrontDescriptionAttribute($value): ?string
+    public function getFrontDescriptionAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setFrontDescriptionAttribute($value): void
+    public function setFrontDescriptionAttribute(mixed $value): void
     {
         $this->attributes['front_description'] = $this->encodeTranslations($value);
     }
 
-    public function getBackDescriptionAttribute($value): ?string
+    public function getBackDescriptionAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setBackDescriptionAttribute($value): void
+    public function setBackDescriptionAttribute(mixed $value): void
     {
         $this->attributes['back_description'] = $this->encodeTranslations($value);
     }
 
-    public function getDescriptionAttribute($value): ?string
+    public function getDescriptionAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setDescriptionAttribute($value): void
+    public function setDescriptionAttribute(mixed $value): void
     {
         $this->attributes['description'] = $this->encodeTranslations($value);
     }
@@ -174,22 +178,22 @@ class Coin extends Model
 
     // --- Catalog references -------------------------------------------------
 
-    public function setKmNumberAttribute($value): void
+    public function setKmNumberAttribute(mixed $value): void
     {
         $this->attributes['km_number'] = self::clip(self::normalizeKmNumber($value), 64);
     }
 
-    public function setBnbNumberAttribute($value): void
+    public function setBnbNumberAttribute(mixed $value): void
     {
         $this->attributes['bnb_number'] = self::clip(self::normalizeBnbNumber($value), 100);
     }
 
-    public function setNumistaNumberAttribute($value): void
+    public function setNumistaNumberAttribute(mixed $value): void
     {
         $this->attributes['numista_number'] = self::clip(self::normalizeNumistaNumber($value), 64);
     }
 
-    public function setOtherReferencesAttribute($value): void
+    public function setOtherReferencesAttribute(mixed $value): void
     {
         $value = trim((string) $value);
 
@@ -367,29 +371,46 @@ class Coin extends Model
             ->implode(' + ');
     }
 
+    /**
+     * @param  Builder<Coin>  $query
+     * @return Builder<Coin>
+     */
     public function scopeMissingField(Builder $query, string $field): Builder
     {
         if (! array_key_exists($field, self::COMPLETENESS_FIELDS)) {
             return $query;
         }
 
+        // @phpstan-ignore argument.type (SQL comes from the COMPLETENESS_FIELDS constant only, never from input)
         return $query->whereRaw('NOT ('.self::filledSql($field).')');
     }
 
-    /** @param  'complete'|'incomplete'|string  $state */
+    /**
+     * @param  Builder<Coin>  $query
+     * @param  'complete'|'incomplete'|string  $state
+     * @return Builder<Coin>
+     */
     public function scopeCompletenessState(Builder $query, string $state): Builder
     {
         $total = count(self::COMPLETENESS_FIELDS);
 
+        // The raw SQL is built from the COMPLETENESS_FIELDS constant only (no user input).
         return match ($state) {
+            // @phpstan-ignore argument.type
             'complete' => $query->whereRaw('('.self::completenessScoreSql().') = '.$total),
+            // @phpstan-ignore argument.type
             'incomplete' => $query->whereRaw('('.self::completenessScoreSql().') < '.$total),
             default => $query,
         };
     }
 
+    /**
+     * @param  Builder<Coin>  $query
+     * @return Builder<Coin>
+     */
     public function scopeOrderByCompleteness(Builder $query, string $direction = 'asc'): Builder
     {
+        // @phpstan-ignore argument.type (SQL comes from the COMPLETENESS_FIELDS constant; direction is whitelisted)
         return $query->orderByRaw('('.self::completenessScoreSql().') '.(strtolower($direction) === 'desc' ? 'DESC' : 'ASC'));
     }
 
@@ -414,6 +435,7 @@ class Coin extends Model
             $selects[] = 'COALESCE(SUM(CASE WHEN '.self::filledSql($field)." THEN 0 ELSE 1 END), 0) AS missing_{$field}";
         }
 
+        // @phpstan-ignore argument.type (every part is built from the COMPLETENESS_FIELDS constant, never from input)
         $row = DB::table('coins')->selectRaw(implode(', ', $selects))->first();
 
         $total = (int) $row->total;
@@ -437,7 +459,7 @@ class Coin extends Model
             return trim($m[1]);
         }
 
-        $parts = preg_split('/\s+с\s+|\s+with\s+/u', $metal, 2);
+        $parts = preg_split('/\s+с\s+|\s+with\s+/u', $metal, 2) ?: [$metal];
 
         return trim($parts[0]);
     }

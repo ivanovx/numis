@@ -41,7 +41,7 @@ class ImportNumisDates extends Command
             return self::FAILURE;
         }
 
-        $rows = json_decode(file_get_contents($path), true);
+        $rows = json_decode((string) file_get_contents($path), true);
 
         if (! is_array($rows)) {
             $this->error('Could not parse JSON file.');

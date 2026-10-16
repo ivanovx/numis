@@ -62,14 +62,14 @@ trait HasTranslatedFields
         return is_array($decoded) ? ($decoded[$locale] ?? null) : null;
     }
 
-    protected function encodeTranslations($value): ?string
+    protected function encodeTranslations(mixed $value): ?string
     {
         if (is_array($value)) {
             $filtered = array_filter($value, fn ($v) => $v !== null && $v !== '');
 
-            return $filtered ? json_encode($value, JSON_UNESCAPED_UNICODE) : null;
+            return $filtered ? (json_encode($value, JSON_UNESCAPED_UNICODE) ?: null) : null;
         }
 
-        return $value;
+        return $value === null ? null : (string) $value;
     }
 }

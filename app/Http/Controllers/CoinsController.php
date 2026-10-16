@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Concerns\FiltersCoinsQuery;
 use App\Http\Middleware\SetLocale;
 use App\Models\Coin;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -13,14 +15,14 @@ class CoinsController extends Controller
 {
     use FiltersCoinsQuery;
 
-    public function index()
+    public function index(): View
     {
         return view('coins.index', [
             'categories' => Coin::CATEGORIES,
         ]);
     }
 
-    public function category(string $locale, string $category)
+    public function category(string $locale, string $category): View
     {
         abort_unless(in_array($category, Coin::CATEGORIES, true), 404);
 
@@ -47,7 +49,7 @@ class CoinsController extends Controller
         ]);
     }
 
-    public function show(string $locale, Coin $coin, Request $request)
+    public function show(string $locale, Coin $coin, Request $request): View
     {
         $coin->load(['series', 'artists']);
 
@@ -94,6 +96,7 @@ class CoinsController extends Controller
      * and sameAs links to the same coin on other sites, so search engines can
      * connect the page with those catalogs.
      */
+    /** @return array<string, mixed> */
     protected function referenceStructuredData(Coin $coin, string $locale): array
     {
         $references = collect($coin->catalogReferences($locale));
@@ -121,37 +124,43 @@ class CoinsController extends Controller
      * from the query string that catalog._card appends to every coin link,
      * so the "current list" context survives the click through.
      */
+    /**
+     * @param  array<string, mixed>  $filters
+     * @return array{prev: ?Coin, next: ?Coin}
+     */
     protected function neighborCoins(Coin $coin, array $filters): array
     {
-        $ids = $this->applyCoinFilters(Coin::query(), $filters)->pluck('id');
+        $ids = $this->applyCoinFilters(Coin::query(), $filters)->pluck('id')->values();
         $position = $ids->search($coin->id);
 
-        if ($position === false) {
+        if (! is_int($position)) {
             return ['prev' => null, 'next' => null];
         }
 
         return [
-            'prev' => $position > 0 ? Coin::find($ids[$position - 1]) : null,
-            'next' => $position < $ids->count() - 1 ? Coin::find($ids[$position + 1]) : null,
+            'prev' => $position > 0 ? Coin::query()->find((int) $ids[$position - 1]) : null,
+            'next' => $position < $ids->count() - 1 ? Coin::query()->find((int) $ids[$position + 1]) : null,
         ];
     }
 
+    /** @return list<array{label: string, url?: string}> */
     protected function coinBreadcrumbItems(Coin $coin): array
     {
         $items = [];
 
         if ($coin->category) {
             $items[] = [
-                'label' => __('catalog.categories.'.$coin->category),
+                'label' => (string) __('catalog.categories.'.$coin->category),
                 'url' => route('catalog.category', ['locale' => app()->getLocale(), 'category' => $coin->category]),
             ];
         }
 
-        $items[] = ['label' => $coin->title];
+        $items[] = ['label' => (string) $coin->title];
 
         return $items;
     }
 
+    /** @return Collection<int, Coin> */
     protected function seriesTimeline(Coin $coin): Collection
     {
         if (! $coin->series_id) {
@@ -165,7 +174,8 @@ class CoinsController extends Controller
             ->get(['id', 'title', 'year', 'front_image']);
     }
 
-    protected function similarCoins(Coin $coin): Collection
+    /** @return EloquentCollection<int, Coin> */
+    protected function similarCoins(Coin $coin): EloquentCollection
     {
         $artistIds = $coin->artists->pluck('id');
 
@@ -190,6 +200,10 @@ class CoinsController extends Controller
             ->get();
     }
 
+    /**
+     * @param  Collection<int, Coin>  $coins
+     * @return Collection<int|string, Collection<int, Coin>>
+     */
     protected function exchangeCoinsByYear(Collection $coins): Collection
     {
         return $coins
@@ -215,6 +229,6 @@ class CoinsController extends Controller
 
     protected function seriesName(Coin $coin): string
     {
-        return $coin->series?->name ?? __('catalog.no_series');
+        return $coin->series->name ?? __('catalog.no_series');
     }
 }

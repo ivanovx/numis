@@ -1,67 +1,65 @@
 <?php
 
 use App\Models\User;
-use Laravel\Fortify\Features;
 
 test('login screen can be rendered', function () {
-    $response = $this->get(route('login'));
+    $this->get(route('login'))->assertOk();
+});
 
-    $response->assertOk();
+test('an authenticated user is redirected away from the login screen', function () {
+    // The `guest` middleware on the login route sends signed-in users to the home page.
+    $this->actingAs(User::factory()->create())
+        ->get(route('login'))
+        ->assertRedirect(route('home'));
 });
 
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
-    $response = $this->post(route('login.store'), [
+    $this->post(route('login'), [
         'email' => $user->email,
         'password' => 'password',
-    ]);
-
-    $response
+    ])
         ->assertSessionHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect(route('admin.dashboard'));
 
-    $this->assertAuthenticated();
+    $this->assertAuthenticatedAs($user);
 });
 
-test('users can not authenticate with invalid password', function () {
+test('users are sent back to the page they originally asked for', function () {
     $user = User::factory()->create();
 
-    $response = $this->post(route('login.store'), [
+    $this->withSession(['url.intended' => route('admin.coins.index')])
+        ->post(route('login'), ['email' => $user->email, 'password' => 'password'])
+        ->assertRedirect(route('admin.coins.index'));
+});
+
+test('users can not authenticate with an invalid password', function () {
+    $user = User::factory()->create();
+
+    $this->post(route('login'), [
         'email' => $user->email,
         'password' => 'wrong-password',
-    ]);
-
-    $response->assertSessionHasErrorsIn('email');
+    ])->assertSessionHasErrors('email');
 
     $this->assertGuest();
 });
 
-test('users with two factor enabled are redirected to two factor challenge', function () {
-    $this->skipUnlessFortifyHas(Features::twoFactorAuthentication());
+test('the login form requires an email and a password', function () {
+    $this->post(route('login'), [])->assertSessionHasErrors(['email', 'password']);
 
-    Features::twoFactorAuthentication([
-        'confirm' => true,
-        'confirmPassword' => true,
-    ]);
-
-    $user = User::factory()->withTwoFactor()->create();
-
-    $response = $this->post(route('login.store'), [
-        'email' => $user->email,
-        'password' => 'password',
-    ]);
-
-    $response->assertRedirect(route('two-factor.login'));
     $this->assertGuest();
+});
+
+test('guests can not open the admin panel', function () {
+    $this->get(route('admin.dashboard'))->assertRedirect(route('login'));
+    $this->get(route('admin.coins.index'))->assertRedirect(route('login'));
 });
 
 test('users can logout', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->post(route('logout'));
-
-    $response->assertRedirect(route('home'));
+    $this->actingAs(User::factory()->create())
+        ->post(route('logout'))
+        ->assertRedirect(route('login'));
 
     $this->assertGuest();
 });

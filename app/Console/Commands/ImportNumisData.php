@@ -25,19 +25,22 @@ class ImportNumisData extends Command
 
         if (! file_exists($path)) {
             $this->error("File not found: {$path}");
+
             return self::FAILURE;
         }
 
-        $data = json_decode(file_get_contents($path), true);
+        $data = json_decode((string) file_get_contents($path), true);
 
         $seriesMap = $this->importSeries($data['series'] ?? []);
         $this->importCoins($data['coins'] ?? [], $seriesMap);
 
         $this->info('Import complete.');
+
         return self::SUCCESS;
     }
 
     /**
+     * @param  array<int, array<string, mixed>>  $seriesRows
      * @return array<int, int> wp term_id => new Series id
      */
     protected function importSeries(array $seriesRows): array
@@ -54,11 +57,15 @@ class ImportNumisData extends Command
             $map[$row['term_id']] = $series->id;
         }
 
-        $this->info('Series imported: ' . count($map));
+        $this->info('Series imported: '.count($map));
 
         return $map;
     }
 
+    /**
+     * @param  array<int, array<string, mixed>>  $coinRows
+     * @param  array<int, int>  $seriesMap  wp term_id => new Series id
+     */
     protected function importCoins(array $coinRows, array $seriesMap): void
     {
         $bar = $this->output->createProgressBar(count($coinRows));
@@ -73,13 +80,13 @@ class ImportNumisData extends Command
             // The WordPress export only had English text — stored under the "en" key.
             // Fill in "bg" and "de" from the admin panel afterwards.
             $coin = Coin::create([
-                'title'        => ['en' => $row['title']],
-                'series_id'    => $seriesId,
-                'year'         => $row['year'] !== null ? (int) $row['year'] : null,
+                'title' => ['en' => $row['title']],
+                'series_id' => $seriesId,
+                'year' => $row['year'] !== null ? (int) $row['year'] : null,
                 'denomination' => $row['denomination'],
-                'metal'        => $row['metal'],
-                'diameter'     => $row['diameter'],
-                'description'  => $row['description'] !== null ? ['en' => $row['description']] : null,
+                'metal' => $row['metal'],
+                'diameter' => $row['diameter'],
+                'description' => $row['description'] !== null ? ['en' => $row['description']] : null,
                 // issue_date, quality, weight, mintage, edge, mint,
                 // front_description, back_description did not exist in the old
                 // WordPress plugin — they start blank and are filled in from
@@ -102,7 +109,7 @@ class ImportNumisData extends Command
 
         $bar->finish();
         $this->newLine();
-        $this->info('Coins imported: ' . count($coinRows));
+        $this->info('Coins imported: '.count($coinRows));
     }
 
     /**
@@ -116,17 +123,19 @@ class ImportNumisData extends Command
 
             if (! $response->successful()) {
                 $this->warn("  Failed to download ({$response->status()}): {$url}");
+
                 return null;
             }
 
-            $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
-            $filename  = 'coins/' . Str::uuid() . '.' . $extension;
+            $extension = pathinfo((string) parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+            $filename = 'coins/'.Str::uuid().'.'.$extension;
 
             Storage::disk('public')->put($filename, $response->body());
 
             return $filename;
         } catch (\Throwable $e) {
             $this->warn("  Error downloading {$url}: {$e->getMessage()}");
+
             return null;
         }
     }

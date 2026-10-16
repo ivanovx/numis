@@ -16,11 +16,20 @@ class CoinTranslationService
         'description',
     ];
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
     public function translateBulgarianFields(array $data): array
     {
         return $this->translateFields($data, self::TRANSLATED_FIELDS);
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @param  list<string>  $fields
+     * @return array<string, mixed>
+     */
     public function translateFields(array $data, array $fields): array
     {
         $apiKey = config('services.deepl.key');

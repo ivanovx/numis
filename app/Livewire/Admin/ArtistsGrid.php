@@ -15,10 +15,12 @@ class ArtistsGrid extends Component
 
     public string $sortBy = 'name';
 
+    /** @var 'asc'|'desc' */
     public string $sortDirection = 'asc';
 
     public string $paginationTheme = 'bootstrap';
 
+    /** @var array<int, int|string> */
     public array $selected = [];
 
     public function updatedSearch(): void
@@ -49,6 +51,7 @@ class ArtistsGrid extends Component
         $this->resetPage();
     }
 
+    /** @param  array<int, int|string>  $ids */
     public function togglePageSelection(array $ids): void
     {
         $ids = array_map('intval', $ids);

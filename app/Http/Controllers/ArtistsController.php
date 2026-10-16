@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use Illuminate\Contracts\View\View;
 
-class ArtistsController extends Controller {
-    public function index() {
+class ArtistsController extends Controller
+{
+    public function index(): View
+    {
         $artists = Artist::query()
             ->withCount('coins')
             ->orderBy('name')
             ->get();
 
         return view('artists.index', [
-            'artists' => $artists
+            'artists' => $artists,
         ]);
     }
 
-    public function show(string $locale, Artist $artist) {
+    public function show(string $locale, Artist $artist): View
+    {
         $artist->load([
             'coins' => fn ($query) => $query
                 ->with(['series', 'artists'])

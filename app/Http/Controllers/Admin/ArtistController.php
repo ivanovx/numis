@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
 use App\Services\CoinTranslationService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -12,17 +14,17 @@ use Throwable;
 
 class ArtistController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('admin.artists.index');
     }
 
-    public function create()
+    public function create(): View
     {
         return view('admin.artists.create', ['artist' => new Artist]);
     }
 
-    public function store(Request $request, CoinTranslationService $translator)
+    public function store(Request $request, CoinTranslationService $translator): RedirectResponse
     {
         $data = $this->validated($request);
 
@@ -39,12 +41,12 @@ class ArtistController extends Controller
         return redirect()->route('admin.artists.index')->with('status', 'Artist created.');
     }
 
-    public function edit(Artist $artist)
+    public function edit(Artist $artist): View
     {
         return view('admin.artists.edit', compact('artist'));
     }
 
-    public function update(Request $request, Artist $artist)
+    public function update(Request $request, Artist $artist): RedirectResponse
     {
         $data = $this->validated($request, $artist);
 
@@ -53,13 +55,14 @@ class ArtistController extends Controller
         return redirect()->route('admin.artists.index')->with('status', 'Artist updated.');
     }
 
-    public function destroy(Artist $artist)
+    public function destroy(Artist $artist): RedirectResponse
     {
         $artist->delete(); // coins keep existing, just lose this artist credit
 
         return redirect()->route('admin.artists.index')->with('status', 'Artist deleted.');
     }
 
+    /** @return array<string, mixed> */
     protected function validated(Request $request, ?Artist $artist = null): array
     {
         $id = $artist?->id;
@@ -72,7 +75,7 @@ class ArtistController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:artists,slug,'.$id],
         ]);
 
-        $firstName = collect($data['name'])->first(fn ($value) => filled($value));
+        $firstName = collect((array) $data['name'])->first(fn ($value) => filled($value));
 
         if (! $firstName) {
             throw ValidationException::withMessages([

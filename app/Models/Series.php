@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Concerns\HasTranslatedFields;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Series extends Model
 {
+    /** @use HasFactory<Factory<Series>> */
     use HasFactory, HasTranslatedFields;
 
     protected $table = 'series';
@@ -18,18 +21,19 @@ class Series extends Model
         'slug',
     ];
 
+    /** @return HasMany<Coin, $this> */
     public function coins(): HasMany
     {
         return $this->hasMany(Coin::class);
     }
 
     // name is stored as {"bg":"...","en":"...","de":"..."}
-    public function getNameAttribute($value): ?string
+    public function getNameAttribute(mixed $value): ?string
     {
         return $this->translatedValue($value);
     }
 
-    public function setNameAttribute($value): void
+    public function setNameAttribute(mixed $value): void
     {
         $this->attributes['name'] = $this->encodeTranslations($value);
     }
@@ -39,9 +43,9 @@ class Series extends Model
      * (name is JSON, not sortable in SQL), then by the current locale's
      * translated name.
      *
-     * @return \Illuminate\Support\Collection<int, Series>
+     * @return Collection<int, Series>
      */
-    public static function forSelect(): \Illuminate\Support\Collection
+    public static function forSelect(): Collection
     {
         return static::orderBy('slug')->get()->sortBy('name')->values();
     }

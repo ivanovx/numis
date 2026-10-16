@@ -6,11 +6,11 @@ use App\Http\Middleware\SetLocale;
 use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View;
 
 class StatisticsController extends Controller
 {
-    public function index(string $locale)
+    public function index(string $locale): View
     {
         $coins = Coin::query()->get();
         $missingTranslations = $coins->filter(function (Coin $coin): bool {

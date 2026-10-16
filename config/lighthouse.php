@@ -1,15 +1,18 @@
 <?php
 
 declare(strict_types=1);
+use App\Http\Middleware\SetGraphqlLocale;
+use Nuwave\Lighthouse\Http\Middleware\AcceptJson;
+use Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication;
 
 return [
     'route' => [
         'uri' => '/graphql',
         'name' => 'graphql',
         'middleware' => [
-            Nuwave\Lighthouse\Http\Middleware\AcceptJson::class,
-            App\Http\Middleware\SetGraphqlLocale::class,
-            Nuwave\Lighthouse\Http\Middleware\AttemptAuthentication::class,
+            AcceptJson::class,
+            SetGraphqlLocale::class,
+            AttemptAuthentication::class,
         ],
     ],
 

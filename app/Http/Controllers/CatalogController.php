@@ -7,13 +7,17 @@ use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 
 class CatalogController extends Controller
 {
     use FiltersCoinsQuery;
 
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $coins = $this->filteredQuery($request)->paginate(16)->withQueryString();
 
@@ -48,7 +52,7 @@ class CatalogController extends Controller
         return view('catalog.index', $data);
     }
 
-    public function exportPdf(Request $request)
+    public function exportPdf(Request $request): Response
     {
         $coins = $this->filteredQuery($request)
             ->with(['series', 'artists'])
@@ -63,7 +67,8 @@ class CatalogController extends Controller
         return $pdf->download('numis-catalog-'.now()->format('Y-m-d').'.pdf');
     }
 
-    protected function groupedMetals()
+    /** @return Collection<int|string, Collection<int, mixed>> */
+    protected function groupedMetals(): Collection
     {
         return Coin::whereNotNull('metal')
             ->distinct()
@@ -73,6 +78,7 @@ class CatalogController extends Controller
             ->sortKeys();
     }
 
+    /** @return array{totalCoins: int, earliestYear: mixed, recentCoins: \Illuminate\Database\Eloquent\Collection<int, Coin>} */
     protected function heroData(): array
     {
         return [
@@ -86,6 +92,7 @@ class CatalogController extends Controller
         ];
     }
 
+    /** @return array{0: float, 1: int, 2: string, 3: int} */
     protected function categorySortValue(Coin $coin): array
     {
         preg_match('/-?\d+(?:[.,]\d+)?/', (string) ($coin->denomination ?? ''), $matches);
@@ -93,11 +100,12 @@ class CatalogController extends Controller
         return [
             (float) str_replace(',', '.', $matches[0] ?? '0'),
             (int) ($coin->year ?? 0),
-            $coin->series?->name ?? '',
+            $coin->series->name ?? '',
             $coin->id,
         ];
     }
 
+    /** @return array{0: int, 1: float, 2: int} */
     protected function exchangeSortValue(Coin $coin): array
     {
         preg_match('/-?\d+(?:[.,]\d+)?/', (string) ($coin->denomination ?? ''), $matches);
@@ -109,13 +117,15 @@ class CatalogController extends Controller
         ];
     }
 
-    protected function filteredQuery(Request $request)
+    /** @return Builder<Coin> */
+    protected function filteredQuery(Request $request): Builder
     {
         $query = Coin::query()->with(['series', 'artists']);
 
         return $this->applyCoinFilters($query, $this->currentFilters($request));
     }
 
+    /** @return array<string, mixed> */
     protected function currentFilters(Request $request): array
     {
         return $this->coinFiltersFromRequest($request);

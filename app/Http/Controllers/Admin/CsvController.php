@@ -24,6 +24,11 @@ class CsvController
 
         return response()->streamDownload(function () use ($resource): void {
             $output = fopen('php://output', 'w');
+
+            if ($output === false) {
+                return;
+            }
+
             fwrite($output, "\xEF\xBB\xBF");
 
             if ($resource === 'coins') {
@@ -63,6 +68,7 @@ class CsvController
         return back()->with('status', $message);
     }
 
+    /** @param  resource  $output */
     private function exportCoins($output): void
     {
         $headers = ['id', 'title_bg', 'title_en', 'title_de', 'series_slug', 'artist_slugs', 'category', 'year', 'issue_date', 'denomination', 'metal', 'quality', 'weight', 'diameter', 'mintage', 'km_number', 'bnb_number', 'numista_number', 'other_references', 'edge_bg', 'edge_en', 'edge_de', 'mint_bg', 'mint_en', 'mint_de', 'front_image', 'front_description_bg', 'front_description_en', 'front_description_de', 'back_image', 'back_description_bg', 'back_description_en', 'back_description_de', 'description_bg', 'description_en', 'description_de'];
@@ -76,6 +82,7 @@ class CsvController
         });
     }
 
+    /** @param  resource  $output */
     private function exportSeries($output): void
     {
         $headers = ['id', 'name_bg', 'name_en', 'name_de', 'slug'];
@@ -87,6 +94,7 @@ class CsvController
         });
     }
 
+    /** @param  resource  $output */
     private function exportArtists($output): void
     {
         fputcsv($output, ['id', 'name', 'slug']);
@@ -97,6 +105,7 @@ class CsvController
         });
     }
 
+    /** @return array{count: int, errors: array<int, string>, imported: int} */
     private function importSeries(UploadedFile $file): array
     {
         $rows = $this->rows($file);
@@ -118,6 +127,7 @@ class CsvController
         return compact('count', 'errors') + ['imported' => $count];
     }
 
+    /** @return array{count: int, errors: array<int, string>, imported: int} */
     private function importArtists(UploadedFile $file): array
     {
         $count = 0;
@@ -137,6 +147,7 @@ class CsvController
         return compact('count', 'errors') + ['imported' => $count];
     }
 
+    /** @return array{count: int, errors: array<int, string>, imported: int} */
     private function importCoins(UploadedFile $file): array
     {
         $count = 0;
@@ -162,6 +173,9 @@ class CsvController
      * Catalog-reference columns to write for a CSV row. Only columns that exist
      * in the file are returned, so importing an older export (without these
      * columns) never wipes reference numbers that were entered in the admin.
+     *
+     * @param  array<string, mixed>  $row
+     * @return array<string, mixed>
      */
     private function referenceColumns(array $row): array
     {
@@ -171,10 +185,16 @@ class CsvController
             ->all();
     }
 
+    /** @return \Generator<int, array<string, string>> */
     private function rows(UploadedFile $file): \Generator
     {
-        $handle = fopen($file->getRealPath(), 'r');
-        $headers = array_map(fn ($header) => trim((string) $header), fgetcsv($handle));
+        $handle = fopen((string) $file->getRealPath(), 'r');
+
+        if ($handle === false) {
+            throw new \RuntimeException('The uploaded CSV file could not be read.');
+        }
+
+        $headers = array_map(fn ($header) => trim((string) $header), fgetcsv($handle) ?: []);
         $line = 1;
         while (($values = fgetcsv($handle)) !== false) {
             $line++;

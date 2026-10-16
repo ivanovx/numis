@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Series;
 use App\Services\CoinTranslationService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -12,19 +14,19 @@ use Throwable;
 
 class SeriesController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('admin.series.index');
     }
 
-    public function create()
+    public function create(): View
     {
         return view('admin.series.create', [
             'series' => new Series,
         ]);
     }
 
-    public function store(Request $request, CoinTranslationService $translator)
+    public function store(Request $request, CoinTranslationService $translator): RedirectResponse
     {
         $data = $this->validated($request);
 
@@ -41,12 +43,12 @@ class SeriesController extends Controller
         return redirect()->route('admin.series.index')->with('status', 'Series created.');
     }
 
-    public function edit(Series $series)
+    public function edit(Series $series): View
     {
         return view('admin.series.edit', compact('series'));
     }
 
-    public function update(Request $request, Series $series)
+    public function update(Request $request, Series $series): RedirectResponse
     {
         $data = $this->validated($request, $series);
 
@@ -55,13 +57,14 @@ class SeriesController extends Controller
         return redirect()->route('admin.series.index')->with('status', 'Series updated.');
     }
 
-    public function destroy(Series $series)
+    public function destroy(Series $series): RedirectResponse
     {
         $series->delete(); // coins.series_id is set to null via the FK (nullOnDelete)
 
         return redirect()->route('admin.series.index')->with('status', 'Series deleted.');
     }
 
+    /** @return array<string, mixed> */
     protected function validated(Request $request, ?Series $series = null): array
     {
         $id = $series?->id;
@@ -74,7 +77,7 @@ class SeriesController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:series,slug,'.$id],
         ]);
 
-        $firstName = collect($data['name'])->first(fn ($v) => filled($v));
+        $firstName = collect((array) $data['name'])->first(fn ($v) => filled($v));
 
         if (! $firstName) {
             throw ValidationException::withMessages([

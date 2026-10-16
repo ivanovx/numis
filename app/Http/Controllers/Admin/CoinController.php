@@ -7,6 +7,8 @@ use App\Models\Artist;
 use App\Models\Coin;
 use App\Models\Series;
 use App\Services\CoinTranslationService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -14,12 +16,12 @@ use Throwable;
 
 class CoinController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('admin.coins.index');
     }
 
-    public function create()
+    public function create(): View
     {
         return view('admin.coins.create', [
             'coin' => new Coin,
@@ -28,7 +30,7 @@ class CoinController extends Controller
         ]);
     }
 
-    public function store(Request $request, CoinTranslationService $translator)
+    public function store(Request $request, CoinTranslationService $translator): RedirectResponse
     {
         $data = $this->sanitizeRichTextFields($this->validated($request));
 
@@ -48,7 +50,7 @@ class CoinController extends Controller
         return redirect()->route('admin.coins.index')->with('status', 'Coin created.');
     }
 
-    public function edit(Coin $coin)
+    public function edit(Coin $coin): View
     {
         return view('admin.coins.edit', [
             'coin' => $coin,
@@ -58,7 +60,7 @@ class CoinController extends Controller
         ]);
     }
 
-    public function update(Request $request, Coin $coin)
+    public function update(Request $request, Coin $coin): RedirectResponse
     {
         $data = $this->sanitizeRichTextFields($this->validated($request, $coin));
 
@@ -70,6 +72,10 @@ class CoinController extends Controller
         return redirect()->route('admin.coins.index')->with('status', 'Coin updated.');
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
     protected function sanitizeRichTextFields(array $data): array
     {
         foreach (['front_description', 'back_description', 'description'] as $field) {
@@ -82,7 +88,7 @@ class CoinController extends Controller
         return $data;
     }
 
-    public function destroy(Coin $coin)
+    public function destroy(Coin $coin): RedirectResponse
     {
         foreach (['front_image', 'back_image'] as $field) {
             if ($coin->$field) {
@@ -95,6 +101,7 @@ class CoinController extends Controller
         return redirect()->route('admin.coins.index')->with('status', 'Coin deleted.');
     }
 
+    /** @return array<string, mixed> */
     protected function validated(Request $request, ?Coin $coin = null): array
     {
         $data = $request->validate([
