@@ -192,6 +192,15 @@ For production, point your web server (Nginx/Apache) at `public/` as usual
 for Laravel, run behind PHP-FPM, and set `APP_ENV=production`,
 `APP_DEBUG=false` in `.env`.
 
+## Automated release archives
+
+After a push to `main` passes the `tests` GitHub Actions workflow, the
+`release` workflow publishes a versioned GitHub Release (`v<CI run number>`)
+with a ZIP archive of the tested commit. The archive includes production
+Composer dependencies and the built frontend, but not `node_modules` or an
+`.env` file. It does not deploy to a server or FTP; download the ZIP from the
+repository's **Releases** page when you are ready to upload it.
+
 ## Logging into the admin
 
 Go to `/login` and use the `ADMIN_EMAIL` / `ADMIN_PASSWORD` you set in
