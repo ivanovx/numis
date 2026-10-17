@@ -64,7 +64,7 @@ jobs:
             --no-interaction \
             --optimize-autoloader
 
-          npm ci --prefix "$package_dir"
+          npm install --prefix "$package_dir" --no-audit --no-fund
           npm run build --prefix "$package_dir"
           rm -rf "$package_dir/node_modules"
 
