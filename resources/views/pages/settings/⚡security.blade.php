@@ -11,9 +11,10 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Laravel\Passkeys\Actions\DeletePasskey;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 
-new #[Title('Security settings')] class extends Component {
+new #[Layout('layouts.app.header'), Title('Security settings')] class extends Component {
     use PasswordValidationRules;
 
     public string $current_password = '';

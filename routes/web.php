@@ -124,7 +124,6 @@ Route::prefix('{locale}')
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [LoginController::class, 'show'])->name('login')->middleware('guest');
-Route::post('/login', [LoginController::class, 'login'])->middleware('guest');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 /*
@@ -132,6 +131,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 | Admin (replaces the Numis WP admin dashboard + coin/series edit screens)
 |--------------------------------------------------------------------------
 */
+Route::get('/dashboard', fn () => redirect()->route('admin.dashboard'))
+    ->middleware('auth')
+    ->name('dashboard');
+
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('{resource}/export', [CsvController::class, 'export'])->name('csv.export');

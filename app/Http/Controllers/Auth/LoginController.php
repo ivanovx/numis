@@ -13,26 +13,10 @@ class LoginController extends Controller
     public function show(): RedirectResponse|View
     {
         if (Auth::check()) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('home');
         }
 
         return view('auth.login');
-    }
-
-    public function login(Request $request): RedirectResponse
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-
-            return redirect()->intended(route('admin.dashboard'));
-        }
-
-        return back()->withErrors(['email' => 'Invalid credentials.'])->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse
