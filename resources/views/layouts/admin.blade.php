@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Numis Admin' }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    @vite('resources/js/bootstrap.js')
     <link href="{{ asset('css/admin.css') }}?v=3" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    @vite('resources/js/admin.js')
     @livewireStyles
 </head>
 <body class="admin-shell">
@@ -53,39 +53,6 @@
 
     @include('partials.footer')
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('[data-rich-text-editor]').forEach((editorElement) => {
-                const input = document.getElementById(editorElement.dataset.richTextEditor);
-                const editor = new Quill(editorElement, {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{ header: [2, 3, false] }],
-                            [{ list: 'ordered' }, { list: 'bullet' }],
-                            ['blockquote'],
-                            ['clean'],
-                        ],
-                    },
-                });
-
-                if (input.value) {
-                    editor.clipboard.dangerouslyPasteHTML(input.value);
-                }
-
-                editor.on('text-change', () => {
-                    input.value = editor.root.innerHTML;
-                });
-
-                editorElement.closest('form')?.addEventListener('submit', () => {
-                    input.value = editor.root.innerHTML;
-                });
-            });
-        });
-    </script>
     <style>
         .rich-text-editor {
             background: #fff;

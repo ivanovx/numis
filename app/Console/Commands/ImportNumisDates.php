@@ -33,7 +33,15 @@ class ImportNumisDates extends Command
 
     public function handle(): int
     {
-        $path = $this->argument('path') ?? database_path('data/numis_dates_import.json');
+        $pathArgument = $this->argument('path');
+
+        if ($pathArgument !== null && ! is_string($pathArgument)) {
+            $this->error('Path must be a string.');
+
+            return self::FAILURE;
+        }
+
+        $path = $pathArgument ?? database_path('data/numis_dates_import.json');
 
         if (! file_exists($path)) {
             $this->error("File not found: {$path}");

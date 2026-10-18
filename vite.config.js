@@ -8,6 +8,9 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/js/admin.js',
+                'resources/js/bootstrap.js',
+                'resources/js/catalog-statistics.js',
                 'resources/js/passkeys.js',
             ],
             refresh: true,

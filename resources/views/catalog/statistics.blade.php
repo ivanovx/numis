@@ -122,65 +122,17 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-    <script>
-        (function () {
-            var yearLabels = @json($coinsByYear->reject(fn ($c, $y) => $y === 'unknown')->sortKeys()->keys());
-            var yearData = @json($coinsByYear->reject(fn ($c, $y) => $y === 'unknown')->sortKeys()->values());
-
-            var metalLabels = @json($coinsByBaseMetal->keys());
-            var metalData = @json($coinsByBaseMetal->values());
-
-            var palette = ['#023E73', '#024873', '#0A89A6', '#15AEBF', '#BF6B04', '#a35a03', '#4b6072', '#7fb8c4'];
-
-            var yearCtx = document.getElementById('chart-coins-by-year');
-            if (yearCtx && yearLabels.length) {
-                new Chart(yearCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: yearLabels,
-                        datasets: [{
-                            label: '{{ __('catalog.total_coins') }}',
-                            data: yearData,
-                            backgroundColor: '#0A89A6',
-                            borderRadius: 3,
-                            maxBarThickness: 22
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { grid: { display: false } },
-                            y: { beginAtZero: true, ticks: { precision: 0 } }
-                        }
-                    }
-                });
-            }
-
-            var metalCtx = document.getElementById('chart-metals');
-            if (metalCtx && metalLabels.length) {
-                new Chart(metalCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: metalLabels,
-                        datasets: [{
-                            data: metalData,
-                            backgroundColor: palette,
-                            borderColor: '#ffffff',
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } }
-                        }
-                    }
-                });
-            }
-        })();
+    @php
+        $chartData = [
+            'yearLabels' => $coinsByYear->reject(fn ($count, $year) => $year === 'unknown')->sortKeys()->keys(),
+            'yearData' => $coinsByYear->reject(fn ($count, $year) => $year === 'unknown')->sortKeys()->values(),
+            'metalLabels' => $coinsByBaseMetal->keys(),
+            'metalData' => $coinsByBaseMetal->values(),
+            'totalCoinsLabel' => __('catalog.total_coins'),
+        ];
+    @endphp
+    <script type="application/json" id="catalog-statistics-data">
+        @json($chartData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT)
     </script>
+    @vite('resources/js/catalog-statistics.js')
 @endpush

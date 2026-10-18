@@ -1,0 +1,187 @@
+{
+  "planHash": "0eebe3b1ac8c9d25603be2de48f26160141fed182b8dda2677665960f9f2b321",
+  "phase": "postupgrade",
+  "recordedAtUtc": "2026-10-17T20:47:31.5811385Z",
+  "retryCount": 0,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 42635,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "frontend-production-build",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "npm warn Unknown env config \u0022scripts-prepend-node-path\u0022. This will stop working in the next major version of npm.\r\n\r\n\u003E build\r\n\u003E vite build\r\n\r\n\u001B[36mvite v8.2.2 \u001B[32mbuilding client environment for production...\u001B[36m\u001B[39m\r\n\u001B[33m[plugin laravel:fonts] Optimized font fallbacks require the optional \u0022fontaine\u0022 package. Install it, or set \u0022optimizedFallbacks: false\u0022 on your fonts to disable the feature.\u001B[39m\r\ntransforming...\r\n\u2713 745 modules transformed.\r\nrendering chunks...\r\ncomputing gzip size...\r\npublic/build/manifest.json                                       3.03 kB \u2502 gzip:  0.60 kB\r\npublic/build/fonts-manifest.json                                 5.74 kB \u2502 gzip:  0.71 kB\r\npublic/build/assets/instrument-sans-400-normal-DRC__1Mx.woff2   16.86 kB\r\npublic/build/assets/instrument-sans-500-normal-Dk9ku72i.woff2   17.23 kB\r\npublic/build/assets/instrument-sans-600-normal-B7fBEWYG.woff2   17.40 kB\r\npublic/build/assets/instrument-sans-400-normal-D1W7dsQl.woff    21.24 kB\r\npublic/build/assets/instrument-sans-500-normal-Z6ESRlEs.woff    21.65 kB\r\npublic/build/assets/instrument-sans-600-normal-B9e8oLYv.woff    21.67 kB\r\npublic/build/assets/bootstrap-icons-DJdhg9lH.woff2             134.01 kB\r\npublic/build/assets/bootstrap-icons-BHUGvtHM.woff              180.28 kB\r\npublic/build/assets/app-H-smVelF.css                             0.42 kB \u2502 gzip:  0.28 kB\r\npublic/build/assets/fonts-C9MNnjVw.css                           2.35 kB \u2502 gzip:  0.38 kB\r\npublic/build/assets/admin-DVB7LGv8.css                          24.36 kB \u2502 gzip:  3.70 kB\r\npublic/build/assets/bootstrap-gwj8okrH.css                     310.67 kB \u2502 gzip: 44.65 kB\r\npublic/build/assets/app-BvRk9kiK.js                              0.00 kB \u2502 gzip:  0.02 kB\r\npublic/build/assets/rolldown-runtime-hePW80VL.js                 0.71 kB \u2502 gzip:  0.42 kB\r\npublic/build/assets/passkeys-CsxEE3hN.js                        12.07 kB \u2502 gzip:  3.90 kB\r\npublic/build/assets/bootstrap-DzUV9Nw6.js                       79.01 kB \u2502 gzip: 23.57 kB\r\npublic/build/assets/admin-CBB7w8wT.js                          200.34 kB \u2502 gzip: 58.70 kB\r\npublic/build/assets/catalog-statistics-DrY5NpNM.js             203.07 kB \u2502 gzip: 69.63 kB\r\n\r\n\u001B[32m\u2713 built in 1.44s\u001B[39m\r\n",
+        "durationMs": 2827
+      },
+      {
+        "name": "application-ci-check",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\u003E Composer\\Config::disableProcessTimeout\r\n\r\n INFO Configuration cache cleared successfully. \r\n\r\n{\u0022tool\u0022:\u0022pint\u0022,\u0022result\u0022:\u0022passed\u0022}{\u0022tool\u0022:\u0022phpstan\u0022,\u0022result\u0022:\u0022passed\u0022,\u0022errors\u0022:0}\r\n{\u0022tool\u0022:\u0022pest\u0022,\u0022result\u0022:\u0022passed\u0022,\u0022tests\u0022:109,\u0022passed\u0022:109,\u0022assertions\u0022:953,\u0022duration_ms\u0022:13308}\r\n",
+        "durationMs": 71424
+      },
+      {
+        "name": "login-page-responds",
+        "kind": "http-probe",
+        "verificationMethod": "http-status",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "HTTP 200\n\u003C!DOCTYPE html\u003E\n\u003Chtml lang=\u0022bg\u0022\u003E\n\u003Chead\u003E\n    \u003Cmeta charset=\u0022UTF-8\u0022\u003E\n    \u003Cmeta name=\u0022viewport\u0022 content=\u0022width=device-width, initial-scale=1\u0022\u003E\n    \u003Ctitle\u003ELogin \u2014 Numis Admin\u003C/title\u003E\n    \u003Clink rel=\u0022preload\u0022 as=\u0022style\u0022 href=\u0022http://127.0.0.1:8089/build/assets/bootstrap-gwj8okrH.css\u0022 /\u003E\u003Clink rel=\u0022modulepreload\u0022 as=\u0022script\u0022 href=\u0022http://127.0.0.1:8089/build/assets/bootstrap-DzUV9Nw6.js\u0022 /\u003E\u003Clink rel=\u0022modulepreload\u0022 as=\u0022script\u0022 href=\u0022http://127.0.0.1:8089/build/assets/rolldown-runtime-hePW80VL.js\u0022 /\u003E\u003Clink rel=\u0022stylesheet\u0022 href=\u0022http://127.0.0.1:8089/build/assets/bootstrap-gwj8okrH.css\u0022 data-navigate-track=\u0022reload\u0022 /\u003E\u003Cscript type=\u0022module\u0022 src=\u0022http://127.0.0.1:8089/build/assets/bootstrap-DzUV9Nw6.js\u0022 data-navigate-track=\u0022reload\u0022\u003E\u003C/script\u003E\u003Cscript id=\u0022browser-logger-active\u0022\u003E\n(function() {\n    const ENDPOINT = \u0027http://127.0.0.1:8089/_boost/browser-logs\u0027;\n    const logQueue = [];\n    let flushTimeout = null;\n    const captureTypes = [\u0022error\u0022,\u0022warning\u0022,\u0022info\u0022,\u0022log\u0022,\u0022debug\u0022,\u0022table\u0022];\n\n    console.log(\u0027\uD83D\uDD0D Browser logger active (MCP server detected). Posting to: \u0027 \u002B ENDPOINT);\n\n    // Store original console methods\n    const originalConsole = {\n        log: console.log,\n        debug: console.debug,\n        info: console.info,\n        error: console.error,\n        warn: console.warn,\n        table: console.table\n    };\n\n    // Walk own enumerable keys so JSON.stringify cannot auto-invoke a proxy fake toJSON (e.g. Livewire\u0027s \u0060$wire\u0060) and fire a real request.\n    function toSafeValue(value, seen) {\n        if (value === null || typeof value !== \u0027object\u0027) {\n            return value;\n        }\n        if (value instanceof Error) {\n            return { name: value.name, message: value.message, stack: value.stack };\n        }\n        // Date has no own enumerable keys, so the walk below would collapse it to {}.\n        if (value instanceof Date) {\n            return value.toISOString();\n        }\n        if (seen.has(value)) {\n            return \u0027[Circular]\u0027;\n        }\n        seen.add(value);\n        if (Array.isArray(value)) {\n            return value.map((item) =\u003E toSafeValue(item, seen));\n        }\n        const plain = {};\n        for (const key of Object.keys(value)) {\n            if (key === \u0027toJSON\u0027) continue;\n            try {\n                plain[key] = toSafeValue(value[key], seen);\n            } catch (e) {\n                plain[key] = \u0027[Unreadable]\u0027;\n            }\n        }\n        return plain;\n    }\n\n    // Helper to safely stringify values\n    function safeStringify(obj) {\n        return JSON.stringify(toSafeValue(obj, new WeakSet()));\n    }\n\n    // Normalize log type for consistency (e.g., \u0027warn\u0027 to \u0027warning\u0027)\n    function normalizeType(type) {\n        return type === \u0027warn\u0027 ? \u0027warning\u0027 : type;\n    }\n\n    // Determine if a log type should be captured based on configured levels\n    function shouldCapture(type) {\n        return captureTypes.includes(normalizeType(type));\n    }\n\n    // Batch and send logs\n    function flushLogs() {\n        if (logQueue.length === 0) return;\n\n        const batch = logQueue.splice(0, logQueue.length);\n\n        fetch(ENDPOINT, {\n            method: \u0027POST\u0027,\n            headers: {\n                \u0027Content-Type\u0027: \u0027application/json\u0027,\n                \u0027X-Requested-With\u0027: \u0027XMLHttpRequest\u0027\n            },\n            body: JSON.stringify({ logs: batch })\n        }).catch(err =\u003E {\n            // Silently fail to avoid infinite loops\n            originalConsole.error(\u0027Failed to send logs:\u0027, err);\n        });\n    }\n\n    // Debounced flush (100ms)\n    function scheduleFlush() {\n        if (flushTimeout) clearTimeout(flushTimeout);\n        flushTimeout = setTimeout(flushLogs, 100);\n    }\n\n    // Intercept console methods\n    [\u0027log\u0027, \u0027debug\u0027, \u0027info\u0027, \u0027error\u0027, \u0027warn\u0027, \u0027table\u0027].forEach(method =\u003E {\n        console[method] = function(...args) {\n            // Call original method\n            originalConsole[method].apply(console, args);\n\n            // Capture log data\n            try {\n                if (!shouldCapture(method)) {\n                    return;\n                }\n\n                logQueue.push({\n\u2026[truncated]",
+        "durationMs": 2497
+      },
+      {
+        "name": "public-home-responds",
+        "kind": "http-probe",
+        "verificationMethod": "http-status",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "HTTP 200\n\u003C!DOCTYPE html\u003E\n\u003Chtml lang=\u0022bg\u0022\u003E\n\u003Chead\u003E\n    \u003Cmeta charset=\u0022UTF-8\u0022\u003E\n    \u003Cmeta name=\u0022viewport\u0022 content=\u0022width=device-width, initial-scale=1\u0022\u003E\n    \u003Ctitle\u003E\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0442\u0435 \u043C\u043E\u043D\u0435\u0442\u0438\u003C/title\u003E\n    \u003Cmeta name=\u0022description\u0022 content=\u0022\u0420\u0430\u0437\u0433\u043B\u0435\u0434\u0430\u0439\u0442\u0435 \u043A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 \u043C\u043E\u043D\u0435\u0442\u0438 \u0441 \u0434\u0430\u043D\u043D\u0438 \u0437\u0430 \u0433\u043E\u0434\u0438\u043D\u0430, \u043D\u043E\u043C\u0438\u043D\u0430\u043B, \u043C\u0435\u0442\u0430\u043B, \u0442\u0438\u0440\u0430\u0436, \u0441\u0435\u0440\u0438\u044F \u0438 \u0445\u0443\u0434\u043E\u0436\u043D\u0438\u043A.\u0022\u003E\n    \u003Cmeta name=\u0022robots\u0022 content=\u0022index,follow\u0022\u003E\n        \u003Clink rel=\u0022canonical\u0022 href=\u0022http://127.0.0.1:8090/catalog\u0022\u003E\n            \u003Clink rel=\u0022alternate\u0022 hreflang=\u0022bg\u0022 href=\u0022http://127.0.0.1:8090/bg/catalog\u0022\u003E\n            \u003Clink rel=\u0022alternate\u0022 hreflang=\u0022en\u0022 href=\u0022http://127.0.0.1:8090/en/catalog\u0022\u003E\n            \u003Clink rel=\u0022alternate\u0022 hreflang=\u0022de\u0022 href=\u0022http://127.0.0.1:8090/de/catalog\u0022\u003E\n        \u003Clink rel=\u0022alternate\u0022 hreflang=\u0022x-default\u0022 href=\u0022http://127.0.0.1:8090/bg/catalog\u0022\u003E\n    \u003Cmeta property=\u0022og:type\u0022 content=\u0022website\u0022\u003E\n    \u003Cmeta property=\u0022og:site_name\u0022 content=\u0022\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0442\u0435 \u043C\u043E\u043D\u0435\u0442\u0438\u0022\u003E\n    \u003Cmeta property=\u0022og:title\u0022 content=\u0022\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0442\u0435 \u043C\u043E\u043D\u0435\u0442\u0438\u0022\u003E\n    \u003Cmeta property=\u0022og:description\u0022 content=\u0022\u0420\u0430\u0437\u0433\u043B\u0435\u0434\u0430\u0439\u0442\u0435 \u043A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 \u043C\u043E\u043D\u0435\u0442\u0438 \u0441 \u0434\u0430\u043D\u043D\u0438 \u0437\u0430 \u0433\u043E\u0434\u0438\u043D\u0430, \u043D\u043E\u043C\u0438\u043D\u0430\u043B, \u043C\u0435\u0442\u0430\u043B, \u0442\u0438\u0440\u0430\u0436, \u0441\u0435\u0440\u0438\u044F \u0438 \u0445\u0443\u0434\u043E\u0436\u043D\u0438\u043A.\u0022\u003E\n    \u003Cmeta property=\u0022og:url\u0022 content=\u0022http://127.0.0.1:8090\u0022\u003E\n        \u003Cmeta name=\u0022twitter:card\u0022 content=\u0022summary\u0022\u003E\n    \u003Cmeta name=\u0022twitter:title\u0022 content=\u0022\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0442\u0435 \u043C\u043E\u043D\u0435\u0442\u0438\u0022\u003E\n    \u003Cmeta name=\u0022twitter:description\u0022 content=\u0022\u0420\u0430\u0437\u0433\u043B\u0435\u0434\u0430\u0439\u0442\u0435 \u043A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 \u043C\u043E\u043D\u0435\u0442\u0438 \u0441 \u0434\u0430\u043D\u043D\u0438 \u0437\u0430 \u0433\u043E\u0434\u0438\u043D\u0430, \u043D\u043E\u043C\u0438\u043D\u0430\u043B, \u043C\u0435\u0442\u0430\u043B, \u0442\u0438\u0440\u0430\u0436, \u0441\u0435\u0440\u0438\u044F \u0438 \u0445\u0443\u0434\u043E\u0436\u043D\u0438\u043A.\u0022\u003E\n        \u003Cscript type=\u0022application/ld\u002Bjson\u0022\u003E\n        {\u0022@context\u0022:\u0022https://schema.org\u0022,\u0022@type\u0022:\u0022CollectionPage\u0022,\u0022name\u0022:\u0022\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0442\u0435 \u043C\u043E\u043D\u0435\u0442\u0438\u0022,\u0022description\u0022:\u0022\u0420\u0430\u0437\u0433\u043B\u0435\u0434\u0430\u0439\u0442\u0435 \u043A\u0430\u0442\u0430\u043B\u043E\u0433 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438 \u043C\u043E\u043D\u0435\u0442\u0438 \u0441 \u0434\u0430\u043D\u043D\u0438 \u0437\u0430 \u0433\u043E\u0434\u0438\u043D\u0430, \u043D\u043E\u043C\u0438\u043D\u0430\u043B, \u043C\u0435\u0442\u0430\u043B, \u0442\u0438\u0440\u0430\u0436, \u0441\u0435\u0440\u0438\u044F \u0438 \u0445\u0443\u0434\u043E\u0436\u043D\u0438\u043A.\u0022,\u0022url\u0022:\u0022http://127.0.0.1:8090\u0022,\u0022inLanguage\u0022:\u0022bg\u0022}    \u003C/script\u003E\n    \u003Clink rel=\u0022preload\u0022 as=\u0022style\u0022 href=\u0022http://127.0.0.1:8090/build/assets/bootstrap-gwj8okrH.css\u0022 /\u003E\u003Clink rel=\u0022modulepreload\u0022 as=\u0022script\u0022 href=\u0022http://127.0.0.1:8090/build/assets/bootstrap-DzUV9Nw6.js\u0022 /\u003E\u003Clink rel=\u0022modulepreload\u0022 as=\u0022script\u0022 href=\u0022http://127.0.0.1:8090/build/assets/rolldown-runtime-hePW80VL.js\u0022 /\u003E\u003Clink rel=\u0022stylesheet\u0022 href=\u0022http://127.0.0.1:8090/build/assets/bootstrap-gwj8okrH.css\u0022 data-navigate-track=\u0022reload\u0022 /\u003E\u003Cscript type=\u0022module\u0022 src=\u0022http://127.0.0.1:8090/build/assets/bootstrap-DzUV9Nw6.js\u0022 data-navigate-track=\u0022reload\u0022\u003E\u003C/script\u003E    \u003Clink href=\u0022http://127.0.0.1:8090/css/catalog.css?v=1791714094-4\u0022 rel=\u0022stylesheet\u0022\u003E\n\u003Cscript id=\u0022browser-logger-active\u0022\u003E\n(function() {\n    const ENDPOINT = \u0027http://127.0.0.1:8090/_boost/browser-logs\u0027;\n    const logQueue = [];\n    let flushTimeout = null;\n    const captureTypes = [\u0022error\u0022,\u0022warning\u0022,\u0022info\u0022,\u0022log\u0022,\u0022debug\u0022,\u0022table\u0022];\n\n    console.log(\u0027\uD83D\uDD0D Browser logger active (MCP server detected). Posting to: \u0027 \u002B ENDPOINT);\n\n    // Store original console methods\n    const originalConsole = {\n        log: console.log,\n        debug: console.debug,\n        info: console.info,\n        error: console.error,\n        warn: console.warn,\n        table: console.table\n    };\n\n    // Walk own enumerable keys so JSON.stringify cannot auto-invoke a proxy fake toJSON (e.g. Livewire\u0027s \u0060$wire\u0060) and fire a real request.\n    function toSafeValue(value, seen) {\n        if (value === null || typeof value !== \u0027object\u0027) {\n            return value;\n        }\n        if (value instanceof Error) {\n            return { name: value.name, message: value.message, stack: value.stack };\n        }\n        // Date has no own enumerable keys, so the walk below would collapse it to {}.\n        if (value instanceof Date) {\n            return value.toISOString();\n        }\n        if (seen.has(value)) {\n            return \u0027[Circular]\u0027;\n        }\n        seen.add(value);\n        if (Array.isArray(value)) {\n            return value.map((item) =\u003E toSafeValue(item, seen));\n        }\n        const plain = {};\n        for (const key of Object.keys(value)) {\n            if (key === \u0027toJSON\u0027) continue;\n            try {\n                plain[key] = toSafeValue(value[key], seen);\n            } catch (e) {\n                plain[key] = \u0027[Unr\n\u2026[truncated]",
+        "durationMs": 2359
+      }
+    ],
+    "executions": [
+      {
+        "source": "setup[0]",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
+        "args": [
+          "ci"
+        ],
+        "cwd": "C:\\Users\\ivanovx\\Desktop\\numis",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32",
+        "nodeExecutable": "C:\\Program Files\\nodejs\\node.EXE",
+        "nodeVersion": "v23.4.0",
+        "packageManager": "npm",
+        "packageManagerExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
+        "packageManagerVersion": "11.6.2",
+        "cleanup": {
+          "RootProcessId": 12912,
+          "Completed": true,
+          "ProcessesObserved": 5,
+          "ProcessesTerminated": 1,
+          "Failure": null
+        }
+      },
+      {
+        "source": "frontend-production-build",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
+        "args": [
+          "run",
+          "build"
+        ],
+        "cwd": "C:\\Users\\ivanovx\\Desktop\\numis",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32",
+        "nodeExecutable": "C:\\Program Files\\nodejs\\node.EXE",
+        "nodeVersion": "v23.4.0",
+        "packageManager": "npm",
+        "packageManagerExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
+        "packageManagerVersion": "11.6.2",
+        "cleanup": {
+          "RootProcessId": 10212,
+          "Completed": true,
+          "ProcessesObserved": 10,
+          "ProcessesTerminated": 1,
+          "Failure": null
+        }
+      },
+      {
+        "source": "application-ci-check",
+        "resolvedExecutable": "C:\\Users\\ivanovx\\.config\\herd-lite\\bin\\composer.BAT",
+        "args": [
+          "ci:check"
+        ],
+        "cwd": "C:\\Users\\ivanovx\\Desktop\\numis",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32",
+        "nodeExecutable": null,
+        "nodeVersion": null,
+        "packageManager": null,
+        "packageManagerExecutable": null,
+        "packageManagerVersion": null,
+        "cleanup": {
+          "RootProcessId": 464,
+          "Completed": true,
+          "ProcessesObserved": 55,
+          "ProcessesTerminated": 1,
+          "Failure": null
+        }
+      },
+      {
+        "source": "login-page-responds",
+        "resolvedExecutable": "C:\\Users\\ivanovx\\.config\\herd-lite\\bin\\php.EXE",
+        "args": [
+          "artisan",
+          "serve",
+          "--host=127.0.0.1",
+          "--port=8089"
+        ],
+        "cwd": "C:\\Users\\ivanovx\\Desktop\\numis",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32",
+        "nodeExecutable": null,
+        "nodeVersion": null,
+        "packageManager": null,
+        "packageManagerExecutable": null,
+        "packageManagerVersion": null,
+        "cleanup": {
+          "RootProcessId": 28876,
+          "Completed": true,
+          "ProcessesObserved": 7,
+          "ProcessesTerminated": 4,
+          "Failure": null
+        }
+      },
+      {
+        "source": "public-home-responds",
+        "resolvedExecutable": "C:\\Users\\ivanovx\\.config\\herd-lite\\bin\\php.EXE",
+        "args": [
+          "artisan",
+          "serve",
+          "--host=127.0.0.1",
+          "--port=8090"
+        ],
+        "cwd": "C:\\Users\\ivanovx\\Desktop\\numis",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32",
+        "nodeExecutable": null,
+        "nodeVersion": null,
+        "packageManager": null,
+        "packageManagerExecutable": null,
+        "packageManagerVersion": null,
+        "cleanup": {
+          "RootProcessId": 17140,
+          "Completed": true,
+          "ProcessesObserved": 7,
+          "ProcessesTerminated": 4,
+          "Failure": null
+        }
+      }
+    ]
+  }
+}

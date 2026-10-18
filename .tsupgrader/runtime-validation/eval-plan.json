@@ -1,0 +1,67 @@
+{
+  "projectType": "webapp",
+  "setup": [
+    {
+      "command": "npm",
+      "args": [
+        "ci"
+      ],
+      "timeoutSeconds": 600
+    }
+  ],
+  "assertions": [
+    {
+      "name": "frontend-production-build",
+      "kind": "process",
+      "command": "npm",
+      "args": [
+        "run",
+        "build"
+      ],
+      "verificationMethod": "exit-code",
+      "expected": "0",
+      "timeoutSeconds": 180
+    },
+    {
+      "name": "application-ci-check",
+      "kind": "process",
+      "command": "composer",
+      "args": [
+        "ci:check"
+      ],
+      "verificationMethod": "exit-code",
+      "expected": "0",
+      "timeoutSeconds": 300
+    },
+    {
+      "name": "login-page-responds",
+      "kind": "http-probe",
+      "startCommand": "php",
+      "startArgs": [
+        "artisan",
+        "serve",
+        "--host=127.0.0.1",
+        "--port=8089"
+      ],
+      "url": "http://127.0.0.1:8089/login",
+      "verificationMethod": "http-status",
+      "expected": "200",
+      "timeoutSeconds": 120
+    },
+    {
+      "name": "public-home-responds",
+      "kind": "http-probe",
+      "startCommand": "php",
+      "startArgs": [
+        "artisan",
+        "serve",
+        "--host=127.0.0.1",
+        "--port=8090"
+      ],
+      "url": "http://127.0.0.1:8090/",
+      "verificationMethod": "http-status",
+      "expected": "200",
+      "timeoutSeconds": 120
+    }
+  ]
+}

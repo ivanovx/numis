@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use JsonException;
 
 class ImportNumisData extends Command
 {
@@ -21,7 +22,15 @@ class ImportNumisData extends Command
 
     public function handle(): int
     {
-        $path = $this->argument('path') ?? database_path('data/numis_import_data.json');
+        $pathArgument = $this->argument('path');
+
+        if ($pathArgument !== null && ! is_string($pathArgument)) {
+            $this->error('Path must be a string.');
+
+            return self::FAILURE;
+        }
+
+        $path = $pathArgument ?? database_path('data/numis_import_data.json');
 
         if (! file_exists($path)) {
             $this->error("File not found: {$path}");
@@ -29,10 +38,31 @@ class ImportNumisData extends Command
             return self::FAILURE;
         }
 
-        $data = json_decode((string) file_get_contents($path), true);
+        try {
+            $data = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            $this->error('Could not parse JSON file.');
 
-        $seriesMap = $this->importSeries($data['series'] ?? []);
-        $this->importCoins($data['coins'] ?? [], $seriesMap);
+            return self::FAILURE;
+        }
+
+        if (! is_array($data)) {
+            $this->error('The JSON file must contain an object with series and coins arrays.');
+
+            return self::FAILURE;
+        }
+
+        $seriesRows = $data['series'] ?? [];
+        $coinRows = $data['coins'] ?? [];
+
+        if (! is_array($seriesRows) || ! is_array($coinRows)) {
+            $this->error('The JSON file must contain an object with series and coins arrays.');
+
+            return self::FAILURE;
+        }
+
+        $seriesMap = $this->importSeries($seriesRows);
+        $this->importCoins($coinRows, $seriesMap);
 
         $this->info('Import complete.');
 

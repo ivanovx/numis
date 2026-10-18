@@ -47,8 +47,10 @@ A **coin** has the following fields:
 The public catalog can be filtered by series, year (or a year range/period),
 metal, denomination, and artist.
 
-Everything is plain Blade + Bootstrap 5 (via CDN) — **no npm/Vite build step
-is required**, which keeps deploys simple.
+The frontend uses Bootstrap, Bootstrap Icons, Quill, and Chart.js from npm.
+Vite builds these assets into `public/build`, so a production deploy must
+include the generated build directory. The GitHub Release archive includes
+these compiled assets and is ready for manual FTP deployment.
 
 ## 1. Create the base Laravel project
 
@@ -73,6 +75,9 @@ cp -r database/migrations/* /path/to/numis/database/migrations/
 cp -r database/seeders/* /path/to/numis/database/seeders/
 cp -r database/data /path/to/numis/database/
 cp -r resources/views/* /path/to/numis/resources/views/
+cp -r resources/css /path/to/numis/resources/
+cp -r resources/js /path/to/numis/resources/
+cp package.json package-lock.json vite.config.js /path/to/numis/
 cp -r lang /path/to/numis/
 cp routes/web.php /path/to/numis/routes/web.php
 cp -r public/css /path/to/numis/public/
@@ -107,11 +112,17 @@ ADMIN_EMAIL, ADMIN_PASSWORD).
 
 ```bash
 composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
 php artisan key:generate
 php artisan storage:link
 php artisan migrate
 php artisan db:seed --class=Database\\Seeders\\AdminUserSeeder
 ```
+
+The `npm ci` and `npm run build` commands generate `public/build`, which must
+be uploaded with the application. Do not upload `node_modules`; it is not
+needed at runtime.
 
 For automatic coin translations when creating a coin, add a DeepL Free API
 key to the application's `.env` file:
