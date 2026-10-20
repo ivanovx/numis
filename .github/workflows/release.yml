@@ -51,11 +51,14 @@ jobs:
           RELEASE_RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
         shell: bash
         run: |
-          tag="v${RELEASE_RUN_NUMBER}"
+          build_date="$(date -u +%Y-%m-%d)"
+          tag="v${build_date}-${RELEASE_RUN_NUMBER}"
           package_dir="numis-${tag}"
 
           mkdir "$package_dir"
           git archive HEAD | tar -x -C "$package_dir"
+
+          printf '%s\n' "$tag" > "$package_dir/build-version.txt"
 
           composer install \
             --working-dir="$package_dir" \
@@ -65,7 +68,7 @@ jobs:
             --optimize-autoloader
 
           npm install --prefix "$package_dir" --no-audit --no-fund
-          npm run build --prefix "$package_dir"
+          APP_VERSION="$tag" npm run build --prefix "$package_dir"
           rm -rf "$package_dir/node_modules"
 
           archive="${package_dir}.zip"

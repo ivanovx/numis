@@ -41,6 +41,11 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'version' => env(
+        'APP_VERSION',
+        trim((string) (file_exists(base_path('build-version.txt')) ? file_get_contents(base_path('build-version.txt')) : 'dev')) ?: 'dev',
+    ),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
