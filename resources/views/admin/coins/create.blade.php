@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1 class="mb-4">Add Coin</h1>
+    <h1 class="mb-4">Добавяне на монета</h1>
 
     <form method="POST" action="{{ route('admin.coins.store') }}" enctype="multipart/form-data">
         @csrf

@@ -193,8 +193,8 @@ test('the admin dashboard summarises data completeness', function () {
 
     $this->get(route('admin.dashboard'))
         ->assertOk()
-        ->assertSee('Data completeness')
-        ->assertSee('1 of 2 coins');
+        ->assertSee('Пълнота на данните')
+        ->assertSee('1 от 2 монети');
 });
 
 test('csv export includes the catalog reference columns', function () {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
 use App\Models\Coin;
+use App\Models\Period;
 use App\Models\Series;
 use Illuminate\Contracts\View\View;
 
@@ -14,6 +15,7 @@ class DashboardController extends Controller
     {
         return view('admin.dashboard', [
             'coinCount' => Coin::count(),
+            'periodCount' => Period::count(),
             'seriesCount' => Series::count(),
             'artistCount' => Artist::count(),
             'completeness' => Coin::completenessReport(),

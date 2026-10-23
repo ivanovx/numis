@@ -32,13 +32,13 @@ class ArtistController extends Controller
             $data = $translator->translateFields($data, ['name']);
         } catch (Throwable $exception) {
             throw ValidationException::withMessages([
-                'name.bg' => 'Automatic translation failed: '.$exception->getMessage(),
+                'name.bg' => 'Автоматичният превод не бе успешен: '.$exception->getMessage(),
             ]);
         }
 
         Artist::create($data);
 
-        return redirect()->route('admin.artists.index')->with('status', 'Artist created.');
+        return redirect()->route('admin.artists.index')->with('status', 'Художникът е добавен.');
     }
 
     public function edit(Artist $artist): View
@@ -52,14 +52,14 @@ class ArtistController extends Controller
 
         $artist->update($data);
 
-        return redirect()->route('admin.artists.index')->with('status', 'Artist updated.');
+        return redirect()->route('admin.artists.index')->with('status', 'Художникът е редактиран.');
     }
 
     public function destroy(Artist $artist): RedirectResponse
     {
         $artist->delete(); // coins keep existing, just lose this artist credit
 
-        return redirect()->route('admin.artists.index')->with('status', 'Artist deleted.');
+        return redirect()->route('admin.artists.index')->with('status', 'Художникът е изтрит.');
     }
 
     /** @return array<string, mixed> */
@@ -79,7 +79,7 @@ class ArtistController extends Controller
 
         if (! $firstName) {
             throw ValidationException::withMessages([
-                'name.en' => 'Please provide a name in at least one language.',
+                'name.en' => 'Въведи име поне на един език.',
             ]);
         }
 

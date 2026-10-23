@@ -38,20 +38,21 @@ class Coin extends Model
      * of truth for both the per-row indicator and the grid filters/sorting.
      */
     public const COMPLETENESS_FIELDS = [
-        'weight' => 'Weight (Тегло)',
-        'diameter' => 'Diameter (Диаметър)',
-        'edge' => 'Edge (Гурт)',
-        'mintage' => 'Mintage (Тираж)',
-        'mint' => 'Minted at (Монетен двор)',
-        'artists' => 'Artist (Художник)',
-        'metal' => 'Metal, fineness (Метал, проба)',
-        'issue_date' => 'Date of issue (Дата на въвеждане)',
-        'km_number' => 'Krause KM# (Каталожен номер)',
+        'weight' => 'Тегло',
+        'diameter' => 'Диаметър',
+        'edge' => 'Гурт',
+        'mintage' => 'Тираж',
+        'mint' => 'Монетен двор',
+        'artists' => 'Художник',
+        'metal' => 'Метал, проба',
+        'issue_date' => 'Дата на въвеждане',
+        'km_number' => 'Каталожен номер Krause KM#',
     ];
 
     protected $fillable = [
         'title',
         'series_id',
+        'period_id',
         'category',
         'year',
         'issue_date',
@@ -84,6 +85,12 @@ class Coin extends Model
         return $this->belongsTo(Series::class);
     }
 
+    /** @return BelongsTo<Period, $this> */
+    public function period(): BelongsTo
+    {
+        return $this->belongsTo(Period::class);
+    }
+
     /** @return BelongsToMany<Artist, $this> */
     public function artists(): BelongsToMany
     {
@@ -100,6 +107,26 @@ class Coin extends Model
     public function seriesName(): ?string
     {
         return $this->series?->name;
+    }
+
+    public function scopeOrderByDenomination(Builder $query, string $direction = 'asc'): Builder
+    {
+        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
+        $value = "LOWER(COALESCE(denomination, ''))";
+
+        return $query
+            ->orderByRaw("CASE WHEN TRIM({$value}) = '' THEN 1 ELSE 0 END")
+            ->orderByRaw("
+                CASE
+                    WHEN {$value} LIKE '%стотин%' OR {$value} LIKE '%Стотин%' OR {$value} LIKE '%stotink%' THEN 0
+                    WHEN {$value} LIKE '%лев%' OR {$value} LIKE '%Лев%' OR {$value} LIKE '%lev%' THEN 1
+                    WHEN {$value} LIKE '%cent%' OR {$value} LIKE '%цент%' OR {$value} LIKE '%Цент%' THEN 2
+                    WHEN {$value} LIKE '%euro%' OR {$value} LIKE '%евро%' OR {$value} LIKE '%Евро%' THEN 3
+                    ELSE 4
+                END {$direction}
+            ")
+            ->orderByRaw("CAST(denomination AS DECIMAL(12, 4)) {$direction}")
+            ->orderBy('denomination', $direction);
     }
 
     // --- Translatable fields: stored as {"bg":"...","en":"...","de":"..."} ---

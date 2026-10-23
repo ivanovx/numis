@@ -1,4 +1,4 @@
-# Numis — Laravel coin catalog
+# Bulgarian Coins Catalog - BCC
 
 This is a rebuild of the "Numis" WordPress plugin (Bulgarian coins catalog,
 `ivandewolf.com/bulgarian-coins-catalog`) as a standalone Laravel + Blade +
@@ -27,6 +27,7 @@ A **coin** has the following fields:
 |--------------------------|------------------------|-------------|
 | Заглавие                 | `title`                | ✅ bg/en/de |
 | Серия                    | `series_id` (belongs to one `Series`) | — |
+| Исторически период       | `period_id` (belongs to one `Period`) | — |
 | Художник(ци)             | `artists` (many-to-many `Artist`) | — (proper names) |
 | Година                   | `year`                 | — |
 | Дата на въвеждане        | `issue_date`           | — |
@@ -220,8 +221,12 @@ Go to `/login` and use the `ADMIN_EMAIL` / `ADMIN_PASSWORD` you set in
 - **Dashboard** (`/admin`) — coin/series/artist counts, quick-add links
 - **Coins** (`/admin/coins`) — list, create, edit, delete; upload front/back
   images; fill in all numismatic fields (year, denomination, metal, quality,
-  weight, diameter, mintage, edge, mint); assign a series and one or more
-  artists
+  weight, diameter, mintage, edge, mint); assign a series, historical period,
+  and one or more artists. The list sorts by denomination and then year, and
+  selected coins can be assigned to a period in bulk.
+- **Historical periods** (`/admin/periods`) — create, rename, and delete
+  periods such as "Царство България при Фердинанд"; deleting a period leaves
+  its coins in place but unassigned.
 - **Series** (`/admin/series`) — list, create, edit, delete; a series is
   just a name — no hierarchy
 - **Artists** (`/admin/artists`) — list, create, edit, delete; just a name.

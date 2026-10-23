@@ -56,13 +56,18 @@ class CsvController
                 'artists' => $this->importArtists($request->file('csv')),
             });
         } catch (\Throwable $exception) {
-            return back()->withErrors(['csv' => 'Import failed: '.$exception->getMessage()]);
+            return back()->withErrors(['csv' => 'Импортирането е неуспешно: '.$exception->getMessage()]);
         }
 
-        $message = sprintf('%d %s imported.', $result['imported'], $resource);
+        $resourceName = [
+            'coins' => $result['imported'] === 1 ? 'монета' : 'монети',
+            'series' => $result['imported'] === 1 ? 'серия' : 'серии',
+            'artists' => $result['imported'] === 1 ? 'художник' : 'художници',
+        ][$resource];
+        $message = sprintf('Импортирани: %d %s.', $result['imported'], $resourceName);
 
         if ($result['errors'] !== []) {
-            $message .= ' Skipped rows: '.implode(' | ', $result['errors']);
+            $message .= ' Пропуснати редове: '.implode(' | ', $result['errors']);
         }
 
         return back()->with('status', $message);

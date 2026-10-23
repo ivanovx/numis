@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Coin;
+use App\Models\Period;
 use App\Models\Series;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
@@ -30,10 +31,10 @@ class CoinsGrid extends Component
     #[Url]
     public string $missing = '';
 
-    public string $sortBy = 'year';
+    public string $sortBy = 'denomination';
 
     /** @var 'asc'|'desc' */
-    public string $sortDirection = 'desc';
+    public string $sortDirection = 'asc';
 
     public int $perPage = 20;
 
@@ -43,6 +44,8 @@ class CoinsGrid extends Component
     public array $selected = [];
 
     public string $bulkSeriesId = '';
+
+    public string $bulkPeriodId = '';
 
     public function updated(string $property): void
     {
@@ -100,7 +103,7 @@ class CoinsGrid extends Component
 
         $this->selected = [];
         $this->resetPage();
-        session()->flash('status', 'Selected coins deleted.');
+        session()->flash('status', 'Избраните монети са изтрити.');
     }
 
     public function assignSelectedSeries(): void
@@ -113,7 +116,24 @@ class CoinsGrid extends Component
 
         $this->selected = [];
         $this->bulkSeriesId = '';
-        session()->flash('status', 'Selected coins assigned to the series.');
+        session()->flash('status', 'Избраните монети са добавени към серията.');
+    }
+
+    public function assignSelectedPeriod(): void
+    {
+        if ($this->bulkPeriodId === '' || $this->selected === []) {
+            return;
+        }
+
+        $periodId = $this->bulkPeriodId === 'none'
+            ? null
+            : Period::findOrFail($this->bulkPeriodId)->id;
+
+        Coin::whereKey($this->selected)->update(['period_id' => $periodId]);
+
+        $this->selected = [];
+        $this->bulkPeriodId = '';
+        session()->flash('status', 'Избраните монети са добавени към историческия период.');
     }
 
     /** @return list<string> */
@@ -122,32 +142,32 @@ class CoinsGrid extends Component
         $flags = [];
 
         if (! $coin->front_image || ! $coin->back_image) {
-            $flags[] = 'Missing images';
+            $flags[] = 'Липсват изображения';
         }
 
         if (collect(['bg', 'en', 'de'])->contains(fn ($locale) => ! filled($coin->translation('title', $locale)))) {
-            $flags[] = 'Missing translations';
+            $flags[] = 'Липсват преводи';
         }
 
         if (! $coin->series_id) {
-            $flags[] = 'Missing series';
+            $flags[] = 'Липсва серия';
         }
 
         if (! $coin->year) {
-            $flags[] = 'Missing year';
+            $flags[] = 'Липсва година';
         }
 
         if (! collect(['bg', 'en', 'de'])->contains(fn ($locale) => filled($coin->translation('description', $locale)))) {
-            $flags[] = 'Missing description';
+            $flags[] = 'Липсва описание';
         }
 
-        return $flags ?: ['Complete'];
+        return $flags ?: ['Пълна'];
     }
 
     public function render(): View
     {
         $coins = Coin::query()
-            ->with(['series', 'artists'])
+            ->with(['series', 'period', 'artists'])
             ->when($this->search !== '', function ($query) {
                 $search = '%'.$this->search.'%';
 
@@ -167,16 +187,16 @@ class CoinsGrid extends Component
             ->when($this->metal !== '', fn ($query) => $query->where('metal', $this->metal))
             ->when($this->completeness !== '', fn ($query) => $query->completenessState($this->completeness))
             ->when($this->missing !== '', fn ($query) => $query->missingField($this->missing))
-            ->when(
-                $this->sortBy === 'completeness',
-                fn ($query) => $query->orderByCompleteness($this->sortDirection)->orderByDesc('year'),
-                fn ($query) => $query->orderBy($this->sortBy, $this->sortDirection),
-            )
+            ->when($this->sortBy === 'completeness', fn ($query) => $query->orderByCompleteness($this->sortDirection)->orderByDesc('year'))
+            ->when($this->sortBy === 'denomination', fn ($query) => $query->orderByDenomination($this->sortDirection)->orderBy('year')->orderBy('id'))
+            ->when($this->sortBy === 'year', fn ($query) => $query->orderBy('year', $this->sortDirection)->orderBy('id'))
+            ->when($this->sortBy === 'metal', fn ($query) => $query->orderBy('metal', $this->sortDirection)->orderBy('id'))
             ->paginate($this->perPage);
 
         return view('livewire.admin.coins-grid', [
             'coins' => $coins,
             'series' => Series::forSelect(),
+            'periods' => Period::orderBy('name')->get(),
             'categories' => Coin::CATEGORIES,
             'metals' => Coin::METALS,
             'completenessFields' => Coin::COMPLETENESS_FIELDS,

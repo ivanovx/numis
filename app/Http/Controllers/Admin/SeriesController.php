@@ -34,13 +34,13 @@ class SeriesController extends Controller
             $data = $translator->translateFields($data, ['name']);
         } catch (Throwable $exception) {
             throw ValidationException::withMessages([
-                'name.bg' => 'Automatic translation failed: '.$exception->getMessage(),
+                'name.bg' => 'Автоматичният превод не бе успешен: '.$exception->getMessage(),
             ]);
         }
 
         Series::create($data);
 
-        return redirect()->route('admin.series.index')->with('status', 'Series created.');
+        return redirect()->route('admin.series.index')->with('status', 'Серията е добавена.');
     }
 
     public function edit(Series $series): View
@@ -54,14 +54,14 @@ class SeriesController extends Controller
 
         $series->update($data);
 
-        return redirect()->route('admin.series.index')->with('status', 'Series updated.');
+        return redirect()->route('admin.series.index')->with('status', 'Серията е редактирана.');
     }
 
     public function destroy(Series $series): RedirectResponse
     {
         $series->delete(); // coins.series_id is set to null via the FK (nullOnDelete)
 
-        return redirect()->route('admin.series.index')->with('status', 'Series deleted.');
+        return redirect()->route('admin.series.index')->with('status', 'Серията е изтрита.');
     }
 
     /** @return array<string, mixed> */
@@ -81,7 +81,7 @@ class SeriesController extends Controller
 
         if (! $firstName) {
             throw ValidationException::withMessages([
-                'name.en' => 'Please provide a name in at least one language.',
+                'name.en' => 'Въведи име поне на един език.',
             ]);
         }
 

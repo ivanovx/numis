@@ -1,34 +1,42 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1 class="mb-4">Numis Dashboard</h1>
+    <h1 class="mb-4">Административно табло</h1>
 
     <div class="mb-4 d-flex gap-2">
-        <a href="{{ route('admin.coins.create') }}" class="btn btn-primary">➕ Add Coin</a>
-        <a href="{{ route('admin.series.create') }}" class="btn btn-secondary">➕ Add Series</a>
-        <a href="{{ route('admin.artists.create') }}" class="btn btn-secondary">➕ Add Artist</a>
+        <a href="{{ route('admin.coins.create') }}" class="btn btn-primary">➕ Добави монета</a>
+        <a href="{{ route('admin.periods.create') }}" class="btn btn-secondary">➕ Добави период</a>
+        <a href="{{ route('admin.series.create') }}" class="btn btn-secondary">➕ Добави серия</a>
+        <a href="{{ route('admin.artists.create') }}" class="btn btn-secondary">➕ Добави художник</a>
     </div>
 
-    <div class="row g-3">
-        <div class="col-md-4">
+    <div class="row row-cols-2 row-cols-lg-5 g-3">
+        <div class="col">
             <div class="card text-center p-3">
                 <h2>{{ $coinCount }}</h2>
-                <p class="mb-0">Coins</p>
-                <a href="{{ route('admin.coins.index') }}">View all</a>
+                <p class="mb-0">Монети</p>
+                <a href="{{ route('admin.coins.index') }}">Виж всички</a>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col">
+            <div class="card text-center p-3">
+                <h2>{{ $periodCount }}</h2>
+                <p class="mb-0">Исторически периоди</p>
+                <a href="{{ route('admin.periods.index') }}">Виж всички</a>
+            </div>
+        </div>
+        <div class="col">
             <div class="card text-center p-3">
                 <h2>{{ $seriesCount }}</h2>
-                <p class="mb-0">Series</p>
-                <a href="{{ route('admin.series.index') }}">View all</a>
+                <p class="mb-0">Серии</p>
+                <a href="{{ route('admin.series.index') }}">Виж всички</a>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col">
             <div class="card text-center p-3">
                 <h2>{{ $artistCount }}</h2>
-                <p class="mb-0">Artists</p>
-                <a href="{{ route('admin.artists.index') }}">View all</a>
+                <p class="mb-0">Художници</p>
+                <a href="{{ route('admin.artists.index') }}">Виж всички</a>
             </div>
         </div>
     </div>
@@ -42,10 +50,10 @@
         <div class="card mt-4">
             <div class="card-body">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-                    <h2 class="h5 mb-0">Data completeness (Пълнота на данните)</h2>
+                    <h2 class="h5 mb-0">Пълнота на данните</h2>
                     <span class="text-muted small">
-                        {{ $completeness['complete'] }} of {{ $completeness['total'] }} coins have all {{ count($completenessFields) }} tracked fields
-                        · <a href="{{ route('admin.coins.index', ['completeness' => 'incomplete']) }}">show incomplete</a>
+                        {{ $completeness['complete'] }} от {{ $completeness['total'] }} монети имат попълнени всички {{ count($completenessFields) }} проследявани полета
+                        · <a href="{{ route('admin.coins.index', ['completeness' => 'incomplete']) }}">покажи непълните</a>
                     </span>
                 </div>
 
@@ -57,7 +65,7 @@
                     <strong>{{ $completeness['average_percent'] }}%</strong>
                 </div>
 
-                <h3 class="h6 text-muted">Most common gaps (Най-често липсва)</h3>
+                <h3 class="h6 text-muted">Най-често липсващи данни</h3>
                 <div class="row g-2">
                     @foreach ($gaps as $field => $missingCount)
                         <div class="col-md-6 col-lg-4">

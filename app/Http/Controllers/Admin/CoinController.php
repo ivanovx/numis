@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
 use App\Models\Coin;
+use App\Models\Period;
 use App\Models\Series;
 use App\Services\CoinTranslationService;
 use Illuminate\Contracts\View\View;
@@ -26,6 +27,7 @@ class CoinController extends Controller
         return view('admin.coins.create', [
             'coin' => new Coin,
             'allSeries' => Series::forSelect(),
+            'allPeriods' => Period::orderBy('name')->get(),
             'allArtists' => Artist::orderBy('name')->get(),
         ]);
     }
@@ -38,7 +40,7 @@ class CoinController extends Controller
             $data = $translator->translateBulgarianFields($data);
         } catch (Throwable $exception) {
             throw ValidationException::withMessages([
-                'title.bg' => 'Automatic translation failed: '.$exception->getMessage(),
+                'title.bg' => 'Автоматичният превод не бе успешен: '.$exception->getMessage(),
             ]);
         }
 
@@ -47,7 +49,7 @@ class CoinController extends Controller
         $coin->artists()->sync($request->input('artist_ids', []));
         $this->storeImages($request, $coin);
 
-        return redirect()->route('admin.coins.index')->with('status', 'Coin created.');
+        return redirect()->route('admin.coins.index')->with('status', 'Монетата е добавена.');
     }
 
     public function edit(Coin $coin): View
@@ -55,6 +57,7 @@ class CoinController extends Controller
         return view('admin.coins.edit', [
             'coin' => $coin,
             'allSeries' => Series::forSelect(),
+            'allPeriods' => Period::orderBy('name')->get(),
             'allArtists' => Artist::orderBy('name')->get(),
             'selectedArtists' => $coin->artists->pluck('id')->all(),
         ]);
@@ -69,7 +72,7 @@ class CoinController extends Controller
         $coin->artists()->sync($request->input('artist_ids', []));
         $this->storeImages($request, $coin);
 
-        return redirect()->route('admin.coins.index')->with('status', 'Coin updated.');
+        return redirect()->route('admin.coins.index')->with('status', 'Монетата е редактирана.');
     }
 
     /**
@@ -98,7 +101,7 @@ class CoinController extends Controller
 
         $coin->delete();
 
-        return redirect()->route('admin.coins.index')->with('status', 'Coin deleted.');
+        return redirect()->route('admin.coins.index')->with('status', 'Монетата е изтрита.');
     }
 
     /** @return array<string, mixed> */
@@ -111,6 +114,7 @@ class CoinController extends Controller
             'title.de' => ['nullable', 'string', 'max:255'],
 
             'series_id' => ['nullable', 'exists:series,id'],
+            'period_id' => ['nullable', 'exists:periods,id'],
             'category' => ['required', 'in:'.implode(',', Coin::CATEGORIES)],
 
             'artist_ids' => ['nullable', 'array'],
@@ -160,7 +164,7 @@ class CoinController extends Controller
 
         if (! array_filter($data['title'] ?? [])) {
             throw ValidationException::withMessages([
-                'title.en' => 'Please provide a title in at least one language.',
+                'title.en' => 'Въведи заглавие поне на един език.',
             ]);
         }
 

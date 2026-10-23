@@ -69,7 +69,7 @@ class SeriesGrid extends Component
 
         $this->selected = [];
         $this->resetPage();
-        session()->flash('status', 'Selected series deleted.');
+        session()->flash('status', 'Избраните серии са изтрити.');
     }
 
     public function render(): View

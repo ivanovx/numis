@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? 'Numis Admin' }}</title>
+    <title>{{ $title ?? 'Администрация на Numis' }}</title>
     @vite('resources/js/bootstrap.js')
     <link href="{{ asset('css/admin.css') }}?v=3" rel="stylesheet">
     @vite('resources/js/admin.js')
@@ -13,20 +13,21 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark admin-navbar mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">Numis Admin</a>
+            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">Numis — администрация</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavigation"
-                    aria-controls="adminNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="adminNavigation" aria-expanded="false" aria-label="Отвори навигацията">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="adminNavigation">
                 <div class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                    <a class="nav-link {{ request()->routeIs('admin.coins.*') ? 'active' : '' }}" href="{{ route('admin.coins.index') }}">Coins</a>
-                    <a class="nav-link {{ request()->routeIs('admin.series.*') ? 'active' : '' }}" href="{{ route('admin.series.index') }}">Series</a>
-                    <a class="nav-link {{ request()->routeIs('admin.artists.*') ? 'active' : '' }}" href="{{ route('admin.artists.index') }}">Artists</a>
+                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Табло</a>
+                    <a class="nav-link {{ request()->routeIs('admin.coins.*') ? 'active' : '' }}" href="{{ route('admin.coins.index') }}">Монети</a>
+                    <a class="nav-link {{ request()->routeIs('admin.periods.*') ? 'active' : '' }}" href="{{ route('admin.periods.index') }}">Периоди</a>
+                    <a class="nav-link {{ request()->routeIs('admin.series.*') ? 'active' : '' }}" href="{{ route('admin.series.index') }}">Серии</a>
+                    <a class="nav-link {{ request()->routeIs('admin.artists.*') ? 'active' : '' }}" href="{{ route('admin.artists.index') }}">Художници</a>
                     <form method="POST" action="{{ route('logout') }}" class="d-lg-inline mt-2 mt-lg-0">
                         @csrf
-                        <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+                        <button type="submit" class="btn btn-sm btn-outline-light">Изход</button>
                     </form>
                 </div>
             </div>

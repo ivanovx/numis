@@ -69,7 +69,7 @@ class ArtistsGrid extends Component
 
         $this->selected = [];
         $this->resetPage();
-        session()->flash('status', 'Selected artists deleted.');
+        session()->flash('status', 'Избраните художници са изтрити.');
     }
 
     public function render(): View

@@ -1,8 +1,8 @@
-@php($languages = $series->exists ? ['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] : ['bg' => 'Bulgarian'])
+@php($languages = $series->exists ? ['bg' => 'Български', 'en' => 'Английски', 'de' => 'Немски'] : ['bg' => 'Български'])
 
 <div class="row g-3">
     <div class="col-12">
-        <label class="form-label fw-bold mb-1">Name</label>
+        <label class="form-label fw-bold mb-1">Име</label>
         <div class="row g-2">
             @foreach ($languages as $code => $label)
                 <div class="col-md-4">
@@ -14,20 +14,20 @@
         </div>
         <div class="form-text">
             @if ($series->exists)
-                Edit the translations directly.
+                Редактирай преводите директно.
             @else
-                Enter the Bulgarian name. English and German will be translated automatically with DeepL after saving.
+                Въведи името на български. След запазване английският и немският превод ще бъдат направени автоматично чрез DeepL.
             @endif
         </div>
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">Slug</label>
-        <input type="text" name="slug" class="form-control" value="{{ old('slug', $series->slug) }}" placeholder="auto from name">
+        <label class="form-label">Кратко име (slug)</label>
+        <input type="text" name="slug" class="form-control" value="{{ old('slug', $series->slug) }}" placeholder="попълва се автоматично">
     </div>
 </div>
 
 <div class="mt-4">
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{{ route('admin.series.index') }}" class="btn btn-outline-secondary">Cancel</a>
+    <button type="submit" class="btn btn-primary">Запази</button>
+    <a href="{{ route('admin.series.index') }}" class="btn btn-outline-secondary">Отказ</a>
 </div>

@@ -11,7 +11,7 @@
 @if ($detailed ?? false)
     <div class="border rounded p-3 bg-light" data-completeness="{{ $c['filled'] }}/{{ $c['total'] }}">
         <div class="d-flex justify-content-between align-items-center mb-2">
-            <strong>Data completeness (Пълнота на данните)</strong>
+            <strong>Пълнота на данните</strong>
             <span class="badge text-bg-{{ $tone }}">{{ $c['filled'] }}/{{ $c['total'] }}</span>
         </div>
         <div class="progress" style="height: .5rem" role="progressbar"
@@ -20,19 +20,19 @@
         </div>
         @if ($missingLabels)
             <div class="small mt-2">
-                <span class="text-muted">Still missing (Липсва):</span>
+                <span class="text-muted">Липсват:</span>
                 @foreach ($missingLabels as $label)
                     <span class="badge text-bg-light border fw-normal">{{ $label }}</span>
                 @endforeach
             </div>
         @else
-            <div class="small mt-2 text-success">All tracked fields are filled in.</div>
+            <div class="small mt-2 text-success">Всички проследявани полета са попълнени.</div>
         @endif
-        <div class="form-text mb-0">Reflects the saved record — it updates after you press Save.</div>
+        <div class="form-text mb-0">Показва запазените данни и се обновява след натискане на „Запази“.</div>
     </div>
 @else
     <div style="min-width: 6.5rem"
-         title="{{ $missingLabels ? 'Missing: '.implode(', ', $missingLabels) : 'All data present' }}"
+         title="{{ $missingLabels ? 'Липсват: '.implode(', ', $missingLabels) : 'Всички данни са попълнени' }}"
          data-completeness="{{ $c['filled'] }}/{{ $c['total'] }}">
         <div class="d-flex justify-content-between small lh-1 mb-1">
             <strong>{{ $c['filled'] }}/{{ $c['total'] }}</strong>

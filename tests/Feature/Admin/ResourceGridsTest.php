@@ -12,7 +12,7 @@ test('authenticated users can visit the series grid', function () {
     $response = $this->get(route('admin.series.index'));
 
     $response->assertOk();
-    $response->assertSee('Search name or slug...');
+    $response->assertSee('Търси по име или кратко име...');
     $response->assertSee(route('admin.series.create'));
 });
 
@@ -22,7 +22,7 @@ test('authenticated users can visit the artists grid', function () {
     $response = $this->get(route('admin.artists.index'));
 
     $response->assertOk();
-    $response->assertSee('Search name or slug...');
+    $response->assertSee('Търси по име или кратко име...');
     $response->assertSee(route('admin.artists.create'));
 });
 

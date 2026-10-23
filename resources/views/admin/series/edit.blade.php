@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1 class="mb-4">Edit Series</h1>
+    <h1 class="mb-4">Редактиране на серия</h1>
 
     <form method="POST" action="{{ route('admin.series.update', $series) }}">
         @csrf

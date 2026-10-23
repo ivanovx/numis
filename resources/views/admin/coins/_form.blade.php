@@ -1,4 +1,4 @@
-@php($languages = $coin->exists ? ['bg' => 'Bulgarian', 'en' => 'English', 'de' => 'German'] : ['bg' => 'Bulgarian'])
+@php($languages = $coin->exists ? ['bg' => 'Български', 'en' => 'Английски', 'de' => 'Немски'] : ['bg' => 'Български'])
 
 <div class="row g-3">
     @if ($coin->exists)
@@ -8,7 +8,7 @@
     @endif
 
     <div class="col-12">
-        <label class="form-label fw-bold mb-1">Title (Заглавие)</label>
+        <label class="form-label fw-bold mb-1">Заглавие</label>
         <div class="row g-2">
             @foreach ($languages as $code => $label)
                 <label class="form-label small text-muted">{{ $label }}</label>
@@ -17,17 +17,17 @@
         </div>
         <div class="form-text">
             @if ($coin->exists)
-                Edit the translations directly. Blank languages fall back to another filled one on the public site.
+                Редактирай преводите директно. Ако липсва превод, в публичния сайт ще се показва наличният текст на друг език.
             @else
-                Enter the Bulgarian text. English and German will be translated automatically with DeepL after saving.
+                Въведи текста на български. След запазване английският и немският превод ще бъдат направени автоматично чрез DeepL.
             @endif
         </div>
     </div>
 
     <div class="col-md-4">
-        <label class="form-label">Series (Серия)</label>
+        <label class="form-label">Серия</label>
         <select name="series_id" class="form-select">
-            <option value="">— None —</option>
+            <option value="">— Без серия —</option>
             @foreach ($allSeries as $term)
                 <option value="{{ $term->id }}" @selected((string) old('series_id', $coin->series_id) === (string) $term->id)>
                     {{ $term->name }}
@@ -36,10 +36,23 @@
         </select>
     </div>
 
+    <div class="col-md-4">
+        <label class="form-label">Исторически период</label>
+        <select name="period_id" class="form-select">
+            <option value="">— Без период —</option>
+            @foreach ($allPeriods as $period)
+                <option value="{{ $period->id }}" @selected((string) old('period_id', $coin->period_id) === (string) $period->id)>
+                    {{ $period->name }}
+                </option>
+            @endforeach
+        </select>
+        <div class="form-text">Управлявай периодите от <a href="{{ route('admin.periods.index') }}" target="_blank">/admin/periods</a>.</div>
+    </div>
+
     <div class="col-md-3">
-        <label class="form-label">Category (Категория)</label>
+        <label class="form-label">Категория</label>
         <select name="category" class="form-select" required>
-            <option value="">— Select category —</option>
+            <option value="">— Избери категория —</option>
             @foreach (\App\Models\Coin::CATEGORIES as $category)
                 <option value="{{ $category }}" @selected(old('category', $coin->category) === $category)>
                     {{ __('catalog.categories.' . $category) }}
@@ -49,18 +62,18 @@
     </div>
 
      <div class="col-md-2">
-        <label class="form-label">Year (Година)</label>
+        <label class="form-label">Година</label>
         <input type="number" name="year" class="form-control" value="{{ old('year', $coin->year) }}">
     </div>
 
      <div class="col-md-3">
-        <label class="form-label">Date of issue (Дата на въвеждане)</label>
+        <label class="form-label">Дата на въвеждане</label>
         <input type="date" name="issue_date" class="form-control"
                value="{{ old('issue_date', $coin->issue_date?->format('Y-m-d')) }}">
     </div>
 
     <div class="col-md-12">
-        <label class="form-label">Artist(s) (Художник)</label>
+        <label class="form-label">Художник(ци)</label>
         <select name="artist_ids[]" class="form-select" multiple size="4">
             @foreach ($allArtists as $artist)
                 <option value="{{ $artist->id }}" @selected(in_array($artist->id, old('artist_ids', $selectedArtists ?? [])))>
@@ -69,18 +82,18 @@
             @endforeach
         </select>
         <div class="form-text">
-            Ctrl/Cmd-click to select multiple.
-            Manage the artist list at <a href="{{ route('admin.artists.index') }}" target="_blank">/admin/artists</a>.
+            За избор на няколко задръж Ctrl/Cmd и щракни върху имената.
+            Управлявай художниците от <a href="{{ route('admin.artists.index') }}" target="_blank">/admin/artists</a>.
         </div>
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Denomination (Номинална стойност)</label>
+        <label class="form-label">Номинал</label>
         <input type="text" name="denomination" class="form-control" value="{{ old('denomination', $coin->denomination) }}">
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Metal, fineness (Метал, проба)</label>
+        <label class="form-label">Метал, проба</label>
         <input type="text" name="metal" list="metal-suggestions" class="form-control" value="{{ old('metal', $coin->metal) }}">
         <datalist id="metal-suggestions">
             @foreach (\App\Models\Coin::METALS as $suggestion)
@@ -90,62 +103,62 @@
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Quality (Качество)</label>
+        <label class="form-label">Качество</label>
         <input type="text" name="quality" class="form-control" value="{{ old('quality', $coin->quality) }}">
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Weight (Тегло)</label>
+        <label class="form-label">Тегло</label>
         <input type="text" name="weight" class="form-control" value="{{ old('weight', $coin->weight) }}">
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Diameter (Диаметър, mm)</label>
+        <label class="form-label">Диаметър (мм)</label>
         <input type="text" name="diameter" class="form-control" value="{{ old('diameter', $coin->diameter) }}">
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Mintage (Тираж)</label>
+        <label class="form-label">Тираж</label>
         <input type="text" name="mintage" class="form-control" value="{{ old('mintage', $coin->mintage) }}">
     </div>
 
     <div class="col-12 mt-4">
-        <label class="form-label fw-bold mb-0">Catalog references (Каталожни номера)</label>
-        <div class="form-text mt-0">Numbers collectors search by. Prefixes such as "KM#" or "N#" are optional — they are stripped automatically.</div>
+        <label class="form-label fw-bold mb-0">Каталожни номера</label>
+        <div class="form-text mt-0">Номера, по които колекционерите търсят монетите. Префикси като „KM#“ и „N#“ не са задължителни — премахват се автоматично.</div>
     </div>
 
     <div class="col-md-3">
         <label class="form-label">Krause (KM#)</label>
-        <input type="text" name="km_number" class="form-control" maxlength="64" placeholder="e.g. 202.1"
+        <input type="text" name="km_number" class="form-control" maxlength="64" placeholder="напр. 202.1"
                value="{{ old('km_number', $coin->km_number) }}">
     </div>
 
     <div class="col-md-3">
         <label class="form-label">Numista (N#)</label>
-        <input type="text" name="numista_number" class="form-control" maxlength="64" placeholder="e.g. 12345 or numista.com URL"
+        <input type="text" name="numista_number" class="form-control" maxlength="64" placeholder="напр. 12345 или адрес от numista.com"
                value="{{ old('numista_number', $coin->numista_number) }}">
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">BNB code (БНБ код)</label>
-        <input type="text" name="bnb_number" class="form-control" maxlength="100" placeholder="e.g. NC_2025_9_100LV"
+        <label class="form-label">Код на БНБ</label>
+        <input type="text" name="bnb_number" class="form-control" maxlength="100" placeholder="напр. NC_2025_9_100LV"
                value="{{ old('bnb_number', $coin->bnb_number) }}">
         @if ($coin->bnbUrl('bg'))
-            <div class="form-text"><a href="{{ $coin->bnbUrl('bg') }}" target="_blank" rel="noopener">Open on bnb.bg ↗</a></div>
+            <div class="form-text"><a href="{{ $coin->bnbUrl('bg') }}" target="_blank" rel="noopener">Отвори в bnb.bg ↗</a></div>
         @else
-            <div class="form-text">The code from the coin's address on bnb.bg (a pasted URL works too).</div>
+            <div class="form-text">Кодът от адреса на монетата в bnb.bg (можеш да поставиш и целия адрес).</div>
         @endif
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">Other catalogs (Други каталози)</label>
-        <input type="text" name="other_references" class="form-control" maxlength="255" placeholder="e.g. Schön 123; Фриш 45"
+        <label class="form-label">Други каталози</label>
+        <input type="text" name="other_references" class="form-control" maxlength="255" placeholder="напр. Schön 123; Фриш 45"
                value="{{ old('other_references', $coin->other_references) }}">
     </div>
 
     @foreach ([
-        'edge' => 'Edge (Гурт)',
-        'mint' => 'Minted at (Отсечена в)',
+        'edge' => 'Гурт',
+        'mint' => 'Отсечена в',
     ] as $field => $label)
         <div class="col-12">
             <label class="form-label fw-bold mb-1">{{ $label }}</label>
@@ -163,7 +176,7 @@
 
     <div class="col-12 col-lg-6">
         <div class="image-side-block">
-            <label class="form-label">Front image (Лице)</label>
+            <label class="form-label">Снимка на лицевата страна</label>
             <input type="file" name="front_image" class="form-control" accept="image/*">
             @if ($coin->front_image_url)
                 <img src="{{ $coin->front_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
@@ -171,7 +184,7 @@
             <div class="row g-2 mt-2">
                 @foreach ($languages as $code => $label)
                     <div class="col-12">
-                        <label class="form-label small text-muted">Description ({{ $label }})</label>
+                        <label class="form-label small text-muted">Описание ({{ $label }})</label>
                         @php($frontDescriptionId = 'front-description-' . $code)
                         <textarea id="{{ $frontDescriptionId }}" name="front_description[{{ $code }}]" class="d-none">{{ old('front_description.' . $code, $coin->translation('front_description', $code)) }}</textarea>
                         <div class="rich-text-editor" data-rich-text-editor="{{ $frontDescriptionId }}"></div>
@@ -183,7 +196,7 @@
 
     <div class="col-12 col-lg-6">
         <div class="image-side-block">
-            <label class="form-label">Back image (Реверс)</label>
+            <label class="form-label">Снимка на обратната страна (реверс)</label>
             <input type="file" name="back_image" class="form-control" accept="image/*">
             @if ($coin->back_image_url)
                 <img src="{{ $coin->back_image_url }}" class="img-thumbnail mt-2" style="max-width:150px">
@@ -191,7 +204,7 @@
             <div class="row g-2 mt-2">
                 @foreach ($languages as $code => $label)
                     <div class="col-12">
-                        <label class="form-label small text-muted">Description ({{ $label }})</label>
+                        <label class="form-label small text-muted">Описание ({{ $label }})</label>
                         @php($backDescriptionId = 'back-description-' . $code)
                         <textarea id="{{ $backDescriptionId }}" name="back_description[{{ $code }}]" class="d-none">{{ old('back_description.' . $code, $coin->translation('back_description', $code)) }}</textarea>
                         <div class="rich-text-editor" data-rich-text-editor="{{ $backDescriptionId }}"></div>
@@ -202,7 +215,7 @@
     </div>
 
    <!-- <div class="col-12">
-        <label class="form-label fw-bold mb-1">Description (Описание)</label>
+        <label class="form-label fw-bold mb-1">Описание</label>
         <div class="row g-2">
             @foreach ($languages as $code => $label)
                 <div class="col-12">
@@ -217,6 +230,6 @@
 </div>
 
 <div class="mt-10" style="margin-top: 5rem;">
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{{ route('admin.coins.index') }}" class="btn btn-outline-secondary">Cancel</a>
+    <button type="submit" class="btn btn-primary">Запази</button>
+    <a href="{{ route('admin.coins.index') }}" class="btn btn-outline-secondary">Отказ</a>
 </div>
